@@ -4,8 +4,27 @@ import { Button } from '../ui/button'
 import { FileText, MessageCircle, PlusCircle, RatioIcon } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import RecentArticle from './recent-article'
+import { prisma } from '@/lib/prisma'
 
-export default function BlogDashboard() {
+export default async function BlogDashboard() {
+    const [articles, totalComments] = await Promise.all([
+    prisma.article.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+      include: {
+        comments: true,
+        author: {
+          select: {
+            name: true,
+            email: true,
+            imageUrl: true,
+          },
+        },
+      },
+    }),
+    prisma.comment.count(),
+  ]);
   return (
     <main className='flex-1 p-4 md:p-8'>
         <div className='flex justify-between items-center mb-6'> 
@@ -31,7 +50,7 @@ export default function BlogDashboard() {
                     <FileText className='w-4 h-4'/>
                 </CardHeader>
                 <CardContent>
-                    <div className='text-2xl font-bold'>2</div>
+                    <div className='text-2xl font-bold'>{articles.length}</div>
                     <p className="text-xs text-muted-foreground mt-1">+5 from last month</p>
                 </CardContent>
             </Card>
@@ -42,7 +61,7 @@ export default function BlogDashboard() {
                     <MessageCircle className='w-4 h-4'/>
                 </CardHeader>
                 <CardContent>
-                    <div className='text-2xl font-bold'>2</div>
+                    <div className='text-2xl font-bold'>{totalComments}</div>
                     <p className="text-xs text-muted-foreground mt-1">+5 from last month</p>
                 </CardContent>
             </Card>
@@ -60,7 +79,7 @@ export default function BlogDashboard() {
         </div>
 
         {/* Recent Articles */}
-       <RecentArticle/>
+       <RecentArticle articles={articles} />
     </main>
   )
 }
