@@ -1,5 +1,4 @@
 import { Footer } from "@/components/Home/footer";
-import Navbar from "@/components/Home/header/navbar";
 import HeroSection from "@/components/Home/hero-section";
 import TopArticle from "@/components/Home/top-article";
 import { Button } from "@/components/ui/button";
@@ -8,7 +7,6 @@ import Link from "next/link";
 export default function Home() {
   return (
     <main>
-      <Navbar />
       <HeroSection />
       <section className="relative py-16 md:py-24">
         <div className="container mx-auto px-4">
