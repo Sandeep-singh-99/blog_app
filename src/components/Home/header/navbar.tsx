@@ -1,11 +1,14 @@
+"use client";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "../../ui/button";
 import SearchInput from "./search-input";
 import { ToggleMode } from "./toggle-mode";
-
+import { Menu, Search, X } from "lucide-react";
+import { Input } from "@/components/ui/input";
 
 export default function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="sticky top-0 z-50 w-full border border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -23,49 +26,106 @@ export default function Navbar() {
 
           {/* Desktop Navigation */}
 
-            <div className="hidden md:flex items-center gap-4">
+          <div className="hidden md:flex items-center gap-4">
+            <Link
+              href="/articles"
+              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+            >
+              Articles
+            </Link>
+            <Link
+              href="/tutorials"
+              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+            >
+              Tutorials
+            </Link>
+            <Link
+              href="/about"
+              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+            >
+              About
+            </Link>
+            <Link
+              href="/dashboard"
+              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+            >
+              Dashboard
+            </Link>
+          </div>
+
+          {/* Right Section */}
+
+          <div className="flex items-center gap-4">
+            <SearchInput />
+            <ToggleMode />
+
+            <div className="hidden md:flex items-center gap-2">
+              <Button>Login</Button>
+              <Button>SignUp</Button>
+
+              {/* Mobile Menu Button */}
+            </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="md:hidden text-muted-foreground hover:text-foreground"
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              {isOpen ? (
+                <X className="h-5 w-5" />
+              ) : (
+                <Menu className="h-5 w-5" />
+              )}
+            </Button>
+          </div>
+        </div>
+        {isOpen && (
+          <div className="md:hidden py-4 space-y-4 border-t">
+            {/* Search Bar (Mobile) */}
+            <div className="px-4">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  type="search"
+                  placeholder="Search articles..."
+                  className="pl-10 w-full focus-visible:ring-1"
+                />
+              </div>
+            </div>
+
+            {/* Mobile Navigation Links */}
+            <div className="space-y-2 px-4">
               <Link
                 href="/articles"
-                className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                className="block px-3 py-2 text-base font-medium text-foreground"
+                onClick={() => setIsOpen(false)}
               >
                 Articles
               </Link>
               <Link
                 href="/tutorials"
-                className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                className="block px-3 py-2 text-base font-medium text-foreground"
+                onClick={() => setIsOpen(false)}
               >
                 Tutorials
               </Link>
               <Link
                 href="/about"
-                className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                className="block px-3 py-2 text-base font-medium text-foreground"
+                onClick={() => setIsOpen(false)}
               >
                 About
               </Link>
               <Link
                 href="/dashboard"
-                className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                className="block px-3 py-2 text-base font-medium text-foreground"
+                onClick={() => setIsOpen(false)}
               >
                 Dashboard
               </Link>
             </div>
-
-            {/* Right Section */}
-
-            <div className="flex items-center gap-4">
-              <SearchInput/>
-              <ToggleMode/>
-
-              <div className="hidden md:flex items-center gap-2">
-                <Button>
-                    Login
-                </Button>
-                <Button>
-                    SignUp
-                </Button>
-            </div>
-            </div>
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );
