@@ -126,6 +126,16 @@ export default function EditArticle({ article }: EditArticleProps) {
                 theme="snow"
                 value={content}
                 onChange={setContent}
+                modules={{
+                  toolbar: [
+                    [{ header: [1, 2, false] }],
+                    ["bold", "italic", "underline"],
+                    ["link", "image"],
+                    [{ list: "ordered" }, { list: "bullet" }],
+                    ["clean", "code-block"],
+                    ["blockquote"],
+                  ],
+                }}
                 placeholder="Write your article content here..."
               />
               {formState.errors.content && (
