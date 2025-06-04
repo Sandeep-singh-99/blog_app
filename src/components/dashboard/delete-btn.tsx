@@ -1,8 +1,25 @@
-import React from 'react'
-import { Button } from '../ui/button'
+"use client";
+import React, { useTransition } from "react";
+import { Button } from "../ui/button";
+import { deleteArticle } from "@/actions/delete-article";
 
-export default function DeleteBtn() {
+type DeleteBtnProps = {
+  articleId?: string;
+};
+
+export default function DeleteBtn({ articleId }: DeleteBtnProps) {
+  const [isPending, startTransition] = useTransition();
   return (
-    <Button variant={"ghost"} size={"sm"}>Delete</Button>
-  )
+    <form
+      action={() => {
+        startTransition(async () => {
+          await deleteArticle(articleId || "");
+        });
+      }}
+    >
+      <Button variant={"ghost"} size={"sm"} disabled={isPending}>
+        {isPending ? "Deleting..." : "Delete"}
+      </Button>
+    </form>
+  );
 }

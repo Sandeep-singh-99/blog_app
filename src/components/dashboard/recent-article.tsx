@@ -77,13 +77,13 @@ export default function RecentArticle({ articles }: RecentArticleProps) {
                     {article.createdAt.toISOString().split("T")[0]}
                   </TableCell>
                   <TableCell>
-                    <div>
+                    <div className="flex items-center gap-2">
                       <Link href={`/dashboard/articles/${article.id}/edit`}>
                         <Button variant={"ghost"} size={"sm"}>
                           Edit
                         </Button>
                       </Link>
-                      <DeleteBtn />
+                      <DeleteBtn articleId={article.id} />
                     </div>
                   </TableCell>
                 </TableRow>
