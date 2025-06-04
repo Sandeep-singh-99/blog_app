@@ -78,7 +78,7 @@ export default function RecentArticle({ articles }: RecentArticleProps) {
                   </TableCell>
                   <TableCell>
                     <div>
-                      <Link href={"/"}>
+                      <Link href={`/dashboard/articles/${article.id}/edit`}>
                         <Button variant={"ghost"} size={"sm"}>
                           Edit
                         </Button>
