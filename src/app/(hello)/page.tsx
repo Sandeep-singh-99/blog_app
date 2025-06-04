@@ -3,6 +3,7 @@ import HeroSection from "@/components/Home/hero-section";
 import TopArticle from "@/components/Home/top-article";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { Suspense } from "react";
 
 export default function Home() {
   return (
@@ -19,7 +20,9 @@ export default function Home() {
             </p>
           </div>
 
-          <TopArticle />
+          <Suspense fallback={<div className="text-center text-gray-500">Loading...</div>}>
+            <TopArticle />
+          </Suspense>
 
           <div className="mt-12 text-center">
             <Link href={"/articles"}>
