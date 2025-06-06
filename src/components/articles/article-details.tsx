@@ -1,7 +1,10 @@
 import { prisma } from '@/lib/prisma';
 import { Prisma } from '@prisma/client';
-import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import React from 'react'
+import LikeButton from './like-button';
+import CommentSection from '../comments/comment-section';
+import CommentInput from '../comments/comment-input';
 
 type ArticleDetailPageProps = {
   article: Prisma.ArticleGetPayload<{
@@ -59,6 +62,13 @@ export default async function ArticleDetails({ article }: ArticleDetailPageProps
 
                 <section className='prose prose-lg dark:prose-invert max-w-none mb-12' dangerouslySetInnerHTML={{__html: article.content}}/>
 
+                { /* Like Button */}
+                <LikeButton/>
+
+                <CommentInput/>
+
+                {/* Comment Section */}
+                <CommentSection/>
             </article>
         </main>
     </div>
