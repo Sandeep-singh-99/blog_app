@@ -21,20 +21,20 @@ type ArticleDetailPageProps = {
 };
 
 export default async function ArticleDetails({ article }: ArticleDetailPageProps) {
-//      const comments = await prisma.comment.findMany({
-//     where: {
-//       articleId: article.id,
-//     },
-//     include: {
-//       author: {
-//         select: {
-//           name: true,
-//           email: true,
-//           imageUrl: true,
-//         },
-//       },
-//     },
-//   });
+     const comments = await prisma.comment.findMany({
+    where: {
+      articleId: article.id,
+    },
+    include: {
+      user: {
+        select: {
+          name: true,
+          email: true,
+          imageUrl: true,
+        }
+      }
+    }
+  });
   return (
     <div className='min-h-screen bg-background'>
         <main className='container mx-auto py-12 px-4 sm:px-6 lg:px-8'>
@@ -65,10 +65,10 @@ export default async function ArticleDetails({ article }: ArticleDetailPageProps
                 { /* Like Button */}
                 <LikeButton/>
 
-                <CommentInput/>
+                <CommentInput articleId={article.id} />
 
                 {/* Comment Section */}
-                <CommentSection/>
+                <CommentSection comments={comments} />
             </article>
         </main>
     </div>
