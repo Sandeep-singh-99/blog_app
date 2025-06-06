@@ -35,6 +35,11 @@ export default async function ArticleDetails({ article }: ArticleDetailPageProps
       }
     }
   });
+
+  const likes = await prisma.like.findMany({ where: { articleId: article.id } });
+  const user = await prisma.user.findUnique({ where: { clerkUserId: article.author.email } });
+
+  const isLiked: boolean = likes.some((like) => like.userId === user?.id);
   return (
     <div className='min-h-screen bg-background'>
         <main className='container mx-auto py-12 px-4 sm:px-6 lg:px-8'>
@@ -63,7 +68,7 @@ export default async function ArticleDetails({ article }: ArticleDetailPageProps
                 <section className='prose prose-lg dark:prose-invert max-w-none mb-12' dangerouslySetInnerHTML={{__html: article.content}}/>
 
                 { /* Like Button */}
-                <LikeButton/>
+                <LikeButton articleId={article.id} likes={likes} isLiked={isLiked} />
 
                 <CommentInput articleId={article.id} />
 
