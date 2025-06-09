@@ -40,7 +40,7 @@ export default function Navbar() {
             >
               Articles
             </Link>
-            <Link
+            {/* <Link
               href="/tutorials"
               className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
             >
@@ -51,7 +51,7 @@ export default function Navbar() {
               className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
             >
               About
-            </Link>
+            </Link> */}
             <Link
               href="/dashboard"
               className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
@@ -122,7 +122,7 @@ export default function Navbar() {
               >
                 Articles
               </Link>
-              <Link
+              {/* <Link
                 href="/tutorials"
                 className="block px-3 py-2 text-base font-medium text-foreground"
                 onClick={() => setIsOpen(false)}
@@ -135,7 +135,7 @@ export default function Navbar() {
                 onClick={() => setIsOpen(false)}
               >
                 About
-              </Link>
+              </Link> */}
               <Link
                 href="/dashboard"
                 className="block px-3 py-2 text-base font-medium text-foreground"
