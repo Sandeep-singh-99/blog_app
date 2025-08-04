@@ -33,36 +33,24 @@ export default function Navbar() {
 
           {/* Desktop Navigation */}
 
-          <div className="hidden md:flex items-center gap-4">
+          {/* Right Section */}
+
+          <div className="flex items-center gap-4">
+             <div className="hidden md:flex items-center gap-4">
             <Link
               href="/articles"
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+              className="text-sm dark:bg-neutral-900 p-2 font-medium rounded-md text-muted-foreground transition-colors hover:text-foreground"
             >
               Articles
             </Link>
-            {/* <Link
-              href="/tutorials"
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-            >
-              Tutorials
-            </Link>
-            <Link
-              href="/about"
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-            >
-              About
-            </Link> */}
             <Link
               href="/dashboard"
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+              className="text-sm font-medium dark:bg-neutral-900 p-2 rounded-md text-muted-foreground transition-colors hover:text-foreground"
             >
               Dashboard
             </Link>
           </div>
 
-          {/* Right Section */}
-
-          <div className="flex items-center gap-4">
             <SearchInput />
             <ToggleMode />
 
@@ -122,20 +110,6 @@ export default function Navbar() {
               >
                 Articles
               </Link>
-              {/* <Link
-                href="/tutorials"
-                className="block px-3 py-2 text-base font-medium text-foreground"
-                onClick={() => setIsOpen(false)}
-              >
-                Tutorials
-              </Link>
-              <Link
-                href="/about"
-                className="block px-3 py-2 text-base font-medium text-foreground"
-                onClick={() => setIsOpen(false)}
-              >
-                About
-              </Link> */}
               <Link
                 href="/dashboard"
                 className="block px-3 py-2 text-base font-medium text-foreground"
