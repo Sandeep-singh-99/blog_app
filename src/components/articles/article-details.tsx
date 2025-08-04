@@ -5,6 +5,7 @@ import React from 'react'
 import LikeButton from './like-button';
 import CommentSection from '../comments/comment-section';
 import CommentInput from '../comments/comment-input';
+import MdEditorPreview from '../mdeditor-preview';
 
 type ArticleDetailPageProps = {
   article: Prisma.ArticleGetPayload<{
@@ -65,7 +66,8 @@ export default async function ArticleDetails({ article }: ArticleDetailPageProps
                     </div>
                 </header>
 
-                <section className='prose prose-lg dark:prose-invert max-w-none mb-12' dangerouslySetInnerHTML={{__html: article.content}}/>
+             
+                <MdEditorPreview content={article.content} />
 
                 { /* Like Button */}
                 <LikeButton articleId={article.id} likes={likes} isLiked={isLiked} />

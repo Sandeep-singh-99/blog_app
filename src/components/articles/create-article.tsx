@@ -11,16 +11,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import "react-quill-new/dist/quill.snow.css";
 import { Button } from "../ui/button";
 import { createArticle } from "@/actions/create-article";
-const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
+
+
+import MDEditor from "@uiw/react-md-editor";
 
 export default function CreateArticle() {
   const [content, setContent] = useState("");
   const [formState, action, isPending] = useActionState(createArticle, {
     errors: {},
   });
+
+  const handleChange = (value?: string) => {
+  setContent(value || ''); // Provide a default empty string if value is undefined
+  };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -98,7 +103,7 @@ export default function CreateArticle() {
 
             <div className="space-y-2">
               <Label>Content</Label>
-              <ReactQuill
+              {/* <ReactQuill
                 theme="snow"
                 value={content}
                 onChange={setContent}
@@ -113,7 +118,8 @@ export default function CreateArticle() {
                   ],
                 }}
                 placeholder="Write your article content here..."
-              />
+              /> */}
+              <MDEditor value={content} onChange={handleChange} />
               {formState.errors.content && (
                 <span className="text-red-500 text-sm">
                   {formState.errors.content}

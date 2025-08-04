@@ -3,8 +3,8 @@ import { Card } from "../ui/card";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import Image from "next/image";
-import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { prisma } from "@/lib/prisma";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 export default async function TopArticle() {
   const articles = await prisma.article.findMany({

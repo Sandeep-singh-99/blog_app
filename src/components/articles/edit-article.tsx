@@ -11,12 +11,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import "react-quill-new/dist/quill.snow.css";
 import { Button } from "../ui/button";
 import Image from "next/image";
 import { editArticle } from "@/actions/edit-article";
 import { Article } from "@prisma/client";
-const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
+
+import MDEditor from "@uiw/react-md-editor";
 
 
 
@@ -30,6 +30,10 @@ export default function EditArticle({ article }: EditArticleProps) {
   const [formState, action, isPending] = useActionState(editArticle.bind(null, article.id), {
     errors: {},
   });
+
+   const handleChange = (value?: string) => {
+  setContent(value || ''); // Provide a default empty string if value is undefined
+  };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -122,22 +126,7 @@ export default function EditArticle({ article }: EditArticleProps) {
 
             <div className="space-y-2">
               <Label>Content</Label>
-              <ReactQuill
-                theme="snow"
-                value={content}
-                onChange={setContent}
-                modules={{
-                  toolbar: [
-                    [{ header: [1, 2, false] }],
-                    ["bold", "italic", "underline"],
-                    ["link", "image"],
-                    [{ list: "ordered" }, { list: "bullet" }],
-                    ["clean", "code-block"],
-                    ["blockquote"],
-                  ],
-                }}
-                placeholder="Write your article content here..."
-              />
+               <MDEditor value={content} onChange={handleChange} />
               {formState.errors.content && (
                 <span className="text-red-500 text-sm">
                   {formState.errors.content}

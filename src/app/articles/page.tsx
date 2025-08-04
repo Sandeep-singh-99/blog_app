@@ -2,7 +2,6 @@ import AllArticles from "@/components/articles/all-article";
 import { AllArticlesPageSkeleton } from "@/components/articles/all-article-skeleton";
 import ArticleSearch from "@/components/articles/article-search";
 import { Button } from "@/components/ui/button";
-import { prisma } from "@/lib/prisma";
 import { fetchArticleByQuery } from "@/lib/query/fetch-article";
 import Link from "next/link";
 import React, { Suspense } from "react";
