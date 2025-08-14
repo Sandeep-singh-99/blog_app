@@ -66,7 +66,7 @@ function DashboardSidebar({ closeSheet }: { closeSheet?: () => void }) {
             Articles
           </Button>
         </Link>
-        <Button
+        {/* <Button
           variant="ghost"
           className="w-full justify-start"
           onClick={closeSheet}
@@ -89,7 +89,7 @@ function DashboardSidebar({ closeSheet }: { closeSheet?: () => void }) {
         >
           <Settings className="mr-2 h-4 w-4" />
           Settings
-        </Button>
+        </Button> */}
       </nav>
     </div>
   );
