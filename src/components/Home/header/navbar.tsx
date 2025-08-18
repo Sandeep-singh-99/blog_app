@@ -34,8 +34,8 @@ export default function Navbar() {
           {/* Desktop Navigation */}
 
           {/* Right Section */}
-
           <div className="flex items-center gap-4">
+            <SignedIn>
              <div className="hidden md:flex items-center gap-4">
             <Link
               href="/articles"
@@ -50,6 +50,7 @@ export default function Navbar() {
               Dashboard
             </Link>
           </div>
+          </SignedIn>
 
             <SearchInput />
             <ToggleMode />
@@ -102,6 +103,7 @@ export default function Navbar() {
             </div>
 
             {/* Mobile Navigation Links */}
+            <SignedIn>
             <div className="space-y-2 px-4">
               <Link
                 href="/articles"
@@ -118,6 +120,7 @@ export default function Navbar() {
                 Dashboard
               </Link>
             </div>
+            </SignedIn>
           </div>
         )}
       </div>
