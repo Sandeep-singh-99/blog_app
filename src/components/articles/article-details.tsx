@@ -41,13 +41,16 @@ export default async function ArticleDetails({
     },
   });
 
-
   const likes = await prisma.like.findMany({
     where: { articleId: article.id },
   });
 
   const user = await prisma.user.findUnique({
     where: { clerkUserId: article.author.email },
+  });
+
+  const userBookmark = await prisma.bookmark.findMany({
+    where: { articleId: article.id, userId: user?.id },
   });
 
   const isLiked: boolean = likes.some((like) => like.userId === user?.id);
@@ -84,16 +87,21 @@ export default async function ArticleDetails({
               isLiked={isLiked}
             />
 
-            <BookmarkButton articleId={article.id} userId={user?.id ?? ""} isBookmarked={!!userBookmark} />
+            <BookmarkButton
+              articleId={article.id}
+              userId={user?.id ?? ""}
+              isBookmarked={userBookmark.length > 0}
+            />
 
-            <ShareBtn url={`https://blog-app-gamma-self.vercel.app/articles/${article.id}`} />
+            <ShareBtn
+              url={`https://blog-app-gamma-self.vercel.app/articles/${article.id}`}
+            />
           </div>
 
-            <CommentInput articleId={article.id} />
+          <CommentInput articleId={article.id} />
 
-            {/* Comment Section */}
-            <CommentSection comments={comments} />
-         
+          {/* Comment Section */}
+          <CommentSection comments={comments} />
         </article>
       </main>
     </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useTransition } from "react";
+import React, { useTransition, useState } from "react";
 import { Button } from "../ui/button";
 import { Bookmark } from "lucide-react";
 import { bookmarkArticle } from "@/actions/bookmark-article";
@@ -8,18 +8,22 @@ import { bookmarkArticle } from "@/actions/bookmark-article";
 export default function BookmarkButton({
   articleId,
   userId,
-  isBookmarked,
+  isBookmarked: initialBookmarked,
 }: {
   articleId: string;
   userId: string;
   isBookmarked: boolean;
 }) {
   const [isPending, startTransition] = useTransition();
+  const [bookmarked, setBookmarked] = useState(initialBookmarked);
 
   const handleBookmark = () => {
     if (!userId) return;
     startTransition(async () => {
-      await bookmarkArticle(articleId, userId);
+      const res = await bookmarkArticle(articleId, userId);
+      if (res.success) {
+        setBookmarked(res.bookmarked);
+      }
     });
   };
 
@@ -31,7 +35,9 @@ export default function BookmarkButton({
       disabled={isPending || !userId}
     >
       <Bookmark
-        className={`h-5 w-5 ${isBookmarked ? "fill-current text-blue-600" : ""}`}
+        className={`h-5 w-5 ${
+          bookmarked ? "fill-current text-blue-600" : ""
+        }`}
       />
     </Button>
   );
