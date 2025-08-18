@@ -6,30 +6,32 @@ import { revalidatePath } from "next/cache";
 
 export async function bookmarkArticle(articleId: string, userId: string) {
 
-    const user = await prisma.user.findUnique({
-        where: { clerkUserId: userId },
-    })
-
-    if (!user) {
-        throw new Error("User does not exist in the database.");
-    }
-
-    const existingBookmark = await prisma.bookmark.findFirst({
-        where: { articleId, userId: user.id },
+    try {
+    const existing = await prisma.bookmark.findUnique({
+        where: {
+            userId_articleId: {
+                userId,
+                articleId,
+            },
+        },
     });
 
-    if (existingBookmark) {
-        await prisma.bookmark.delete({
-            where: { id: existingBookmark.id },
-        })
+    if (existing) {
+      await prisma.bookmark.delete({
+        where: { id: existing.id },
+      });
+      return { status: "removed" };
     } else {
-        await prisma.bookmark.create({
-            data: {
-                articleId,
-                userId: user.id,
-            },
-        })
+      await prisma.bookmark.create({
+        data: {
+          articleId,
+          userId,
+        },
+      });
+      return { status: "added" };
     }
-
-    revalidatePath(`/article/${articleId}`);
+  } catch (error) {
+    console.error("Bookmark error:", error);
+    throw new Error("Failed to bookmark");
+  }
 }

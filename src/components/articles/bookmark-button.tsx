@@ -5,8 +5,15 @@ import { Button } from "../ui/button";
 import { Bookmark } from "lucide-react";
 import { bookmarkArticle } from "@/actions/bookmark-article";
 
-
-export default function BookmarkButton({ articleId, userId }: { articleId: string; userId: string }) {
+export default function BookmarkButton({
+  articleId,
+  userId,
+  isBookmarked,
+}: {
+  articleId: string;
+  userId: string;
+  isBookmarked: boolean;
+}) {
   const [isPending, startTransition] = useTransition();
 
   const handleBookmark = () => {
@@ -23,7 +30,9 @@ export default function BookmarkButton({ articleId, userId }: { articleId: strin
       onClick={handleBookmark}
       disabled={isPending || !userId}
     >
-      <Bookmark className="h-5 w-5" />
+      <Bookmark
+        className={`h-5 w-5 ${isBookmarked ? "fill-current text-blue-600" : ""}`}
+      />
     </Button>
   );
 }
