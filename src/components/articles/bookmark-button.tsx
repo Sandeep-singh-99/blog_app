@@ -1,13 +1,29 @@
-import React from "react";
+"use client";
+
+import React, { useTransition } from "react";
 import { Button } from "../ui/button";
 import { Bookmark } from "lucide-react";
+import { bookmarkArticle } from "@/actions/bookmark-article";
 
-export default function BookmarkButton() {
+
+export default function BookmarkButton({ articleId, userId }: { articleId: string; userId: string }) {
+  const [isPending, startTransition] = useTransition();
+
+  const handleBookmark = () => {
+    if (!userId) return;
+    startTransition(async () => {
+      await bookmarkArticle(articleId, userId);
+    });
+  };
+
   return (
-    <div>
-      <Button className="gap-2" variant={"ghost"}>
-        <Bookmark className="h-5 w-5" />
-      </Button>
-    </div>
+    <Button
+      className="gap-2"
+      variant="ghost"
+      onClick={handleBookmark}
+      disabled={isPending || !userId}
+    >
+      <Bookmark className="h-5 w-5" />
+    </Button>
   );
 }

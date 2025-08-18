@@ -41,6 +41,10 @@ export default async function ArticleDetails({
     },
   });
 
+  const bookmarkId = await prisma.bookmark.findMany({
+    where: { articleId: article.id }
+  })
+
   const likes = await prisma.like.findMany({
     where: { articleId: article.id },
   });
@@ -82,7 +86,7 @@ export default async function ArticleDetails({
               isLiked={isLiked}
             />
 
-            <BookmarkButton />
+            <BookmarkButton articleId={article.id} userId={user?.id ?? ""} />
 
             <ShareBtn url={`https://blog-app-gamma-self.vercel.app/articles/${article.id}`} />
           </div>
