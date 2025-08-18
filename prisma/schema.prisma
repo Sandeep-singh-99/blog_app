@@ -15,54 +15,63 @@ datasource db {
 }
 
 model User {
-  id String @id @default(cuid())
-  clerkUserId String @unique
-  email String @unique
-  name String
-  imageUrl String?
-  articles Article[]
-  comments Comment[]
-  likes Like[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String     @id @default(cuid())
+  clerkUserId String     @unique
+  email       String     @unique
+  name        String
+  imageUrl    String?
+  articles    Article[]
+  comments    Comment[]
+  likes       Like[]
+  bookmarks   Bookmark[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
 }
-
 
 model Article {
-  id String @id @default(cuid())
-  title String
-  content String
-  category String
+  id               String     @id @default(cuid())
+  title            String
+  content          String
+  category         String
   featuredImageUrl String
-  author User @relation(fields: [authorId], references: [id])
-  authorId String
-  comments Comment[]
-  likes Like[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  author           User       @relation(fields: [authorId], references: [id])
+  authorId         String
+  comments         Comment[]
+  likes            Like[]
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+  Bookmark         Bookmark[]
 }
-
 
 model Comment {
-  id String @id @default(cuid())
-  user User @relation(fields: [userId], references: [id])
-  userId String
-  article Article @relation(fields: [articleId], references: [id])
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  article   Article  @relation(fields: [articleId], references: [id])
   articleId String
-  content String
+  content   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-
 model Like {
-  id String @id @default(cuid())
-  user User @relation(fields: [userId], references: [id])
-  userId String
-  article Article? @relation(fields: [articleId], references: [id])
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  article   Article? @relation(fields: [articleId], references: [id])
   articleId String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@unique([userId, articleId])
+}
+
+model Bookmark {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  article   Article  @relation(fields: [articleId], references: [id])
+  articleId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
