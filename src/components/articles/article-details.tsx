@@ -6,7 +6,6 @@ import LikeButton from "./like-button";
 import CommentSection from "../comments/comment-section";
 import CommentInput from "../comments/comment-input";
 import MdEditorPreview from "../mdeditor-preview";
-import BookmarkButton from "./bookmark-button";
 import ShareBtn from "./share-btn";
 
 type ArticleDetailPageProps = {
@@ -49,9 +48,6 @@ export default async function ArticleDetails({
     where: { clerkUserId: article.author.email },
   });
 
-  const userBookmark = await prisma.bookmark.findMany({
-    where: { articleId: article.id, userId: user?.id },
-  });
 
   const isLiked: boolean = likes.some((like) => like.userId === user?.id);
   return (
@@ -87,11 +83,11 @@ export default async function ArticleDetails({
               isLiked={isLiked}
             />
 
-            <BookmarkButton
+            {/* <BookmarkButton
               articleId={article.id}
               userId={user?.id ?? ""}
-              isBookmarked={userBookmark.length > 0}
-            />
+              isBookmarked={0 < 1}
+            /> */}
 
             <ShareBtn
               url={`https://blog-app-gamma-self.vercel.app/articles/${article.id}`}
