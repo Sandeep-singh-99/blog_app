@@ -1,9 +1,9 @@
 import React from 'react'
-
+import { BarLoader } from "react-spinners";
 export default function ArticleLoading() {
   return (
-    <div className='flex items-center justify-center min-h-screen bg-background'>
-        <p>Loading article...</p>
+    <div className='max-w-5xl mx-auto flex items-center mt-20'>
+       <BarLoader width={"100%"} color="gray" className="my-4" />
     </div>
   )
 }
