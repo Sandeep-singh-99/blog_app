@@ -1,5 +1,4 @@
 "use client";
-import dynamic from "next/dynamic";
 import React, { FormEvent, startTransition, useActionState, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Input } from "../ui/input";
@@ -14,8 +13,8 @@ import {
 import { Button } from "../ui/button";
 import { createArticle } from "@/actions/create-article";
 
-
 import MDEditor from "@uiw/react-md-editor";
+import { toast } from "sonner";
 
 export default function CreateArticle() {
   const [content, setContent] = useState("");
@@ -24,7 +23,7 @@ export default function CreateArticle() {
   });
 
   const handleChange = (value?: string) => {
-  setContent(value || ''); // Provide a default empty string if value is undefined
+  setContent(value || ''); 
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -33,7 +32,8 @@ export default function CreateArticle() {
     const formData = new FormData(e.currentTarget);
     formData.append("content", content);
     startTransition(() => {
-      action(formData)
+      action(formData);
+      toast.success("Article created successfully!");
     })
   }
 
@@ -103,22 +103,6 @@ export default function CreateArticle() {
 
             <div className="space-y-2">
               <Label>Content</Label>
-              {/* <ReactQuill
-                theme="snow"
-                value={content}
-                onChange={setContent}
-                modules={{
-                  toolbar: [
-                    [{ header: [1, 2, false] }],
-                    ["bold", "italic", "underline"],
-                    ["link", "image"],
-                    [{ list: "ordered" }, { list: "bullet" }],
-                    ["clean", "code-block"],
-                    ["blockquote"],
-                  ],
-                }}
-                placeholder="Write your article content here..."
-              /> */}
               <MDEditor value={content} onChange={handleChange} />
               {formState.errors.content && (
                 <span className="text-red-500 text-sm">

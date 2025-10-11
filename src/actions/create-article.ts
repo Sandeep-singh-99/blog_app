@@ -20,7 +20,7 @@ const createArticleSchema = z.object({
   category: z.string().min(3).max(50),
 });
 
-type CreateArticlesFormState = {
+export type CreateArticlesFormState = {
   errors: {
     title?: string[];
     content?: string[];
@@ -33,7 +33,7 @@ type CreateArticlesFormState = {
 export const createArticle = async (
   prevState: CreateArticlesFormState,
   formData: FormData
-): Promise<CreateArticlesFormState> => {
+): Promise<CreateArticlesFormState & { success?: boolean }> => {
   const result = createArticleSchema.safeParse({
     title: formData.get("title"),
     content: formData.get("content"),
@@ -126,6 +126,7 @@ export const createArticle = async (
         authorId: existingUser.id,
       },
     });
+    return { errors: {}, success: true };
   } catch (error) {
     if (error instanceof Error) {
       return {
