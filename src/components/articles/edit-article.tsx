@@ -1,6 +1,11 @@
 "use client";
 import dynamic from "next/dynamic";
-import React, { FormEvent, startTransition, useActionState, useState } from "react";
+import React, {
+  FormEvent,
+  startTransition,
+  useActionState,
+  useState,
+} from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
@@ -17,33 +22,40 @@ import { editArticle } from "@/actions/edit-article";
 import { Article } from "@prisma/client";
 
 import MDEditor from "@uiw/react-md-editor";
-
-
+import { toast } from "sonner";
 
 type EditArticleProps = {
-    article: Article
-}
-
+  article: Article;
+};
 
 export default function EditArticle({ article }: EditArticleProps) {
   const [content, setContent] = useState(article?.content || "");
-  const [formState, action, isPending] = useActionState(editArticle.bind(null, article.id), {
-    errors: {},
-  });
+  const [formState, action, isPending] = useActionState(
+    editArticle.bind(null, article.id),
+    {
+      errors: {},
+    }
+  );
 
-   const handleChange = (value?: string) => {
-  setContent(value || ''); // Provide a default empty string if value is undefined
+  const handleChange = (value?: string) => {
+    setContent(value || "");
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
+    const imageFile = formData.get("featuredImageUrl") as File | null;
+
+    if (imageFile && imageFile.size > 1 * 1024 * 1024) {
+      toast.error("Image must be less than 1MB.");
+      return;
+    }
     formData.append("content", content);
     startTransition(() => {
-      action(formData)
-    })
-  }
+      action(formData);
+    });
+  };
 
   return (
     <div className="max-w-4xl mx-auto p-6">
@@ -70,7 +82,11 @@ export default function EditArticle({ article }: EditArticleProps) {
 
             <div className="space-y-2">
               <Label>Category</Label>
-              <Select name="category" defaultValue={article?.category || ""} required>
+              <Select
+                name="category"
+                defaultValue={article?.category || ""}
+                required
+              >
                 <SelectTrigger className="w-full" name="category" id="category">
                   <SelectValue placeholder="Select a category" />
                 </SelectTrigger>
@@ -103,21 +119,19 @@ export default function EditArticle({ article }: EditArticleProps) {
                 className="w-full"
                 placeholder="Upload an image for your article"
               />
-              {
-                article?.featuredImageUrl && (
-                  <div className="">
-                    <Image
-                      src={article.featuredImageUrl}
-                      alt="Featured Image"
-                      width={200}
-                      height={100}
-                      className="w-48 h-32 object-cover"
-                    />
-                  </div>
-                )
-              }
+              {article?.featuredImageUrl && (
+                <div className="">
+                  <Image
+                    src={article.featuredImageUrl}
+                    alt="Featured Image"
+                    width={200}
+                    height={100}
+                    className="w-48 h-32 object-cover"
+                  />
+                </div>
+              )}
 
-              {formState.errors.featuredImageUrl   && (
+              {formState.errors.featuredImageUrl && (
                 <span className="text-red-500 text-sm">
                   {formState.errors.featuredImageUrl}
                 </span>
@@ -126,7 +140,7 @@ export default function EditArticle({ article }: EditArticleProps) {
 
             <div className="space-y-2">
               <Label>Content</Label>
-               <MDEditor value={content} onChange={handleChange} />
+              <MDEditor value={content} onChange={handleChange} />
               {formState.errors.content && (
                 <span className="text-red-500 text-sm">
                   {formState.errors.content}
