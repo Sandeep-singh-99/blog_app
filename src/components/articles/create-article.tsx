@@ -1,5 +1,10 @@
 "use client";
-import React, { FormEvent, startTransition, useActionState, useState } from "react";
+import React, {
+  FormEvent,
+  startTransition,
+  useActionState,
+  useState,
+} from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
@@ -23,19 +28,27 @@ export default function CreateArticle() {
   });
 
   const handleChange = (value?: string) => {
-  setContent(value || ''); 
+    setContent(value || "");
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
+    const imageFile = formData.get("featuredImageUrl") as File | null;
+
+    if (imageFile && imageFile.size > 1 * 1024 * 1024) {
+      // 1MB limit
+      toast.error("Image must be less than 1MB.");
+      return; 
+    }
+
     formData.append("content", content);
     startTransition(() => {
       action(formData);
       toast.success("Article created successfully!");
-    })
-  }
+    });
+  };
 
   return (
     <div className="max-w-4xl mx-auto p-6">
@@ -94,7 +107,7 @@ export default function CreateArticle() {
                 className="w-full"
                 placeholder="Upload an image for your article"
               />
-              {formState.errors.featuredImageUrl   && (
+              {formState.errors.featuredImageUrl && (
                 <span className="text-red-500 text-sm">
                   {formState.errors.featuredImageUrl}
                 </span>
