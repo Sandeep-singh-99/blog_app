@@ -12,9 +12,9 @@ export function Footer() {
           <div className="md:col-span-2 lg:col-span-2">
             <h2 className="text-2xl font-bold">
               <span className="bg-gradient-to-r from-purple-600 to-indigo-600 dark:from-purple-400 dark:to-indigo-400 bg-clip-text text-transparent">
-                Blog
+                BitWrite
               </span>
-              <span className="text-foreground">App</span>
+              <span className="text-foreground ml-2">App</span>
             </h2>
             <p className="mt-4 text-muted-foreground">
               Where ideas meet innovation. Dive into a world of insightful 

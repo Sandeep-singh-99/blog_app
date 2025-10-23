@@ -30,7 +30,7 @@ export default async function BlogDashboard() {
         <div className='flex justify-between items-center mb-6'> 
             <div>
                 <h1 className='text-2xl font-bold'>Dashboard</h1>
-                <p className=''>Welcome to your blog dashboard</p>
+                <p className=''>Welcome to your BitWrite dashboard</p>
             </div>
 
             <Link href={"/dashboard/articles/create"}>

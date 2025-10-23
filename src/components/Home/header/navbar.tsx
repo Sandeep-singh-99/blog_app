@@ -24,9 +24,9 @@ export default function Navbar() {
             <Link href={"/"} className="flex items-center space-x-2">
               <span className="font-bold text-2xl">
                 <span className="bg-gradient-to-r from-teal-600 to-indigo-600 dark:from-teal-500 dark:to-indigo-500 bg-clip-text text-transparent">
-                  Blog
+                  BitWrite
                 </span>
-                <span className="text-foreground">App</span>
+                <span className="text-foreground ml-2">App</span>
               </span>
             </Link>
           </div>
