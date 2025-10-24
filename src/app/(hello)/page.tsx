@@ -4,6 +4,7 @@ import TopArticle from "@/components/Home/top-article";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Suspense } from "react";
+import AllTags from "../tag/page";
 
 export default function Home() {
   return (
@@ -11,7 +12,7 @@ export default function Home() {
       <HeroSection />
       <section className="relative py-16 md:py-24">
         <div className="container mx-auto px-4">
-          <div className="mb-12 text-center">
+          <div className="mb-5 text-center">
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
               Featured Articles
             </h2>
@@ -19,6 +20,9 @@ export default function Home() {
               Discover our most popular and trending content
             </p>
           </div>
+
+          {/* <AllTags /> */}
+          <AllTags />
 
           <Suspense fallback={<div className="text-center text-gray-500">Loading...</div>}>
             <TopArticle />
