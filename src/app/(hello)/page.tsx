@@ -4,7 +4,7 @@ import TopArticle from "@/components/Home/top-article";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Suspense } from "react";
-import AllTags from "../tag/page";
+import AllTags from "../tags/page";
 
 export default function Home() {
   return (
@@ -21,7 +21,6 @@ export default function Home() {
             </p>
           </div>
 
-          {/* <AllTags /> */}
           <AllTags />
 
           <Suspense fallback={<div className="text-center text-gray-500">Loading...</div>}>

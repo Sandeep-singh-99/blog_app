@@ -3,20 +3,18 @@ import Link from "next/link";
 import Image from "next/image";
 
 type TagPageProps = {
-  params: { tag: string };
+  params: { tags: string };
 };
 
 export default async function TagPage({ params }: TagPageProps) {
-  const tag = decodeURIComponent(params.tag);
-  console.log("Tag param:", tag); // should log the clicked tag
-
+  const { tags } = await params;
+  const tag = decodeURIComponent(tags);
+  
   const articles = await prisma.article.findMany({
-    where: { tags: { has: tag } }, // Prisma array contains
+    where: { tags: { has: tag } }, 
     include: { author: true },
     orderBy: { createdAt: "desc" },
   });
-
-  console.log("Tag Article", articles);
   
 
   if (articles.length === 0) {

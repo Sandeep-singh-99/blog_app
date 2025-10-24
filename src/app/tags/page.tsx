@@ -24,7 +24,8 @@ export default async function AllTags() {
         {tags.map((tag) => (
           <Link
             key={tag}
-            href={`/tag/${encodeURIComponent(tag)}`}
+            href={`/tags/${encodeURIComponent(tag)}`}
+            // href={`/tags/${tag}`}
             className="group relative flex items-center gap-2 rounded-full border border-border/50 bg-background px-4 py-2 text-sm font-medium text-foreground shadow-sm transition-all hover:-translate-y-1 hover:border-primary hover:bg-gradient-to-r hover:from-primary/10 hover:to-purple-500/10"
           >
             <Tag className="h-4 w-4 text-primary transition-colors group-hover:text-purple-600" />
