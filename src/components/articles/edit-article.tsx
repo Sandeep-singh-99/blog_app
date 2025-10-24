@@ -5,6 +5,7 @@ import React, {
   startTransition,
   useActionState,
   useState,
+  KeyboardEvent
 } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Input } from "../ui/input";
@@ -23,6 +24,7 @@ import { Article } from "@prisma/client";
 
 import MDEditor from "@uiw/react-md-editor";
 import { toast } from "sonner";
+import { X } from "lucide-react";
 
 type EditArticleProps = {
   article: Article;
@@ -30,6 +32,8 @@ type EditArticleProps = {
 
 export default function EditArticle({ article }: EditArticleProps) {
   const [content, setContent] = useState(article?.content || "");
+  const [tags, setTags] = useState<string[]>(article?.tags || []); 
+  const [tagInput, setTagInput] = useState("");
   const [formState, action, isPending] = useActionState(
     editArticle.bind(null, article.id),
     {
@@ -39,6 +43,20 @@ export default function EditArticle({ article }: EditArticleProps) {
 
   const handleChange = (value?: string) => {
     setContent(value || "");
+  };
+
+   const handleTagKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if ((e.key === "Enter" || e.key === ",") && tagInput.trim() !== "") {
+      e.preventDefault();
+      if (!tags.includes(tagInput.trim())) {
+        setTags([...tags, tagInput.trim()]);
+      }
+      setTagInput("");
+    }
+  };
+
+  const removeTag = (tag: string) => {
+    setTags(tags.filter((t) => t !== tag));
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -52,6 +70,7 @@ export default function EditArticle({ article }: EditArticleProps) {
       return;
     }
     formData.append("content", content);
+    formData.append("tags", tags.join(","));
     startTransition(() => {
       action(formData);
     });
@@ -105,6 +124,42 @@ export default function EditArticle({ article }: EditArticleProps) {
               {formState.errors.category && (
                 <span className="text-red-500 text-sm">
                   {formState.errors.category}
+                </span>
+              )}
+            </div>
+
+            {/* Tags */}
+            <div className="space-y-2">
+              <Label>Tags</Label>
+              <div className="flex flex-wrap items-center gap-2 rounded-lg border border-input bg-background px-3 py-2 focus-within:ring-2 focus-within:ring-ring">
+                {tags.map((tag) => (
+                  <div
+                    key={tag}
+                    className="flex items-center gap-1 rounded-full bg-muted px-3 py-1 text-sm text-muted-foreground"
+                  >
+                    {tag}
+                    <button
+                      type="button"
+                      onClick={() => removeTag(tag)}
+                      className="text-muted-foreground hover:text-foreground"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </div>
+                ))}
+
+                <Input
+                  type="text"
+                  value={tagInput}
+                  onChange={(e) => setTagInput(e.target.value)}
+                  onKeyDown={handleTagKeyDown}
+                  placeholder="Type and press Enter..."
+                  className="border-0 p-0 focus-visible:ring-0 flex-1 bg-transparent"
+                />
+              </div>
+              {formState.errors.tags && (
+                <span className="text-red-500 text-sm">
+                  {formState.errors.tags}
                 </span>
               )}
             </div>

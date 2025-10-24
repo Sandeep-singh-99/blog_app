@@ -17,6 +17,7 @@ const createArticleSchema = z.object({
   title: z.string().min(3).max(100),
   content: z.string().min(10).max(5000),
   category: z.string().min(3).max(50),
+  tags: z.string().min(1, "At least one tag required"),
 });
 
 type EditArticlesFormState = {
@@ -24,6 +25,7 @@ type EditArticlesFormState = {
     title?: string[];
     content?: string[];
     category?: string[];
+    tags?: string[];
     featuredImageUrl?: string[];
     formErrors?: string[];
   };
@@ -38,6 +40,7 @@ export const editArticle = async (
     title: formData.get("title"),
     content: formData.get("content"),
     category: formData.get("category"),
+    tags: formData.get("tags"),
   });
 
   if (!result.success) {
@@ -156,6 +159,7 @@ export const editArticle = async (
         title: result.data.title,
         content: result.data.content,
         category: result.data.category,
+        tags: result.data.tags.split(",").map((tag) => tag.trim()),
         featuredImageUrl: imageUrl,
         authorId: existingUser.id,
       },
