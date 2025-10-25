@@ -8,12 +8,14 @@ import CommentInput from "../comments/comment-input";
 import MdEditorPreview from "../mdeditor-preview";
 import ShareBtn from "./share-btn";
 import Image from "next/image";
+import Link from "next/link";
 
 type ArticleDetailPageProps = {
   article: Prisma.ArticleGetPayload<{
     include: {
       author: {
         select: {
+          id: true;
           name: true;
           email: true;
           imageUrl: true;
@@ -33,6 +35,7 @@ export default async function ArticleDetails({
     include: {
       user: {
         select: {
+          id: true,
           name: true,
           email: true,
           imageUrl: true,
@@ -68,7 +71,10 @@ export default async function ArticleDetails({
             </div>
             <h1 className="text-4xl font-bold mb-4">{article.title}</h1>
 
-            <div className="flex items-center gap-4">
+            <Link
+              href={`/profile/${article.author.id}`}
+              className="flex items-center gap-4"
+            >
               <Avatar className="h-10 w-10">
                 <AvatarImage src={article.author.imageUrl || ""} />
                 <AvatarFallback>JD</AvatarFallback>
@@ -78,7 +84,7 @@ export default async function ArticleDetails({
                 <p className="font-medium">{article.author.name}</p>
                 <p className="text-sm">{article.createdAt.toDateString()}</p>
               </div>
-            </div>
+            </Link>
           </header>
 
           <div className="border max-w-none mb-12">
