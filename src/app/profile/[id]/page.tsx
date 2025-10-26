@@ -5,6 +5,8 @@ import Image from "next/image";
 import React from "react";
 import { prisma } from "@/lib/prisma";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Link from "next/link";
+import { currentUser } from "@clerk/nextjs/server";
 
 type ArticleDetailProps = {
   params: Promise<{ id: string }>;
@@ -12,6 +14,8 @@ type ArticleDetailProps = {
 
 export default async function ProfilePage({ params }: ArticleDetailProps) {
   const { id } = await params;
+
+  const authUser = await currentUser();
 
   const user = await prisma.user.findUnique({
     where: {
@@ -31,9 +35,13 @@ export default async function ProfilePage({ params }: ArticleDetailProps) {
     },
   });
 
+
   if (!user) {
     return <h1>User not found.</h1>;
   }
+
+  const isOwner = authUser?.id === user.clerkUserId;
+
   return (
     <div className="flex flex-col md:flex-row gap-10 max-w-6xl mx-auto mt-16 px-6">
       {/* LEFT SIDE - POSTS */}
@@ -63,15 +71,17 @@ export default async function ProfilePage({ params }: ArticleDetailProps) {
                     className="flex justify-between gap-6 border-b py-4 hover:bg-muted/20 rounded-md transition"
                   >
                     <div className="flex flex-col gap-2">
-                      <h2 className="text-lg font-semibold hover:underline">
+                      <Link href={`/articles/${article.id}`} className="text-lg font-semibold cursor-pointer hover:underline">
                         {article.title}
-                      </h2>
+                      </Link>
                       <div className="flex items-center gap-4 text-xs text-muted-foreground mt-2">
                         <span>
-                          Apr {20 - article.createdAt.getDate()}, 2021
+                          {article.createdAt.toLocaleDateString("en-US", {
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                          })}
                         </span>
-                        <span>•</span>
-                        <span>50 views</span>
                         <span>•</span>
                         <span>{article.comments.length} comments</span>
                       </div>
@@ -112,9 +122,19 @@ export default async function ProfilePage({ params }: ArticleDetailProps) {
 
           <h2 className="text-lg font-semibold">{user.name}</h2>
           <p className="text-sm text-muted-foreground">69 followers</p>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Love building collaborative tools
-          </p>
+          {isOwner ? (
+            <Button
+              variant="outline"
+              size="sm"
+              className="mt-2"
+            >
+              Edit bio
+            </Button>
+          ) : (
+            <p className="mt-2 text-sm text-muted-foreground">
+              Love building collaborative tools
+            </p>
+          )}
 
           <Button className="mt-4 w-full">Follow</Button>
 
