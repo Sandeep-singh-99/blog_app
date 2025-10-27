@@ -8,7 +8,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Link from "next/link";
 import { currentUser } from "@clerk/nextjs/server";
 import EditProfile from "@/components/edit-profile";
-import MDEditor from "@uiw/react-md-editor";
 import MdEditorPreview from "@/components/mdeditor-preview";
 import SocialMediaList from "@/components/social-media-list";
 

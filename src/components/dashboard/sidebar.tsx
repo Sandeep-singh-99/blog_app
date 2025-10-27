@@ -3,15 +3,17 @@ import React, { useState } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "../ui/button";
 import {
-  BarChart,
   FileText,
   LayoutDashboard,
-  MessageCircle,
-  Settings,
+  User,
 } from "lucide-react";
 import Link from "next/link";
 
-const Sidebar = () => {
+type SidebarProps = {
+  userId: string;
+};
+
+const Sidebar = ({ userId }: SidebarProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -24,11 +26,11 @@ const Sidebar = () => {
           </Button>
         </SheetTrigger>
         <SheetContent side="left" className="w-[250px]">
-          <DashboardSidebar closeSheet={() => setIsOpen(false)} />
+          <DashboardSidebar userId={userId} closeSheet={() => setIsOpen(false)} />
         </SheetContent>
       </Sheet>
       <div className="hidden md:block h-screen w-[250px] border-r bg-background">
-        <DashboardSidebar />
+        <DashboardSidebar userId={userId} />
       </div>
     </div>
   );
@@ -36,7 +38,7 @@ const Sidebar = () => {
 
 export default Sidebar;
 
-function DashboardSidebar({ closeSheet }: { closeSheet?: () => void }) {
+function DashboardSidebar({ userId, closeSheet }: { userId: string; closeSheet?: () => void }) {
   return (
     <div className="h-full px-4 py-6">
       <div className="flex items-center gap-2 mb-8 px-2">
@@ -66,30 +68,12 @@ function DashboardSidebar({ closeSheet }: { closeSheet?: () => void }) {
             Articles
           </Button>
         </Link>
-        {/* <Button
-          variant="ghost"
-          className="w-full justify-start"
-          onClick={closeSheet}
-        >
-          <MessageCircle className="mr-2 h-4 w-4" />
-          Comments
+
+         <Link href={`/profile/${userId}`} onClick={closeSheet}>
+        <Button variant="ghost" className="w-full justify-start">
+          <User className="mr-2 h-4 w-4" /> Profile
         </Button>
-        <Button
-          variant="ghost"
-          className="w-full justify-start"
-          onClick={closeSheet}
-        >
-          <BarChart className="mr-2 h-4 w-4" />
-          Analytics
-        </Button>
-        <Button
-          variant="ghost"
-          className="w-full justify-start"
-          onClick={closeSheet}
-        >
-          <Settings className="mr-2 h-4 w-4" />
-          Settings
-        </Button> */}
+      </Link>
       </nav>
     </div>
   );
