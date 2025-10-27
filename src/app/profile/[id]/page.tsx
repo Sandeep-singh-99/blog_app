@@ -8,6 +8,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Link from "next/link";
 import { currentUser } from "@clerk/nextjs/server";
 import EditProfile from "@/components/edit-profile";
+import MDEditor from "@uiw/react-md-editor";
+import MdEditorPreview from "@/components/mdeditor-preview";
+import SocialMediaList from "@/components/social-media-list";
 
 type ArticleDetailProps = {
   params: Promise<{ id: string }>;
@@ -23,6 +26,7 @@ export default async function ProfilePage({ params }: ArticleDetailProps) {
       id,
     },
     include: {
+      socialLinks: true,
       articles: {
         select: {
           id: true,
@@ -103,10 +107,7 @@ export default async function ProfilePage({ params }: ArticleDetailProps) {
 
           {/* About Tab */}
           <TabsContent value="about">
-            <p className="text-sm text-muted-foreground ">
-              This is the about section for {user.name}. More details about the
-              user can be added here.
-            </p>
+           <MdEditorPreview content={user.bio || "No bio available."} />
           </TabsContent>
         </Tabs>
       </div>
@@ -124,14 +125,7 @@ export default async function ProfilePage({ params }: ArticleDetailProps) {
           <h2 className="text-lg font-semibold">{user.name}</h2>
           <p className="text-sm text-muted-foreground">69 followers</p>
           {isOwner ? (
-            // <Button
-            //   variant="outline"
-            //   size="sm"
-            //   className="mt-2"
-            // >
-            //   Edit bio
-            // </Button>
-            <EditProfile />
+            <EditProfile existingBio={user.bio || ""} existingLinks={user.socialLinks || []} />
           ) : (
             <p className="mt-2 text-sm text-muted-foreground">
               Love building collaborative tools
@@ -166,6 +160,8 @@ export default async function ProfilePage({ params }: ArticleDetailProps) {
               </p>
             </div>
           </div>
+
+          <SocialMediaList links={user.socialLinks} />
         </div>
       </aside>
     </div>
