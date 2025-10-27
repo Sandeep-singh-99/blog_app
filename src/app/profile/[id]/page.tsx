@@ -7,6 +7,7 @@ import { prisma } from "@/lib/prisma";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Link from "next/link";
 import { currentUser } from "@clerk/nextjs/server";
+import EditProfile from "@/components/edit-profile";
 
 type ArticleDetailProps = {
   params: Promise<{ id: string }>;
@@ -123,13 +124,14 @@ export default async function ProfilePage({ params }: ArticleDetailProps) {
           <h2 className="text-lg font-semibold">{user.name}</h2>
           <p className="text-sm text-muted-foreground">69 followers</p>
           {isOwner ? (
-            <Button
-              variant="outline"
-              size="sm"
-              className="mt-2"
-            >
-              Edit bio
-            </Button>
+            // <Button
+            //   variant="outline"
+            //   size="sm"
+            //   className="mt-2"
+            // >
+            //   Edit bio
+            // </Button>
+            <EditProfile />
           ) : (
             <p className="mt-2 text-sm text-muted-foreground">
               Love building collaborative tools
