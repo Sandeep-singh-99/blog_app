@@ -137,7 +137,7 @@ export default async function ProfilePage({ params }: ArticleDetailProps) {
           <Separator className="my-4" />
 
           {/* Following list */}
-          <div className="w-full text-left">
+          {/* <div className="w-full text-left">
             <h3 className="font-medium mb-3">Following</h3>
             <div className="space-y-2">
               {[
@@ -159,7 +159,7 @@ export default async function ProfilePage({ params }: ArticleDetailProps) {
                 See all (76)
               </p>
             </div>
-          </div>
+          </div> */}
 
           <SocialMediaList links={user.socialLinks} />
         </div>
