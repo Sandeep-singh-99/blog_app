@@ -36,21 +36,27 @@ export default function Navbar() {
           {/* Right Section */}
           <div className="flex items-center gap-4">
             <SignedIn>
-             <div className="hidden md:flex items-center gap-4">
-            <Link
-              href="/articles"
-              className="text-sm dark:bg-neutral-900 p-2 font-medium rounded-md text-muted-foreground transition-colors hover:text-foreground"
-            >
-              Articles
-            </Link>
-            <Link
-              href="/dashboard"
-              className="text-sm font-medium dark:bg-neutral-900 p-2 rounded-md text-muted-foreground transition-colors hover:text-foreground"
-            >
-              Dashboard
-            </Link>
-          </div>
-          </SignedIn>
+              <div className="hidden md:flex items-center gap-3">
+                <Link
+                  href="/articles"
+                  className="px-4 py-2 text-sm font-medium rounded-md border border-transparent
+               bg-neutral-100 text-neutral-700 hover:bg-neutral-200
+               dark:bg-neutral-900 dark:text-neutral-200 dark:hover:bg-neutral-800
+               transition-all duration-200"
+                >
+                  Articles
+                </Link>
+                <Link
+                  href="/dashboard"
+                  className="px-4 py-2 text-sm font-medium rounded-md border border-transparent
+               bg-neutral-100 text-neutral-700 hover:bg-neutral-200
+               dark:bg-neutral-900 dark:text-neutral-200 dark:hover:bg-neutral-800
+               transition-all duration-200"
+                >
+                  Dashboard
+                </Link>
+              </div>
+            </SignedIn>
 
             <SearchInput />
             <ToggleMode />
@@ -104,22 +110,22 @@ export default function Navbar() {
 
             {/* Mobile Navigation Links */}
             <SignedIn>
-            <div className="space-y-2 px-4">
-              <Link
-                href="/articles"
-                className="block px-3 py-2 text-base font-medium text-foreground"
-                onClick={() => setIsOpen(false)}
-              >
-                Articles
-              </Link>
-              <Link
-                href="/dashboard"
-                className="block px-3 py-2 text-base font-medium text-foreground"
-                onClick={() => setIsOpen(false)}
-              >
-                Dashboard
-              </Link>
-            </div>
+              <div className="space-y-2 px-4">
+                <Link
+                  href="/articles"
+                  className="block px-3 py-2 text-base font-medium text-foreground"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Articles
+                </Link>
+                <Link
+                  href="/dashboard"
+                  className="block px-3 py-2 text-base font-medium text-foreground"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Dashboard
+                </Link>
+              </div>
             </SignedIn>
           </div>
         )}
