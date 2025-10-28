@@ -9,6 +9,8 @@ import MdEditorPreview from "../mdeditor-preview";
 import ShareBtn from "./share-btn";
 import Image from "next/image";
 import Link from "next/link";
+import FollowButton from "../follow-user";
+import { currentUser } from "@clerk/nextjs/server";
 
 type ArticleDetailPageProps = {
   article: Prisma.ArticleGetPayload<{
@@ -52,6 +54,31 @@ export default async function ArticleDetails({
     where: { clerkUserId: article.author.email },
   });
 
+  // ✅ Get logged-in Clerk user
+  const authUser = await currentUser();
+
+  // ✅ Get current user from DB (if logged in)
+  let isFollowing = false;
+
+  if (authUser) {
+    const currentUserInDB = await prisma.user.findUnique({
+      where: { clerkUserId: authUser.id },
+    });
+
+    if (currentUserInDB) {
+      const follow = await prisma.follow.findUnique({
+        where: {
+          followerId_followingId: {
+            followerId: currentUserInDB.id,
+            followingId: article.author.id,
+          },
+        },
+      });
+
+      isFollowing = !!follow;
+    }
+  }
+
   const isLiked: boolean = likes.some((like) => like.userId === user?.id);
   return (
     <div className="min-h-screen bg-background">
@@ -70,21 +97,45 @@ export default async function ArticleDetails({
               />
             </div>
             <h1 className="text-4xl font-bold mb-4">{article.title}</h1>
+            
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mt-6 border rounded-lg p-4 bg-muted/30">
+              {/* Author Info */}
+              <Link
+                href={`/profile/${article.author.id}`}
+                className="flex items-center gap-3 hover:bg-muted/50 p-2 rounded-md transition"
+              >
+                <Avatar className="h-12 w-12 border">
+                  <AvatarImage src={article.author.imageUrl || ""} />
+                  <AvatarFallback>
+                    {article.author.name?.[0]?.toUpperCase() || "?"}
+                  </AvatarFallback>
+                </Avatar>
 
-            <Link
-              href={`/profile/${article.author.id}`}
-              className="flex items-center gap-4"
-            >
-              <Avatar className="h-10 w-10">
-                <AvatarImage src={article.author.imageUrl || ""} />
-                <AvatarFallback>JD</AvatarFallback>
-              </Avatar>
+                <div>
+                  <p className="font-semibold text-base hover:underline">
+                    {article.author.name}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    Published on{" "}
+                    <span className="font-medium">
+                      {article.createdAt.toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </span>
+                  </p>
+                </div>
+              </Link>
 
-              <div>
-                <p className="font-medium">{article.author.name}</p>
-                <p className="text-sm">{article.createdAt.toDateString()}</p>
+              {/* Follow Button */}
+              <div className="w-full sm:w-auto">
+                <FollowButton
+                  targetUserId={article.author.id}
+                  isFollowing={isFollowing}
+                />
               </div>
-            </Link>
+            </div>
           </header>
 
           <div className="border max-w-none mb-12">

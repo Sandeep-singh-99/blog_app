@@ -39,7 +39,6 @@ export default async function ProfilePage({ params }: ArticleDetailProps) {
     },
   });
 
-
   if (!user) {
     return <h1>User not found.</h1>;
   }
@@ -48,23 +47,23 @@ export default async function ProfilePage({ params }: ArticleDetailProps) {
 
   let isFollowing = false;
 
-if (authUser) {
-  const currentUser = await prisma.user.findUnique({
-    where: { clerkUserId: authUser.id },
-  });
-
-  if (currentUser) {
-    const follow = await prisma.follow.findUnique({
-      where: {
-        followerId_followingId: {
-          followerId: currentUser.id,
-          followingId: user.id,
-        },
-      },
+  if (authUser) {
+    const currentUser = await prisma.user.findUnique({
+      where: { clerkUserId: authUser.id },
     });
-    isFollowing = !!follow;
+
+    if (currentUser) {
+      const follow = await prisma.follow.findUnique({
+        where: {
+          followerId_followingId: {
+            followerId: currentUser.id,
+            followingId: user.id,
+          },
+        },
+      });
+      isFollowing = !!follow;
+    }
   }
-}
 
   return (
     <div className="flex flex-col md:flex-row gap-10 max-w-6xl mx-auto mt-16 px-6">
@@ -95,7 +94,10 @@ if (authUser) {
                     className="flex justify-between gap-6 border-b py-4 hover:bg-muted/20 rounded-md transition"
                   >
                     <div className="flex flex-col gap-2">
-                      <Link href={`/articles/${article.id}`} className="text-lg font-semibold cursor-pointer hover:underline">
+                      <Link
+                        href={`/articles/${article.id}`}
+                        className="text-lg font-semibold cursor-pointer hover:underline"
+                      >
                         {article.title}
                       </Link>
                       <div className="flex items-center gap-4 text-xs text-muted-foreground mt-2">
@@ -126,7 +128,7 @@ if (authUser) {
 
           {/* About Tab */}
           <TabsContent value="about">
-           <MdEditorPreview content={user.bio || "No bio available."} />
+            <MdEditorPreview content={user.bio || "No bio available."} />
           </TabsContent>
         </Tabs>
       </div>
@@ -144,7 +146,10 @@ if (authUser) {
           <h2 className="text-lg font-semibold">{user.name}</h2>
           <p className="text-sm text-muted-foreground">69 followers</p>
           {isOwner ? (
-            <EditProfile existingBio={user.bio || ""} existingLinks={user.socialLinks || []} />
+            <EditProfile
+              existingBio={user.bio || ""}
+              existingLinks={user.socialLinks || []}
+            />
           ) : (
             <p className="mt-2 text-sm text-muted-foreground">
               Love building collaborative tools
