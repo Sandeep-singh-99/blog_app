@@ -1,4 +1,3 @@
-import Navbar from "@/components/Home/header/navbar";
 import { prisma } from "@/lib/prisma";
 import { currentUser } from "@clerk/nextjs/server";
 import React from "react";
@@ -26,7 +25,6 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
   
   return (
     <div>
-      <Navbar />
       {children}
     </div>
   );
