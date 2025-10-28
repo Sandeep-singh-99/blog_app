@@ -2,6 +2,7 @@
 
 import { auth } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
 
 export async function followUser(targetUserId: string) {
   const { userId } = await auth();
@@ -38,6 +39,8 @@ export async function followUser(targetUserId: string) {
     await prisma.follow.delete({
       where: { id: existingFollow.id },
     });
+    revalidatePath(`/profile/${targetUserId}`);
+    revalidatePath(`/profile/${currentUser.id}`);
     return {
       success: true,
       message: "Unfollowed successfully",
@@ -51,12 +54,15 @@ export async function followUser(targetUserId: string) {
         followingId: targetUserId,
       },
     });
+
+    revalidatePath(`/profile/${targetUserId}`);
+    revalidatePath(`/profile/${currentUser.id}`);
     return {
       success: true,
       message: existingFollow
         ? "Unfollowed successfully"
         : "Followed successfully",
-      followed: !existingFollow, 
+      followed: !existingFollow,
     };
   }
 }
