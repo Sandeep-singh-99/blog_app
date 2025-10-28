@@ -32,7 +32,7 @@ export default function FollowButton({
   };
 
   return (
-    <Button onClick={handleFollow} disabled={pending} className="mt-4 w-full">
+    <Button variant={isFollowing ? "destructive" : "default"} onClick={handleFollow} disabled={pending} className="mt-4 w-full">
       {pending ? "Processing..." : isFollowing ? "Unfollow" : "Follow"}
     </Button>
   );
