@@ -1,6 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
-import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import React from "react";
 import { prisma } from "@/lib/prisma";
@@ -10,6 +9,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import EditProfile from "@/components/edit-profile";
 import MdEditorPreview from "@/components/mdeditor-preview";
 import SocialMediaList from "@/components/social-media-list";
+import FollowButton from "@/components/follow-user";
 
 type ArticleDetailProps = {
   params: Promise<{ id: string }>;
@@ -45,6 +45,26 @@ export default async function ProfilePage({ params }: ArticleDetailProps) {
   }
 
   const isOwner = authUser?.id === user.clerkUserId;
+
+  let isFollowing = false;
+
+if (authUser) {
+  const currentUser = await prisma.user.findUnique({
+    where: { clerkUserId: authUser.id },
+  });
+
+  if (currentUser) {
+    const follow = await prisma.follow.findUnique({
+      where: {
+        followerId_followingId: {
+          followerId: currentUser.id,
+          followingId: user.id,
+        },
+      },
+    });
+    isFollowing = !!follow;
+  }
+}
 
   return (
     <div className="flex flex-col md:flex-row gap-10 max-w-6xl mx-auto mt-16 px-6">
@@ -131,8 +151,7 @@ export default async function ProfilePage({ params }: ArticleDetailProps) {
             </p>
           )}
 
-          <Button className="mt-4 w-full">Follow</Button>
-
+          <FollowButton targetUserId={user.id} isFollowing={isFollowing} />
           <Separator className="my-4" />
 
           {/* Following list */}
