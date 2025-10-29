@@ -27,7 +27,7 @@ export default async function page({ searchParams }: SearchPageProps) {
           <h1 className="text-4xl font-bold sm:text-5xl">All Articles</h1>
 
           {/* Search Bar */}
-          <Suspense>
+          <Suspense fallback={<div className="text-center py-4">Loading search...</div>}>
             <ArticleSearch />
           </Suspense>
         </div>
