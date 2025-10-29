@@ -1,4 +1,3 @@
-// /app/bookmarks/page.tsx
 import { prisma } from "@/lib/prisma";
 import { currentUser } from "@clerk/nextjs/server";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -8,6 +7,8 @@ import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
+
+export const dynamic = 'force-dynamic';
 
 export default async function BookmarksPage() {
   const authUser = await currentUser();
