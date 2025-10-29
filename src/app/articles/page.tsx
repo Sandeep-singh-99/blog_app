@@ -1,10 +1,13 @@
 import AllArticles from "@/components/articles/all-article";
 import { AllArticlesPageSkeleton } from "@/components/articles/all-article-skeleton";
 import ArticleSearch from "@/components/articles/article-search";
+import ArticleSearchWrapper from "@/components/articles/article-search-wrapper";
 import { Button } from "@/components/ui/button";
 import { fetchArticleByQuery } from "@/lib/query/fetch-article";
 import Link from "next/link";
 import React, { Suspense } from "react";
+
+export const dynamic = 'force-dynamic';
 
 type SearchPageProps = {
   searchParams: { search?: string; page?: string };
@@ -27,9 +30,10 @@ export default async function page({ searchParams }: SearchPageProps) {
           <h1 className="text-4xl font-bold sm:text-5xl">All Articles</h1>
 
           {/* Search Bar */}
-          <Suspense fallback={<div className="text-center py-4">Loading search...</div>}>
+          {/* <Suspense fallback={<div className="text-center py-4">Loading search...</div>}>
             <ArticleSearch />
-          </Suspense>
+          </Suspense> */}
+          <ArticleSearchWrapper />
         </div>
 
         {/* All Articles */}

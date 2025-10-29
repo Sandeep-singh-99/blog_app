@@ -7,6 +7,8 @@ import Link from "next/link";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
+export const dynamic = 'force-dynamic';
+
 export default async function ConnectionsPage() {
   const authUser = await currentUser();
 

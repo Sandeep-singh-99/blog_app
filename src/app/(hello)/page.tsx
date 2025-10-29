@@ -6,6 +6,8 @@ import Link from "next/link";
 import { Suspense } from "react";
 import AllTags from "../tags/page";
 
+export const dynamic = 'force-dynamic';
+
 export default function Home() {
   return (
     <main>

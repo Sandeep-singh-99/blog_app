@@ -5,6 +5,8 @@ import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
+export const dynamic = 'force-dynamic';
+
 type TagPageProps = {
   params: { tags: string };
 };
