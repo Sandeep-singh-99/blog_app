@@ -12,6 +12,7 @@ import Link from "next/link";
 import FollowButton from "../follow-user";
 import { currentUser } from "@clerk/nextjs/server";
 import BookmarkButton from "./bookmark-button";
+import { Badge } from "../ui/badge";
 
 type ArticleDetailPageProps = {
   article: Prisma.ArticleGetPayload<{
@@ -29,7 +30,7 @@ type ArticleDetailPageProps = {
 };
 
 export default async function ArticleDetails({ article }: ArticleDetailPageProps) {
-  // ✅ Get all related data
+  // Fetch related data
   const comments = await prisma.comment.findMany({
     where: { articleId: article.id },
     include: { user: true },
@@ -52,7 +53,6 @@ export default async function ArticleDetails({ article }: ArticleDetailPageProps
     });
 
     if (currentUserInDB) {
-      // ✅ Check follow
       const follow = await prisma.follow.findUnique({
         where: {
           followerId_followingId: {
@@ -63,7 +63,6 @@ export default async function ArticleDetails({ article }: ArticleDetailPageProps
       });
       isFollowing = !!follow;
 
-      // ✅ Check bookmark
       const bookmark = await prisma.bookmark.findFirst({
         where: {
           articleId: article.id,
@@ -72,45 +71,50 @@ export default async function ArticleDetails({ article }: ArticleDetailPageProps
       });
       isBookmarked = !!bookmark;
 
-      // ✅ Check like
       isLiked = likes.some((like) => like.userId === currentUserInDB!.id);
     }
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <main className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-background text-foreground transition-colors">
+      <main className="container mx-auto py-10 px-4 sm:px-6 lg:px-8">
         <article className="mx-auto max-w-3xl">
-          <header className="mb-12">
-            <div className="flex flex-wrap gap-2 mb-4">
-              <span className="px-3 py-1 text-sm">{article.category}</span>
+          {/* Article Header */}
+          <header className="mb-10">
+            <div className="flex flex-wrap items-center gap-2 mb-3">
+              <Badge variant="secondary" className="text-xs sm:text-sm">
+                {article.category}
+              </Badge>
             </div>
 
-            <div className="relative mb-4 h-48 w-full overflow-hidden rounded-xl">
+            {/* Featured Image */}
+            <div className="relative mb-5 w-full h-52 sm:h-64 md:h-80 overflow-hidden rounded-xl shadow-md">
               <Image
                 src={article.featuredImageUrl as string}
                 alt={article.title}
                 fill
-                className="object-cover"
+                priority
+                className="object-cover object-center hover:scale-105 transition-transform duration-300"
               />
             </div>
 
-            <h1 className="text-4xl font-bold mb-4">{article.title}</h1>
+            <h1 className="text-3xl sm:text-4xl font-bold leading-tight mb-3 break-words">
+              {article.title}
+            </h1>
 
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mt-6 border rounded-lg p-4 bg-muted/30">
-              {/* Author Info */}
+            {/* Author Info */}
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border rounded-lg p-4 bg-muted/30 backdrop-blur-sm">
               <Link
                 href={`/profile/${article.author.id}`}
-                className="flex items-center gap-3 hover:bg-muted/50 p-2 rounded-md transition"
+                className="flex items-center gap-3 hover:bg-muted/50 p-2 rounded-md transition w-full sm:w-auto"
               >
-                <Avatar className="h-12 w-12 border">
+                <Avatar className="h-11 w-11 border">
                   <AvatarImage src={article.author.imageUrl || ""} />
                   <AvatarFallback>
                     {article.author.name?.[0]?.toUpperCase() || "?"}
                   </AvatarFallback>
                 </Avatar>
-
-                <div>
+                <div className="flex flex-col">
                   <p className="font-semibold text-base hover:underline">
                     {article.author.name}
                   </p>
@@ -127,22 +131,25 @@ export default async function ArticleDetails({ article }: ArticleDetailPageProps
                 </div>
               </Link>
 
-              {/* Follow Button */}
+              {/* Follow button (only show if not the author) */}
               {authUser && currentUserInDB?.id !== article.author.id && (
-                <FollowButton
-                  targetUserId={article.author.id}
-                  isFollowing={isFollowing}
-                />
+                <div className="w-full sm:w-auto">
+                  <FollowButton
+                    targetUserId={article.author.id}
+                    isFollowing={isFollowing}
+                  />
+                </div>
               )}
             </div>
           </header>
 
-          <div className="border max-w-none mb-12">
+          {/* Article Content */}
+          <section className="prose prose-sm sm:prose-base dark:prose-invert max-w-none border rounded-lg p-4 mb-12 bg-card">
             <MdEditorPreview content={article.content} />
-          </div>
+          </section>
 
-          {/* Like / Bookmark / Share */}
-          <div className="flex gap-2 mb-12 border-t pt-8">
+          {/* Like / Bookmark / Share Section */}
+          <div className="flex flex-wrap gap-3 mb-12 border-t pt-6">
             <LikeButton articleId={article.id} likes={likes} isLiked={isLiked} />
 
             <BookmarkButton
@@ -156,8 +163,11 @@ export default async function ArticleDetails({ article }: ArticleDetailPageProps
             />
           </div>
 
-          <CommentInput articleId={article.id} />
-          <CommentSection comments={comments} />
+          {/* Comment Section */}
+          <section className="space-y-6">
+            <CommentInput articleId={article.id} />
+            <CommentSection comments={comments} />
+          </section>
         </article>
       </main>
     </div>

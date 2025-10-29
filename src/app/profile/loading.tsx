@@ -2,7 +2,7 @@ import React from 'react'
 import { BarLoader } from "react-spinners";
 export default function ProfileLoading() {
   return (
-    <div className='max-w-5xl mx-auto flex items-center mt-20'>
+    <div className='max-w-5xl mx-auto flex items-center mt-20 md:px-10 px-5'>
        <BarLoader width={"100%"} color="gray" className="my-4" />
     </div>
   )

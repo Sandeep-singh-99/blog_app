@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "../ui/button";
-import { FileText, LayoutDashboard, User, UserCheck2, UserCircle2 } from "lucide-react";
+import { BookMarkedIcon, FileText, LayoutDashboard, User, UserCheck2, UserCircle2 } from "lucide-react";
 import Link from "next/link";
 
 type SidebarProps = {
@@ -83,6 +83,12 @@ function DashboardSidebar({
         <Link href={"/dashboard/connections"} onClick={closeSheet}>
           <Button variant="ghost" className="w-full justify-start">
             <UserCircle2 className="mr-2 h-4 w-4" /> Connections
+          </Button>
+        </Link>
+
+        <Link href={"/dashboard/bookmark"} onClick={closeSheet}>
+          <Button variant="ghost" className="w-full justify-start">
+            <BookMarkedIcon className="mr-2 h-4 w-4" /> BookMark
           </Button>
         </Link>
       </nav>
