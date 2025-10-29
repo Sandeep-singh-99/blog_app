@@ -11,6 +11,7 @@ import Image from "next/image";
 import Link from "next/link";
 import FollowButton from "../follow-user";
 import { currentUser } from "@clerk/nextjs/server";
+import BookmarkButton from "./bookmark-button";
 
 type ArticleDetailPageProps = {
   article: Prisma.ArticleGetPayload<{
@@ -27,45 +28,31 @@ type ArticleDetailPageProps = {
   }>;
 };
 
-export default async function ArticleDetails({
-  article,
-}: ArticleDetailPageProps) {
+export default async function ArticleDetails({ article }: ArticleDetailPageProps) {
+  // ✅ Get all related data
   const comments = await prisma.comment.findMany({
-    where: {
-      articleId: article.id,
-    },
-    include: {
-      user: {
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          imageUrl: true,
-        },
-      },
-    },
+    where: { articleId: article.id },
+    include: { user: true },
   });
 
   const likes = await prisma.like.findMany({
     where: { articleId: article.id },
   });
 
-  const user = await prisma.user.findUnique({
-    where: { clerkUserId: article.author.email },
-  });
-
-  // ✅ Get logged-in Clerk user
   const authUser = await currentUser();
 
-  // ✅ Get current user from DB (if logged in)
+  let currentUserInDB = null;
   let isFollowing = false;
+  let isBookmarked = false;
+  let isLiked = false;
 
   if (authUser) {
-    const currentUserInDB = await prisma.user.findUnique({
+    currentUserInDB = await prisma.user.findUnique({
       where: { clerkUserId: authUser.id },
     });
 
     if (currentUserInDB) {
+      // ✅ Check follow
       const follow = await prisma.follow.findUnique({
         where: {
           followerId_followingId: {
@@ -74,12 +61,22 @@ export default async function ArticleDetails({
           },
         },
       });
-
       isFollowing = !!follow;
+
+      // ✅ Check bookmark
+      const bookmark = await prisma.bookmark.findFirst({
+        where: {
+          articleId: article.id,
+          userId: currentUserInDB.id,
+        },
+      });
+      isBookmarked = !!bookmark;
+
+      // ✅ Check like
+      isLiked = likes.some((like) => like.userId === currentUserInDB!.id);
     }
   }
 
-  const isLiked: boolean = likes.some((like) => like.userId === user?.id);
   return (
     <div className="min-h-screen bg-background">
       <main className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
@@ -88,6 +85,7 @@ export default async function ArticleDetails({
             <div className="flex flex-wrap gap-2 mb-4">
               <span className="px-3 py-1 text-sm">{article.category}</span>
             </div>
+
             <div className="relative mb-4 h-48 w-full overflow-hidden rounded-xl">
               <Image
                 src={article.featuredImageUrl as string}
@@ -96,8 +94,9 @@ export default async function ArticleDetails({
                 className="object-cover"
               />
             </div>
+
             <h1 className="text-4xl font-bold mb-4">{article.title}</h1>
-            
+
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mt-6 border rounded-lg p-4 bg-muted/30">
               {/* Author Info */}
               <Link
@@ -129,12 +128,12 @@ export default async function ArticleDetails({
               </Link>
 
               {/* Follow Button */}
-              <div className="w-full sm:w-auto">
+              {authUser && currentUserInDB?.id !== article.author.id && (
                 <FollowButton
                   targetUserId={article.author.id}
                   isFollowing={isFollowing}
                 />
-              </div>
+              )}
             </div>
           </header>
 
@@ -142,19 +141,15 @@ export default async function ArticleDetails({
             <MdEditorPreview content={article.content} />
           </div>
 
-          {/* Like Button */}
+          {/* Like / Bookmark / Share */}
           <div className="flex gap-2 mb-12 border-t pt-8">
-            <LikeButton
-              articleId={article.id}
-              likes={likes}
-              isLiked={isLiked}
-            />
+            <LikeButton articleId={article.id} likes={likes} isLiked={isLiked} />
 
-            {/* <BookmarkButton
+            <BookmarkButton
               articleId={article.id}
-              userId={user?.id ?? ""}
-              isBookmarked={0 < 1}
-            /> */}
+              userId={currentUserInDB?.id ?? ""}
+              isBookmarked={isBookmarked}
+            />
 
             <ShareBtn
               url={`https://blog-app-gamma-self.vercel.app/articles/${article.id}`}
@@ -162,8 +157,6 @@ export default async function ArticleDetails({
           </div>
 
           <CommentInput articleId={article.id} />
-
-          {/* Comment Section */}
           <CommentSection comments={comments} />
         </article>
       </main>
