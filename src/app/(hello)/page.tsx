@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Suspense } from "react";
 import AllTags from "../tags/page";
+import TrendingPosts from "@/components/articles/trending-pots";
 
 export const dynamic = 'force-dynamic';
 
@@ -25,6 +26,9 @@ export default function Home() {
 
           <AllTags />
 
+          <TrendingPosts />
+
+          <h1 className="text-3xl md:text-4xl font-bold mb-8 text-foreground">Recent Posts</h1>
           <Suspense fallback={<div className="text-center text-gray-500">Loading...</div>}>
             <TopArticle />
           </Suspense>
