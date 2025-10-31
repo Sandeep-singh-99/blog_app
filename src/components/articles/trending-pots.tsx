@@ -33,7 +33,7 @@ export default async function TrendingPosts() {
   }
 
   return (
-    <main className="max-w-6xl mx-auto px-4 md:px-6 py-12">
+    <main className=" mx-auto  py-12">
       <h1 className="text-3xl md:text-4xl font-bold mb-8 text-foreground">
         🔥 Trending Posts
       </h1>
