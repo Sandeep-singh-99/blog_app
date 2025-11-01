@@ -51,7 +51,7 @@ export default function EditProfile({
   existingLinks = [],
 }: EditProfileProps) {
   const [content, setContent] = useState(existingBio);
-//   const existing = existingLinks[0] || { socialMediaName: "", url: "" }
+  //   const existing = existingLinks[0] || { socialMediaName: "", url: "" }
   const [socialMediaName, setSocialMediaName] = useState("");
   const [url, setUrl] = useState("");
   const [formState, action, isPending] = useActionState(createBio, {
@@ -73,8 +73,14 @@ export default function EditProfile({
     formData.append("bio", content);
 
     startTransition(() => {
-      action(formData);
-      toast.success("Bio updated successfully!");
+      try {
+        action(formData);
+        toast.success("Bio updated successfully!");
+      } catch (error) {
+        toast.error(
+          error instanceof Error ? error.message : "Error updating bio"
+        );
+      }
     });
   };
 

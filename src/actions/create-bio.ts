@@ -7,7 +7,7 @@ import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 
 const createBioSchema = z.object({
-    bio: z.string().max(500),
+    bio: z.string().max(1000),
 })
 
 export type CreateBioFormState = {

@@ -26,6 +26,7 @@ export default async function ProfilePage({ params }: ArticleDetailProps) {
     },
     include: {
       socialLinks: true,
+      followers: true,
       articles: {
         select: {
           id: true,
@@ -144,7 +145,7 @@ export default async function ProfilePage({ params }: ArticleDetailProps) {
           </Avatar>
 
           <h2 className="text-lg font-semibold">{user.name}</h2>
-          <p className="text-sm text-muted-foreground">69 followers</p>
+          <p className="text-sm text-muted-foreground">{user.followers.length} followers</p>
           {isOwner ? (
             <EditProfile
               existingBio={user.bio || ""}
