@@ -129,7 +129,9 @@ export default async function ProfilePage({ params }: ArticleDetailProps) {
 
           {/* About Tab */}
           <TabsContent value="about">
-            <MdEditorPreview content={user.bio || "No bio available."} />
+            <section className="prose prose-sm sm:prose-base dark:prose-invert max-w-none border rounded-lg p-4 mb-12 bg-card">
+              <MdEditorPreview content={user.bio || "No bio available."} />
+            </section>
           </TabsContent>
         </Tabs>
       </div>
