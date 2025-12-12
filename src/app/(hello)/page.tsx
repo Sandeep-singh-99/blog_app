@@ -26,7 +26,7 @@ export default function Home() {
 
           <AllTags />
 
-          <TrendingPosts />
+          {/* <TrendingPosts /> */}
 
           <h1 className="text-3xl md:text-4xl font-bold mb-8 text-foreground">Recent Posts</h1>
           <Suspense fallback={<div className="text-center text-gray-500">Loading...</div>}>
