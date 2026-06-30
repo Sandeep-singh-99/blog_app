@@ -45,7 +45,7 @@ const ColorIcon = ({ color, active }: { color: string; active: boolean }) => {
   );
 };
 
-export const Header = () => {
+export const EditorHeader = () => {
   const [theme, setTheme] = useLocalStorageState('next-tiptap-theme', {
     defaultValue: 'light',
     listenStorageChange: true,
@@ -68,19 +68,19 @@ export const Header = () => {
   }, []);
 
   return (
-    <div className="flex items-center justify-between sticky top-0 z-10 ">
-      <h1 className="text-[24px] font-bold leading-tight tracking-tighter">
+    <div className="flex items-center justify-end sticky top-0 z-10 ">
+      {/* <h1 className="text-[24px] font-bold leading-tight tracking-tighter">
         Reactjs Tiptap Editor
-      </h1>
+      </h1> */}
       <div className="flex items-center gap-2">
-        <a
+        {/* <a
           href="https://github.com/hunghg255/reactjs-tiptap-editor"
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2 text-sm font-medium underline-offset-4 hover:underline"
         >
           <Github size={20} className="text-primary" />
-        </a>
+        </a> */}
 
         <Popover>
           <PopoverTrigger>
@@ -318,7 +318,7 @@ export const Header = () => {
 };
 
 
-export const NavBar = ({ editor }) => {
+export const EditorNavBar = ({ editor }) => {
   const [lang, setlang] = useLocalStorageState('next-tiptap-lang', {
     defaultValue: 'en',
     listenStorageChange: true,

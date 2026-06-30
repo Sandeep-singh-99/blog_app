@@ -147,7 +147,7 @@ import 'easydrawer/styles.css';
 import 'katex/dist/katex.min.css';
 import 'reactjs-tiptap-editor/style.css';
 
-import { Header, NavBar } from '@/components/Editor/EditorHeader';
+import { EditorHeader, EditorNavBar } from '@/components/Editor/EditorHeader';
 import { EditorContent, useEditor } from '@tiptap/react';
 import 'katex/contrib/mhchem';
 import { CharacterCount } from '@tiptap/extensions';
@@ -484,12 +484,12 @@ function App() {
     <>
       <div className="border-b border-border shadow-md">
         <div className="w-full max-w-[1200px] p-4  mx-[auto] my-0">
-          <Header editor={editor} />
+          <EditorHeader editor={editor} />
         </div>
       </div>
 
       <div className=" w-full max-w-[1200px] mx-[auto] my-0 px-4">
-        <NavBar editor={editor} />
+        <EditorNavBar editor={editor} />
 
         <RichTextProvider editor={editor}>
           <div className="overflow-hidden rounded-[0.5rem] bg-background !border !border-border">
