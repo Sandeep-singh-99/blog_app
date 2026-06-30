@@ -67,8 +67,9 @@ export const EditorHeader = () => {
     themeActions.setBorderRadius(`${radius}rem` || '0.5rem');
   }, []);
 
+  // sticky top-0 z-10
   return (
-    <div className="flex items-center justify-end sticky top-0 z-10 ">
+    <div className="flex items-center justify-end sticky top-0 z-10">
       {/* <h1 className="text-[24px] font-bold leading-tight tracking-tighter">
         Reactjs Tiptap Editor
       </h1> */}
