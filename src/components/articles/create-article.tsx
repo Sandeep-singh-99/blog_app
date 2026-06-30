@@ -22,6 +22,7 @@ import { createArticle } from "@/actions/create-article";
 import MDEditor from "@uiw/react-md-editor";
 import { toast } from "sonner";
 import { X } from "lucide-react";
+import EditorClient from "../Editor/EditorClient";
 
 export default function CreateArticle() {
   const [content, setContent] = useState("");
@@ -70,7 +71,7 @@ export default function CreateArticle() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
+    <div className="max-w-7xl mx-auto p-6">
       <Card>
         <CardHeader>
           <CardTitle>Create New Article</CardTitle>
@@ -91,7 +92,8 @@ export default function CreateArticle() {
               )}
             </div>
 
-            <div className="space-y-2">
+           <div className="flex items-center justify-between">
+             <div className="space-y-2 w-1/2">
               <Label>Category</Label>
               <Select name="category" defaultValue="" required>
                 <SelectTrigger className="w-full" name="category" id="category">
@@ -115,6 +117,24 @@ export default function CreateArticle() {
                 </span>
               )}
             </div>
+
+             <div className="space-y-2">
+              <Label>Featured Image</Label>
+              <Input
+                type="file"
+                id="featuredImageUrl"
+                name="featuredImageUrl"
+                accept="image/*"
+                className="w-full"
+                placeholder="Upload an image for your article"
+              />
+              {formState.errors.featuredImageUrl && (
+                <span className="text-red-500 text-sm">
+                  {formState.errors.featuredImageUrl}
+                </span>
+              )}
+            </div>
+           </div>
 
         {/* Tags */}
             <div className="space-y-2">
@@ -152,7 +172,7 @@ export default function CreateArticle() {
               )}
             </div>
 
-            <div className="space-y-2">
+            {/* <div className="space-y-2">
               <Label>Featured Image</Label>
               <Input
                 type="file"
@@ -167,11 +187,12 @@ export default function CreateArticle() {
                   {formState.errors.featuredImageUrl}
                 </span>
               )}
-            </div>
+            </div> */}
 
             <div className="space-y-2">
               <Label>Content</Label>
-              <MDEditor value={content} onChange={handleChange} />
+              {/* <MDEditor value={content} onChange={handleChange} /> */}
+              <EditorClient />
               {formState.errors.content && (
                 <span className="text-red-500 text-sm">
                   {formState.errors.content}
