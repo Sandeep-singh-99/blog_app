@@ -1,7 +1,7 @@
 import type { DependencyList, EffectCallback, useEffect, useLayoutEffect } from 'react';
 import { useRef } from 'react';
 import useUnmount from '../useUnmount';
-import depsAreSame from './depsAreSame';
+import depsAreSame from './deepAreSame';
 import type { BasicTarget } from './domTarget';
 import { getTargetElement } from './domTarget';
 
