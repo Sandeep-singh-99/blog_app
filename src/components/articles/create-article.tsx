@@ -19,7 +19,6 @@ import {
 import { Button } from "../ui/button";
 import { createArticle } from "@/actions/create-article";
 
-import MDEditor from "@uiw/react-md-editor";
 import { toast } from "sonner";
 import { X } from "lucide-react";
 import EditorClient from "../Editor/EditorClient";
@@ -32,9 +31,7 @@ export default function CreateArticle() {
     errors: {},
   });
 
-  const handleChange = (value?: string) => {
-    setContent(value || "");
-  };
+  
 
   const handleTagKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if ((e.key === "Enter" || e.key === ",") && tagInput.trim() !== "") {
@@ -172,26 +169,9 @@ export default function CreateArticle() {
               )}
             </div>
 
-            {/* <div className="space-y-2">
-              <Label>Featured Image</Label>
-              <Input
-                type="file"
-                id="featuredImageUrl"
-                name="featuredImageUrl"
-                accept="image/*"
-                className="w-full"
-                placeholder="Upload an image for your article"
-              />
-              {formState.errors.featuredImageUrl && (
-                <span className="text-red-500 text-sm">
-                  {formState.errors.featuredImageUrl}
-                </span>
-              )}
-            </div> */}
 
             <div className="space-y-2">
               <Label>Content</Label>
-              {/* <MDEditor value={content} onChange={handleChange} /> */}
               <EditorClient />
               {formState.errors.content && (
                 <span className="text-red-500 text-sm">

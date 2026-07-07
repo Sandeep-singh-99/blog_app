@@ -25,6 +25,7 @@ import { Article } from "@prisma/client";
 import MDEditor from "@uiw/react-md-editor";
 import { toast } from "sonner";
 import { X } from "lucide-react";
+import EditorClient from "../Editor/EditorClient";
 
 type EditArticleProps = {
   article: Article;
@@ -195,7 +196,8 @@ export default function EditArticle({ article }: EditArticleProps) {
 
             <div className="space-y-2">
               <Label>Content</Label>
-              <MDEditor value={content} onChange={handleChange} />
+              {/* <MDEditor value={content} onChange={handleChange} /> */}
+              <EditorClient />
               {formState.errors.content && (
                 <span className="text-red-500 text-sm">
                   {formState.errors.content}
