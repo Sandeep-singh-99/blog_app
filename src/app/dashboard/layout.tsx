@@ -6,11 +6,11 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import SidebarHeader from "@/components/dashboard/SidebarHeader";
 
 const Layout = async ({ children }: { children: ReactNode }) => {
-  const { userId } = await auth();
-  if (!userId) throw new Error("User not logged in");
+  // const { userId } = await auth();
+  // if (!userId) throw new Error("User not logged in");
 
-  const user = await prisma.user.findUnique({ where: { clerkUserId: userId } });
-  if (!user) throw new Error("User not found");
+  // const user = await prisma.user.findUnique({ where: { clerkUserId: userId } });
+  // if (!user) throw new Error("User not found");
 
   return (
     // <div className="min-h-screen w-full flex">
