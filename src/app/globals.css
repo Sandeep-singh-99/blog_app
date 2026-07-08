@@ -126,7 +126,7 @@
 Markdown Editor
 */
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   .wmde-markdown,
   .wmde-markdown-var {
     color-scheme: dark;
@@ -1272,4 +1272,4 @@ body[data-color-mode*='light'] {
 }
 .token.entity {
   cursor: help;
-}
+} */

@@ -61,11 +61,19 @@ export const EditorHeader = () => {
     listenStorageChange: true,
   });
 
+  // useEffect(() => {
+  //   themeActions.setTheme(theme || 'light');
+  //   themeActions.setColor(color || 'default');
+  //   themeActions.setBorderRadius(`${radius}rem` || '0.5rem');
+  // }, []);
+
   useEffect(() => {
-    themeActions.setTheme(theme || 'light');
-    themeActions.setColor(color || 'default');
-    themeActions.setBorderRadius(`${radius}rem` || '0.5rem');
-  }, []);
+    return () => {
+        themeActions.setTheme("light");
+        themeActions.setColor("default");
+        themeActions.setBorderRadius("0.5rem");
+    };
+}, []);
 
   // sticky top-0 z-10
   return (
