@@ -5,24 +5,36 @@ import React from "react";
 import { prisma } from "@/lib/prisma";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Link from "next/link";
-import { currentUser } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import EditProfile from "@/components/edit-profile";
-import MdEditorPreview from "@/components/mdeditor-preview";
+// import MdEditorPreview from "@/components/mdeditor-preview";
 import SocialMediaList from "@/components/social-media-list";
 import FollowButton from "@/components/follow-user";
 
-type ArticleDetailProps = {
-  params: Promise<{ id: string }>;
-};
-
-export default async function ProfilePage({ params }: ArticleDetailProps) {
-  const { id } = await params;
+export default async function ProfilePage() {
+  const { userId } = await auth();
+  console.log("userId:", userId);
 
   const authUser = await currentUser();
 
+console.log("authUser:", authUser?.id);
+
+  if (!userId) {
+    throw new Error("User not logged in");
+  }
+  const currentDbUser = await prisma.user.findUnique({
+    where: {
+      clerkUserId: userId,
+    },
+  });
+
+  if (!currentDbUser) {
+    throw new Error("User not found");
+  }
+
   const user = await prisma.user.findUnique({
     where: {
-      id,
+      id: currentDbUser.id,
     },
     include: {
       socialLinks: true,
@@ -44,13 +56,13 @@ export default async function ProfilePage({ params }: ArticleDetailProps) {
     return <h1>User not found.</h1>;
   }
 
-  const isOwner = authUser?.id === user.clerkUserId;
+  const isOwner = userId === user.clerkUserId;
 
   let isFollowing = false;
 
-  if (authUser) {
+  if (userId) {
     const currentUser = await prisma.user.findUnique({
-      where: { clerkUserId: authUser.id },
+      where: { clerkUserId: userId },
     });
 
     if (currentUser) {
@@ -130,7 +142,7 @@ export default async function ProfilePage({ params }: ArticleDetailProps) {
           {/* About Tab */}
           <TabsContent value="about">
             <section className="prose prose-sm sm:prose-base dark:prose-invert max-w-none border rounded-lg p-4 mb-12 bg-card">
-              <MdEditorPreview content={user.bio || "No bio available."} />
+              {/* <MdEditorPreview content={user.bio || "No bio available."} /> */}
             </section>
           </TabsContent>
         </Tabs>
@@ -147,7 +159,9 @@ export default async function ProfilePage({ params }: ArticleDetailProps) {
           </Avatar>
 
           <h2 className="text-lg font-semibold">{user.name}</h2>
-          <p className="text-sm text-muted-foreground">{user.followers.length} followers</p>
+          <p className="text-sm text-muted-foreground">
+            {user.followers.length} followers
+          </p>
           {isOwner ? (
             <EditProfile
               existingBio={user.bio || ""}

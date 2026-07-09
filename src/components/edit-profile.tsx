@@ -19,7 +19,6 @@ import {
 import { Button } from "./ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { Label } from "./ui/label";
-import MDEditor from "@uiw/react-md-editor";
 import {
   Select,
   SelectContent,
@@ -34,6 +33,7 @@ import { createBio } from "@/actions/create-bio";
 import { toast } from "sonner";
 import { createSocialLink } from "@/actions/create-social-link";
 import { deleteSocialMedia } from "@/actions/delete-social-media";
+import EditorClient from "./Editor/EditorClient";
 
 type SocialLink = {
   id?: string;
@@ -126,11 +126,7 @@ export default function EditProfile({
             <form onSubmit={handleBioSubmit}>
               <div className="mt-2 space-y-2">
                 <Label>Bio</Label>
-                <MDEditor
-                  value={content}
-                  onChange={handleChange}
-                  height={300}
-                />
+                 <EditorClient content={content} onChange={setContent} />
                 {formState.errors.bio && (
                   <span className="text-red-500 text-sm">
                     {formState.errors.bio}
