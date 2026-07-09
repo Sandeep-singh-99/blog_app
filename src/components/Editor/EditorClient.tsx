@@ -5,13 +5,18 @@ import React from 'react'
 
 const Editor = dynamic(() => import('@/components/Editor/Editor'), {
     ssr: false,
-    loading: () =>  <p>Loading...</p>
+    loading: () => <p>Loading...</p>
 })
 
-export default function EditorClient() {
+interface EditorClientProps {
+  content: string;
+  onChange: (value: string) => void;
+}
+
+export default function EditorClient({ content, onChange }: EditorClientProps) {
   return (
     <>
-    <Editor />
+      <Editor content={content} onChange={onChange} />
     </>
   )
 }

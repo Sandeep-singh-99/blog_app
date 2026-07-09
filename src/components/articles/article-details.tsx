@@ -5,7 +5,6 @@ import React from "react";
 import LikeButton from "./like-button";
 import CommentSection from "../comments/comment-section";
 import CommentInput from "../comments/comment-input";
-import MdEditorPreview from "../mdeditor-preview";
 import ShareBtn from "./share-btn";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,6 +12,7 @@ import FollowButton from "../follow-user";
 import { currentUser } from "@clerk/nextjs/server";
 import BookmarkButton from "./bookmark-button";
 import { Badge } from "../ui/badge";
+import EditorClientPreview from "../Editor/EditorClientPreview";
 
 type ArticleDetailPageProps = {
   article: Prisma.ArticleGetPayload<{
@@ -76,7 +76,7 @@ export default async function ArticleDetails({ article }: ArticleDetailPageProps
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground transition-colors">
+    <div className="min-h-screen bg-white text-foreground transition-colors">
       <main className="container mx-auto py-10 px-4 sm:px-6 lg:px-8">
         <article className="mx-auto max-w-3xl">
           {/* Article Header */}
@@ -98,7 +98,7 @@ export default async function ArticleDetails({ article }: ArticleDetailPageProps
               />
             </div>
 
-            <h1 className="text-3xl sm:text-4xl font-bold leading-tight mb-3 break-words">
+            <h1 className="text-3xl text-black sm:text-4xl font-bold leading-tight mb-3 break-words">
               {article.title}
             </h1>
 
@@ -144,9 +144,10 @@ export default async function ArticleDetails({ article }: ArticleDetailPageProps
           </header>
 
           {/* Article Content */}
-          <section className="prose prose-sm sm:prose-base dark:prose-invert max-w-none border rounded-lg p-4 mb-12 bg-card">
-            <MdEditorPreview content={article.content} />
-          </section>
+          {/* <section className="prose prose-sm sm:prose-base light:prose-invert max-w-none border rounded-lg p-6 mb-12 bg-card">
+            <EditorClientPreview content={article.content} />
+          </section> */}
+          <EditorClientPreview content={article.content} />
 
           {/* Like / Bookmark / Share Section */}
           <div className="flex flex-wrap gap-3 mb-12 border-t pt-6">
