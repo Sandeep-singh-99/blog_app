@@ -19,6 +19,12 @@ export default function EditorPreview({ content }: EditorPreviewProps) {
     extensions: extensions,
     editable: false,
     immediatelyRender: false,
+    editorProps: {
+      attributes: {
+        class:
+          "w-full max-w-none focus:outline-none",
+      },
+    },
   });
 
   useEffect(() => {
@@ -30,11 +36,9 @@ export default function EditorPreview({ content }: EditorPreviewProps) {
   if (!editor) return null;
 
   return (
-    <div className="w-full editor-preview-content animate-in fade-in duration-300">
+    <div className="mx-auto w-full editor-preview-content animate-in fade-in duration-300">
       <RichTextProvider editor={editor}>
-        <>
-          <EditorContent editor={editor} className="outline-none" />
-        </>
+        <EditorContent editor={editor} className="outline-none" />
       </RichTextProvider>
     </div>
   );
