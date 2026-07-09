@@ -25,7 +25,7 @@ export default async function page({ searchParams }: SearchPageProps) {
   const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
   return (
     <div className="min-h-screen bg-background">
-      <main className="container mx-auto px-4 py-12 sm:px-6 lg:text-5xl">
+      <main className="max-w-7xl mx-auto px-4 py-12 sm:px-6 w-full">
         <div className="mb-12 space-y-6 text-center">
           <h1 className="text-4xl font-bold sm:text-5xl">All Articles</h1>
 
