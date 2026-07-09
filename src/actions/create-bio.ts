@@ -5,9 +5,12 @@ import { z } from "zod";
 
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+import { countWords } from "@/lib/utils";
 
 const createBioSchema = z.object({
-    bio: z.string().max(1000),
+    bio: z.string().refine((val) => countWords(val) <= 1500, {
+        message: "Bio cannot exceed 1500 words",
+    }),
 })
 
 export type CreateBioFormState = {
@@ -65,6 +68,6 @@ export const createBio = async (prevState: CreateBioFormState, formData: FormDat
         };
     }
 
-    revalidatePath(`/profile/${existingUser.id}`);
-    redirect(`/profile/${existingUser.id}`);
+    revalidatePath(`/profile`);
+    redirect(`/profile`);
 }

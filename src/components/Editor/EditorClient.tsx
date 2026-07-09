@@ -11,12 +11,13 @@ const Editor = dynamic(() => import('@/components/Editor/Editor'), {
 interface EditorClientProps {
   content: string;
   onChange: (value: string) => void;
+  limit?: number;
 }
 
-export default function EditorClient({ content, onChange }: EditorClientProps) {
+export default function EditorClient({ content, onChange, limit }: EditorClientProps) {
   return (
     <>
-      <Editor content={content} onChange={onChange} />
+      <Editor content={content} onChange={onChange} limit={limit} />
     </>
   )
 }

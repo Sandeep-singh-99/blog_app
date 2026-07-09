@@ -7,9 +7,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Link from "next/link";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import EditProfile from "@/components/edit-profile";
-// import MdEditorPreview from "@/components/mdeditor-preview";
 import SocialMediaList from "@/components/social-media-list";
 import FollowButton from "@/components/follow-user";
+import EditorClientPreview from "@/components/Editor/EditorClientPreview";
 
 export default async function ProfilePage() {
   const { userId } = await auth();
@@ -87,7 +87,7 @@ console.log("authUser:", authUser?.id);
         {/* Tabs */}
         <Tabs
           defaultValue="posts"
-          className="mt-6 flex gap-4 pb-2 text-sm font-medium text-muted-foreground"
+          className="mt-6 flex gap-4 pb-2"
         >
           <TabsList>
             <TabsTrigger value="posts">Posts</TabsTrigger>
@@ -141,9 +141,7 @@ console.log("authUser:", authUser?.id);
 
           {/* About Tab */}
           <TabsContent value="about">
-            <section className="prose prose-sm sm:prose-base dark:prose-invert max-w-none border rounded-lg p-4 mb-12 bg-card">
-              {/* <MdEditorPreview content={user.bio || "No bio available."} /> */}
-            </section>
+            <EditorClientPreview content={user.bio || "No bio available."} />
           </TabsContent>
         </Tabs>
       </div>

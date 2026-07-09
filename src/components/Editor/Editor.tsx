@@ -455,9 +455,10 @@ const RichTextToolbar = () => {
 interface EditorProps {
   content: string;
   onChange: (value: string) => void;
+  limit?: number;
 }
 
-function Editor({ content, onChange }: EditorProps) {
+function Editor({ content, onChange, limit = 5000 }: EditorProps) {
   const editor = useEditor({
     textDirection: 'auto',
     content: content,
@@ -518,7 +519,7 @@ function Editor({ content, onChange }: EditorProps) {
               <RichTextBubbleMenuDragHandle />
             </div>
 
-            <Count editor={editor} limit={WORD_LIMIT} />
+            <Count editor={editor} limit={limit} />
           </div>
         </RichTextProvider>
       </div>

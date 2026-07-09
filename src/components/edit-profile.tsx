@@ -34,6 +34,7 @@ import { toast } from "sonner";
 import { createSocialLink } from "@/actions/create-social-link";
 import { deleteSocialMedia } from "@/actions/delete-social-media";
 import EditorClient from "./Editor/EditorClient";
+import { countWords } from "@/lib/utils";
 
 type SocialLink = {
   id?: string;
@@ -69,6 +70,12 @@ export default function EditProfile({
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
+
+    const wordCount = countWords(content);
+    if (wordCount > 500) {
+      toast.error(`Bio cannot exceed 500 words (current: ${wordCount} words).`);
+      return;
+    }
 
     formData.append("bio", content);
 
@@ -107,7 +114,7 @@ export default function EditProfile({
           Edit Bio
         </Button>
       </DialogTrigger>
-      <DialogContent className="min-w-4xl">
+      <DialogContent className="min-w-5xl w-full max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl font-semibold">
             Edit Profile
@@ -126,7 +133,7 @@ export default function EditProfile({
             <form onSubmit={handleBioSubmit}>
               <div className="mt-2 space-y-2">
                 <Label>Bio</Label>
-                 <EditorClient content={content} onChange={setContent} />
+                 <EditorClient content={content} onChange={setContent} limit={500} />
                 {formState.errors.bio && (
                   <span className="text-red-500 text-sm">
                     {formState.errors.bio}
