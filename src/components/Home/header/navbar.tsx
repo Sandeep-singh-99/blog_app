@@ -3,9 +3,7 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { Button } from "../../ui/button";
 import SearchInput from "./search-input";
-import { ToggleMode } from "./toggle-mode";
-import { Menu, Search, X } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { Menu, X } from "lucide-react";
 import {
   SignedIn,
   SignedOut,
@@ -18,7 +16,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="sticky top-0 z-50 w-full border border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full">
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center gap-8">
             <Link href={"/"} className="flex items-center space-x-2">
@@ -37,15 +35,6 @@ export default function Navbar() {
           <div className="flex items-center gap-4">
             <SignedIn>
               <div className="hidden md:flex items-center gap-3">
-                <Link
-                  href="/articles"
-                  className="px-4 py-2 text-sm font-medium rounded-md border border-transparent
-               bg-neutral-100 text-neutral-700 hover:bg-neutral-200
-               dark:bg-neutral-900 dark:text-neutral-200 dark:hover:bg-neutral-800
-               transition-all duration-200"
-                >
-                  Articles
-                </Link>
                 <Link
                   href="/dashboard"
                   className="px-4 py-2 text-sm font-medium rounded-md border border-transparent
@@ -105,13 +94,6 @@ export default function Navbar() {
             {/* Mobile Navigation Links */}
             <SignedIn>
               <div className="space-y-2 px-4">
-                <Link
-                  href="/articles"
-                  className="block px-3 py-2 text-base font-medium text-foreground"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Articles
-                </Link>
                 <Link
                   href="/dashboard"
                   className="block px-3 py-2 text-base font-medium text-foreground"

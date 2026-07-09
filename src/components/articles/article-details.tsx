@@ -5,7 +5,6 @@ import React from "react";
 import LikeButton from "./like-button";
 import CommentSection from "../comments/comment-section";
 import CommentInput from "../comments/comment-input";
-import MdEditorPreview from "../mdeditor-preview";
 import ShareBtn from "./share-btn";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,6 +12,7 @@ import FollowButton from "../follow-user";
 import { currentUser } from "@clerk/nextjs/server";
 import BookmarkButton from "./bookmark-button";
 import { Badge } from "../ui/badge";
+import EditorClientPreview from "../Editor/EditorClientPreview";
 
 type ArticleDetailPageProps = {
   article: Prisma.ArticleGetPayload<{
@@ -29,7 +29,9 @@ type ArticleDetailPageProps = {
   }>;
 };
 
-export default async function ArticleDetails({ article }: ArticleDetailPageProps) {
+export default async function ArticleDetails({
+  article,
+}: ArticleDetailPageProps) {
   // Fetch related data
   const comments = await prisma.comment.findMany({
     where: { articleId: article.id },
@@ -74,100 +76,103 @@ export default async function ArticleDetails({ article }: ArticleDetailPageProps
       isLiked = likes.some((like) => like.userId === currentUserInDB!.id);
     }
   }
-
   return (
-    <div className="min-h-screen bg-background text-foreground transition-colors">
-      <main className="container mx-auto py-10 px-4 sm:px-6 lg:px-8">
-        <article className="mx-auto max-w-3xl">
-          {/* Article Header */}
-          <header className="mb-10">
-            <div className="flex flex-wrap items-center gap-2 mb-3">
-              <Badge variant="secondary" className="text-xs sm:text-sm">
-                {article.category}
-              </Badge>
-            </div>
+    <div className="min-h-screen bg-white">
+      <main className="mx-auto max-w-7xl px-4 py-10">
+        <article className="mx-auto max-w-4xl rounded-2xl">
+          {/* Featured Image */}
+          <div className="relative h-[250px] md:h-[420px] overflow-hidden rounded-t-2xl">
+            <Image
+              src={article.featuredImageUrl as string}
+              alt={article.title}
+              fill
+              priority
+              className="object-cover"
+            />
+          </div>
 
-            {/* Featured Image */}
-            <div className="relative mb-5 w-full h-52 sm:h-64 md:h-80 overflow-hidden rounded-xl shadow-md">
-              <Image
-                src={article.featuredImageUrl as string}
-                alt={article.title}
-                fill
-                priority
-                className="object-cover object-center hover:scale-105 transition-transform duration-300"
-              />
-            </div>
+          <div className="py-5">
+            {/* Category */}
+            <Badge
+              variant="secondary"
+              className="mb-4 bg-blue-100 text-blue-700 hover:bg-blue-100"
+            >
+              {article.category}
+            </Badge>
 
-            <h1 className="text-3xl sm:text-4xl font-bold leading-tight mb-3 break-words">
+            {/* Title */}
+            <h1 className="mb-8 text-4xl font-extrabold leading-tight tracking-tight text-gray-900 md:text-5xl">
               {article.title}
             </h1>
 
-            {/* Author Info */}
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border rounded-lg p-4 bg-muted/30 backdrop-blur-sm">
+            {/* Author Card */}
+            <div className="flex flex-col justify-between gap-4 rounded-xl border border-gray-200 bg-gray-50 p-5 md:flex-row md:items-center">
               <Link
                 href={`/profile/${article.author.id}`}
-                className="flex items-center gap-3 hover:bg-muted/50 p-2 rounded-md transition w-full sm:w-auto"
+                className="flex items-center gap-4"
               >
-                <Avatar className="h-11 w-11 border">
+                <Avatar className="h-14 w-14 border-2 border-white shadow">
                   <AvatarImage src={article.author.imageUrl || ""} />
                   <AvatarFallback>
-                    {article.author.name?.[0]?.toUpperCase() || "?"}
+                    {article.author.name?.charAt(0)}
                   </AvatarFallback>
                 </Avatar>
-                <div className="flex flex-col">
-                  <p className="font-semibold text-base hover:underline">
+
+                <div>
+                  <h3 className="font-semibold text-gray-900">
                     {article.author.name}
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    Published on{" "}
-                    <span className="font-medium">
-                      {article.createdAt.toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })}
-                    </span>
+                  </h3>
+
+                  <p className="text-sm text-gray-500">
+                    Published{" "}
+                    {article.createdAt.toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
                   </p>
                 </div>
               </Link>
 
-              {/* Follow button (only show if not the author) */}
               {authUser && currentUserInDB?.id !== article.author.id && (
-                <div className="w-full sm:w-auto">
-                  <FollowButton
-                    targetUserId={article.author.id}
-                    isFollowing={isFollowing}
-                  />
-                </div>
+                <FollowButton
+                  targetUserId={article.author.id}
+                  isFollowing={isFollowing}
+                />
               )}
             </div>
-          </header>
 
-          {/* Article Content */}
-          <section className="prose prose-sm sm:prose-base dark:prose-invert max-w-none border rounded-lg p-4 mb-12 bg-card">
-            <MdEditorPreview content={article.content} />
-          </section>
+            {/* Content */}
+            <EditorClientPreview content={article.content} />
 
-          {/* Like / Bookmark / Share Section */}
-          <div className="flex flex-wrap gap-3 mb-12 border-t pt-6">
-            <LikeButton articleId={article.id} likes={likes} isLiked={isLiked} />
+            {/* Actions */}
+            <div className="mt-12 flex flex-wrap items-center gap-4 border-t border-gray-200 pt-6">
+              <LikeButton
+                articleId={article.id}
+                likes={likes}
+                isLiked={isLiked}
+              />
 
-            <BookmarkButton
-              articleId={article.id}
-              userId={currentUserInDB?.id ?? ""}
-              isBookmarked={isBookmarked}
-            />
+              <BookmarkButton
+                articleId={article.id}
+                userId={currentUserInDB?.id ?? ""}
+                isBookmarked={isBookmarked}
+              />
 
-            <ShareBtn
-              url={`https://blog-app-gamma-self.vercel.app/articles/${article.id}`}
-            />
+              <ShareBtn
+                url={`https://blog-app-gamma-self.vercel.app/articles/${article.id}`}
+              />
+            </div>
+
+            {/* Comments */}
+            <div className="mt-5 border-t border-gray-200 pt-10">
+              <CommentInput articleId={article.id} />
+
+              <div className="mt-8">
+                <CommentSection comments={comments} />
+              </div>
+            </div>
           </div>
-
-          {/* Comment Section */}
-          <section className="space-y-6">
-            <CommentInput articleId={article.id} />
-            <CommentSection comments={comments} />
-          </section>
         </article>
       </main>
     </div>

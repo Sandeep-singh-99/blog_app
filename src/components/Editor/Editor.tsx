@@ -239,13 +239,12 @@ const BaseKit = [
   }),
 ];
 
-const LIMIT = 2505;
+const WORD_LIMIT = 5000;
 
-const extensions = [
+export const extensions = [
   ...BaseKit,
-  CharacterCount.configure({
-    limit: LIMIT,
-  }),
+  CharacterCount.configure(),
+
 
   History,
   SearchAndReplace,
@@ -453,43 +452,41 @@ const RichTextToolbar = () => {
   );
 };
 
-function App() {
-  const [content, setContent] = useState(DEFAULT);
+interface EditorProps {
+  content: string;
+  onChange: (value: string) => void;
+  limit?: number;
+}
 
-  const onValueChange = useCallback(
-    debounce((value: any) => {
-      setContent(value);
-    }, 300),
-    [],
-  );
-
+function Editor({ content, onChange, limit = 5000 }: EditorProps) {
   const editor = useEditor({
-    // shouldRerenderOnTransaction:  false,
-    textDirection: 'auto', // global text direction
-    content,
+    textDirection: 'auto',
+    content: content,
     extensions,
-    // content,
-    immediatelyRender: false, // error duplicate plugin key
+    immediatelyRender: false,
     onUpdate: ({ editor }) => {
       const html = editor.getHTML();
-      onValueChange(html);
+      onChange(html);
     },
   });
 
   useEffect(() => {
-    window['editor'] = editor;
+    if (editor && content !== undefined && content !== editor.getHTML()) {
+      if (!editor.isFocused) {
+        editor.commands.setContent(content);
+      }
+    }
+  }, [content, editor]);
+
+  useEffect(() => {
+    (window as any).editor = editor;
   }, [editor]);
+
+  if (!editor) return null;
 
   return (
     <>
-      <div className="border-b border-border shadow-md">
-        <div className="w-full max-w-[1200px] p-4  mx-[auto] my-0">
-          <EditorHeader editor={editor} />
-        </div>
-      </div>
-
-      <div className=" w-full max-w-[1200px] mx-[auto] my-0 px-4">
-        <EditorNavBar editor={editor} />
+      <div className=" w-full mx-[auto] my-0 px-4">
 
         <RichTextProvider editor={editor}>
           <div className="overflow-hidden rounded-[0.5rem] bg-background !border !border-border">
@@ -499,7 +496,7 @@ function App() {
               <EditorContent editor={editor} />
 
               {/* Bubble */}
-              <RichTextBubbleColumns />
+              <RichTextBubbleColumns />  
               <RichTextBubbleDrawer />
               <RichTextBubbleExcalidraw />
               <RichTextBubbleIframe />
@@ -522,24 +519,12 @@ function App() {
               <RichTextBubbleMenuDragHandle />
             </div>
 
-            <Count editor={editor} limit={LIMIT} />
+            <Count editor={editor} limit={limit} />
           </div>
         </RichTextProvider>
-
-        {typeof content === 'string' && (
-          <textarea
-            style={{
-              marginTop: 20,
-              height: 500,
-            }}
-            className="w-full rounded-md border border-border bg-background p-4 font-mono text-sm outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-            readOnly
-            value={content}
-          />
-        )}
       </div>
     </>
   );
 }
 
-export default App;
+export default Editor;

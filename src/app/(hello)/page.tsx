@@ -14,7 +14,7 @@ export default function Home() {
     <main>
       <HeroSection />
       <section className="relative py-16 md:py-24">
-        <div className="container mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-4 w-full">
           <div className="mb-5 text-center">
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
               Featured Articles
