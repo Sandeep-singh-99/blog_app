@@ -239,13 +239,12 @@ const BaseKit = [
   }),
 ];
 
-const LIMIT = 2505;
+const WORD_LIMIT = 5000;
 
 export const extensions = [
   ...BaseKit,
-  CharacterCount.configure({
-    limit: LIMIT,
-  }),
+  CharacterCount.configure(),
+
 
   History,
   SearchAndReplace,
@@ -519,7 +518,7 @@ function Editor({ content, onChange }: EditorProps) {
               <RichTextBubbleMenuDragHandle />
             </div>
 
-            <Count editor={editor} limit={LIMIT} />
+            <Count editor={editor} limit={WORD_LIMIT} />
           </div>
         </RichTextProvider>
       </div>

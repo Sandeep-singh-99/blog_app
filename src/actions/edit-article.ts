@@ -6,6 +6,7 @@ import { z } from "zod";
 import { v2 as cloudinary, UploadApiResponse } from "cloudinary";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+import { countWords } from "@/lib/utils";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -15,7 +16,9 @@ cloudinary.config({
 
 const createArticleSchema = z.object({
   title: z.string().min(3).max(100),
-  content: z.string().min(10).max(5000),
+  content: z.string().min(10).refine((val) => countWords(val) <= 5000, {
+    message: "Content cannot exceed 5000 words",
+  }),
   category: z.string().min(3).max(50),
   tags: z.string().min(1, "At least one tag required"),
 });

@@ -22,6 +22,7 @@ import { toast } from "sonner";
 import { X, Image as ImageIcon, Sparkles, FolderOpen, Tag, ArrowLeft, UploadCloud } from "lucide-react";
 import EditorClient from "../Editor/EditorClient";
 import { useRouter } from "next/navigation";
+import { countWords } from "@/lib/utils";
 
 export default function CreateArticle() {
   const [content, setContent] = useState("");
@@ -91,6 +92,12 @@ export default function CreateArticle() {
 
     if (!content || content.trim().length < 10) {
       toast.error("Content is too short (min 10 characters).");
+      return;
+    }
+
+    const wordCount = countWords(content);
+    if (wordCount > 5000) {
+      toast.error(`Content exceeds the maximum limit of 5000 words (current: ${wordCount} words).`);
       return;
     }
 

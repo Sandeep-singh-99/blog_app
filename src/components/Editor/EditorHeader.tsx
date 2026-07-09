@@ -327,7 +327,7 @@ export const EditorHeader = () => {
 };
 
 
-export const EditorNavBar = ({ editor }) => {
+export const EditorNavBar = ({ editor }: { editor: any }) => {
   const [lang, setlang] = useLocalStorageState('next-tiptap-lang', {
     defaultValue: 'en',
     listenStorageChange: true,
