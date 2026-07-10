@@ -6,8 +6,14 @@ import { Button } from "@/components/ui/button";
 import { fetchArticleByQuery } from "@/lib/query/fetch-article";
 import Link from "next/link";
 import React, { Suspense } from "react";
+import type { Metadata } from "next";
 
 export const dynamic = 'force-dynamic';
+
+export const metadata: Metadata = {
+  title: "All Articles",
+  description: "Browse and search through all articles, technical tutorials, and programming insights on BitWrite.",
+};
 
 type SearchPageProps = {
   searchParams: { search?: string; page?: string };

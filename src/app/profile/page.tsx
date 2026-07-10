@@ -10,6 +10,12 @@ import EditProfile from "@/components/edit-profile";
 import SocialMediaList from "@/components/social-media-list";
 import FollowButton from "@/components/follow-user";
 import EditorClientPreview from "@/components/Editor/EditorClientPreview";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "My Profile",
+  description: "View and manage your profile details, author bio, social media connections, and published articles on BitWrite.",
+};
 
 export default async function ProfilePage() {
   const { userId } = await auth();

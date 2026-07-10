@@ -6,8 +6,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import type { Metadata } from "next";
 
 export const dynamic = 'force-dynamic';
+
+export const metadata: Metadata = {
+  title: "Connections",
+  description: "View and manage your followers and following connections on BitWrite.",
+};
 
 export default async function ConnectionsPage() {
   const authUser = await currentUser();

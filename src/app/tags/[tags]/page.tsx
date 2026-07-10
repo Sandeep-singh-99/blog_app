@@ -4,12 +4,26 @@ import Image from "next/image";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import type { Metadata } from "next";
 
 export const dynamic = 'force-dynamic';
 
 type TagPageProps = {
-  params: { tags: string };
+  params: Promise<{ tags: string }>;
 };
+
+export async function generateMetadata({ params }: TagPageProps): Promise<Metadata> {
+  const { tags } = await params;
+  const tag = decodeURIComponent(tags);
+  return {
+    title: `#${tag} Articles`,
+    description: `Explore all developer articles, coding tutorials, and technical posts tagged with #${tag} on BitWrite.`,
+    openGraph: {
+      title: `#${tag} Articles | BitWrite`,
+      description: `Explore all developer articles, coding tutorials, and technical posts tagged with #${tag} on BitWrite.`,
+    }
+  };
+}
 
 export default async function TagPage({ params }: TagPageProps) {
   const { tags } = await params;

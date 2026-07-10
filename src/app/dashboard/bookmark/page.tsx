@@ -7,8 +7,14 @@ import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
+import type { Metadata } from "next";
 
 export const dynamic = 'force-dynamic';
+
+export const metadata: Metadata = {
+  title: "Bookmarks",
+  description: "View and read all of your bookmarked and saved articles on BitWrite.",
+};
 
 export default async function BookmarksPage() {
   const authUser = await currentUser();

@@ -1,8 +1,14 @@
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { Tag } from "lucide-react";
+import type { Metadata } from "next";
 
 export const dynamic = 'force-dynamic';
+
+export const metadata: Metadata = {
+  title: "Browse Tags",
+  description: "Explore developer stories, tutorials, and articles organized by tags and topics on BitWrite.",
+};
 
 export default async function AllTags() {
   const articles = await prisma.article.findMany({

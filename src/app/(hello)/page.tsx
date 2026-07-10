@@ -6,8 +6,14 @@ import Link from "next/link";
 import { Suspense } from "react";
 import AllTags from "../tags/page";
 import TrendingPosts from "@/components/articles/trending-pots";
+import type { Metadata } from "next";
 
 export const dynamic = 'force-dynamic';
+
+export const metadata: Metadata = {
+  title: "Home",
+  description: "BitWrite - The premier blogging app and social platform for modern software engineers, developers, and tech writers.",
+};
 
 export default function Home() {
   return (
