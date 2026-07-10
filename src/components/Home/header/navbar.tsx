@@ -1,4 +1,5 @@
 "use client";
+
 import Link from "next/link";
 import React, { useState } from "react";
 import { Button } from "../../ui/button";
@@ -14,98 +15,126 @@ import {
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <div className="sticky top-0 z-50 w-full border border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full">
-        <div className="flex h-16 items-center justify-between">
-          <div className="flex items-center gap-8">
-            <Link href={"/"} className="flex items-center space-x-2">
-              <span className="font-bold text-2xl">
-                <span className="bg-gradient-to-r from-teal-600 to-indigo-600 dark:from-teal-500 dark:to-indigo-500 bg-clip-text text-transparent">
-                  BitWrite
-                </span>
-                <span className="text-foreground ml-2">App</span>
-              </span>
+    <header className="sticky top-0 z-50 w-full border-b border-gray-200/80 bg-white/90 backdrop-blur-lg shadow-sm">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        {/* Logo */}
+        <Link href="/" className="flex items-center">
+          <span className="text-2xl font-extrabold tracking-tight">
+            <span className="bg-gradient-to-r from-sky-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent">
+              BitWrite
+            </span>
+            <span className="ml-2 text-gray-900">App</span>
+          </span>
+        </Link>
+
+        {/* Right Section */}
+        <div className="flex items-center gap-3">
+          {/* Dashboard */}
+          <SignedIn>
+            <Link
+              href="/dashboard"
+              className="hidden md:flex items-center rounded-lg border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-medium text-blue-700 transition-all duration-200 hover:border-blue-300 hover:bg-blue-100"
+            >
+              Dashboard
             </Link>
+          </SignedIn>
+
+          {/* Search */}
+          <div className="hidden md:block">
+            <SearchInput />
           </div>
 
-          {/* Desktop Navigation */}
-
-          {/* Right Section */}
-          <div className="flex items-center gap-4">
-            <SignedIn>
-              <div className="hidden md:flex items-center gap-3">
-                <Link
-                  href="/dashboard"
-                  className="px-4 py-2 text-sm font-medium rounded-md border border-transparent
-               bg-neutral-100 text-neutral-700 hover:bg-neutral-200
-               dark:bg-neutral-900 dark:text-neutral-200 dark:hover:bg-neutral-800
-               transition-all duration-200"
-                >
-                  Dashboard
-                </Link>
-              </div>
-            </SignedIn>
-
-            <div className="hidden md:flex  items-center gap-3">
-              <SearchInput />
+          {/* Auth */}
+          <SignedIn>
+            <div className="flex items-center">
+              <UserButton
+                appearance={{
+                  elements: {
+                    avatarBox:
+                      "h-10 w-10 ring-2 ring-gray-200 hover:ring-blue-300 transition",
+                  },
+                }}
+              />
             </div>
-            {/* <ToggleMode /> */}
+          </SignedIn>
 
-            {/* user actions */}
+          <SignedOut>
+            <div className="hidden md:flex items-center gap-2">
+              <SignInButton>
+                <Button
+                  variant="outline"
+                  className="border-gray-300 bg-white hover:bg-gray-100"
+                >
+                  Login
+                </Button>
+              </SignInButton>
 
+              <SignUpButton>
+                <Button className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm">
+                  Sign Up
+                </Button>
+              </SignUpButton>
+            </div>
+          </SignedOut>
+
+          {/* Mobile Menu Button */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="md:hidden rounded-lg text-gray-600 hover:bg-blue-50 hover:text-blue-600"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            {isOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
+          </Button>
+        </div>
+      </div>
+
+      {/* Mobile Menu */}
+      {isOpen && (
+        <div className="border-t border-gray-200 bg-white shadow-lg md:hidden">
+          <div className="space-y-4 px-4 py-4">
+            {/* Search */}
+            <SearchInput />
+
+            {/* Dashboard */}
             <SignedIn>
-              <UserButton />
+              <Link
+                href="/dashboard"
+                onClick={() => setIsOpen(false)}
+                className="block rounded-lg bg-blue-50 px-4 py-3 text-sm font-medium text-blue-700 transition hover:bg-blue-100"
+              >
+                Dashboard
+              </Link>
             </SignedIn>
 
+            {/* Login / Signup */}
             <SignedOut>
-              <div className="hidden md:flex items-center gap-2">
+              <div className="flex flex-col gap-3">
                 <SignInButton>
-                  <Button variant="outline">Login</Button>
+                  <Button
+                    variant="outline"
+                    className="w-full border-gray-300 bg-white hover:bg-gray-100"
+                  >
+                    Login
+                  </Button>
                 </SignInButton>
+
                 <SignUpButton>
-                  <Button>SignUp</Button>
+                  <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
+                    Sign Up
+                  </Button>
                 </SignUpButton>
               </div>
             </SignedOut>
-
-            {/* Mobile Menu Button */}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="md:hidden text-muted-foreground hover:text-foreground"
-              onClick={() => setIsOpen(!isOpen)}
-            >
-              {isOpen ? (
-                <X className="h-5 w-5" />
-              ) : (
-                <Menu className="h-5 w-5" />
-              )}
-            </Button>
           </div>
         </div>
-        {isOpen && (
-          <div className="md:hidden py-4 space-y-4 border-t">
-            {/* Search Bar (Mobile) */}
-            <div className="px-4">
-               <SearchInput />
-            </div>
-
-            {/* Mobile Navigation Links */}
-            <SignedIn>
-              <div className="space-y-2 px-4">
-                <Link
-                  href="/dashboard"
-                  className="block px-3 py-2 text-base font-medium text-foreground"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Dashboard
-                </Link>
-              </div>
-            </SignedIn>
-          </div>
-        )}
-      </div>
-    </div>
+      )}
+    </header>
   );
 }

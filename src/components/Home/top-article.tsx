@@ -50,7 +50,7 @@ export default async function TopArticle() {
                   />
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
-                <span>{article.author.name}</span>
+                <span className="text-gray-600">{article.author.name}</span>
               </div>
 
               <h3 className="mt-4 text-xl font-semibold text-gray-900 dark:text-white">

@@ -41,17 +41,17 @@ import {
   MultipleColumnNode,
   RichTextColumn,
 } from 'reactjs-tiptap-editor/column';
-import { Drawer, RichTextDrawer } from 'reactjs-tiptap-editor/drawer';
+// import { Drawer, RichTextDrawer } from 'reactjs-tiptap-editor/drawer';
 import { Emoji, RichTextEmoji } from 'reactjs-tiptap-editor/emoji';
-import {
-  Excalidraw,
-  RichTextExcalidraw,
-} from 'reactjs-tiptap-editor/excalidraw';
-import { ExportPdf, RichTextExportPdf } from 'reactjs-tiptap-editor/exportpdf';
-import {
-  ExportWord,
-  RichTextExportWord,
-} from 'reactjs-tiptap-editor/exportword';
+// import {
+//   Excalidraw,
+//   RichTextExcalidraw,
+// } from 'reactjs-tiptap-editor/excalidraw';
+// import { ExportPdf, RichTextExportPdf } from 'reactjs-tiptap-editor/exportpdf';
+// import {
+//   ExportWord,
+//   RichTextExportWord,
+// } from 'reactjs-tiptap-editor/exportword';
 import {
   FontFamily,
   RichTextFontFamily,
@@ -70,11 +70,11 @@ import {
 } from 'reactjs-tiptap-editor/horizontalrule';
 import { Iframe, RichTextIframe } from 'reactjs-tiptap-editor/iframe';
 import { Image, RichTextImage } from 'reactjs-tiptap-editor/image';
-import { ImageGif, RichTextImageGif } from 'reactjs-tiptap-editor/imagegif';
-import {
-  ImportWord,
-  RichTextImportWord,
-} from 'reactjs-tiptap-editor/importword';
+// import { ImageGif, RichTextImageGif } from 'reactjs-tiptap-editor/imagegif';
+// import {
+//   ImportWord,
+//   RichTextImportWord,
+// } from 'reactjs-tiptap-editor/importword';
 import { Indent, RichTextIndent } from 'reactjs-tiptap-editor/indent';
 import { Italic, RichTextItalic } from 'reactjs-tiptap-editor/italic';
 import { Katex, RichTextKatex } from 'reactjs-tiptap-editor/katex';
@@ -84,7 +84,7 @@ import {
 } from 'reactjs-tiptap-editor/lineheight';
 import { Link, RichTextLink } from 'reactjs-tiptap-editor/link';
 import { Mention } from 'reactjs-tiptap-editor/mention';
-import { Mermaid, RichTextMermaid } from 'reactjs-tiptap-editor/mermaid';
+// import { Mermaid, RichTextMermaid } from 'reactjs-tiptap-editor/mermaid';
 import { MoreMark, RichTextMoreMark } from 'reactjs-tiptap-editor/moremark';
 import {
   OrderedList,
@@ -106,7 +106,7 @@ import {
   RichTextUnderline,
   TextUnderline,
 } from 'reactjs-tiptap-editor/textunderline';
-import { RichTextTwitter, Twitter } from 'reactjs-tiptap-editor/twitter';
+// import { RichTextTwitter, Twitter } from 'reactjs-tiptap-editor/twitter';
 import { RichTextVideo, Video } from 'reactjs-tiptap-editor/video';
 import { RichTextCallout, Callout } from 'reactjs-tiptap-editor/callout';
 
@@ -147,7 +147,7 @@ import 'easydrawer/styles.css';
 import 'katex/dist/katex.min.css';
 import 'reactjs-tiptap-editor/style.css';
 
-import { EditorHeader, EditorNavBar } from '@/components/Editor/EditorHeader';
+// import { EditorHeader, EditorNavBar } from '@/components/Editor/EditorHeader';
 import { EditorContent, useEditor } from '@tiptap/react';
 import 'katex/contrib/mhchem';
 import { CharacterCount } from '@tiptap/extensions';
@@ -295,10 +295,10 @@ export const extensions = [
       });
     },
   }),
-  ImageGif.configure({
-    provider: 'giphy',
-    API_KEY: process.env.NEXT_PUBLIC_GIPHY_API_KEY as string,
-  }),
+  // ImageGif.configure({
+  //   provider: 'giphy',
+  //   API_KEY: process.env.NEXT_PUBLIC_GIPHY_API_KEY as string,
+  // }),
   Blockquote,
   HorizontalRule,
   Code,
@@ -310,9 +310,9 @@ export const extensions = [
   MultipleColumnNode,
   Table,
   Iframe,
-  ExportPdf,
-  ImportWord,
-  ExportWord,
+  // ExportPdf,
+  // ImportWord,
+  // ExportWord,
   TextDirection,
   Attachment.configure({
     upload: (file: any) => {
@@ -329,62 +329,62 @@ export const extensions = [
     },
   }),
   Katex,
-  Excalidraw,
-  Mermaid.configure({
-    upload: (file: any) => {
-      // fake upload return base 64
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
+  // Excalidraw,
+  // Mermaid.configure({
+  //   upload: (file: any) => {
+  //     // fake upload return base 64
+  //     const reader = new FileReader();
+  //     reader.readAsDataURL(file);
 
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          const blob = convertBase64ToBlob(reader.result as string);
-          resolve(URL.createObjectURL(blob));
-        }, 300);
-      });
-    },
-  }),
-  Drawer.configure({
-    upload: (file: any) => {
-      // fake upload return base 64
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
+  //     return new Promise((resolve) => {
+  //       setTimeout(() => {
+  //         const blob = convertBase64ToBlob(reader.result as string);
+  //         resolve(URL.createObjectURL(blob));
+  //       }, 300);
+  //     });
+  //   },
+  // }),
+  // Drawer.configure({
+  //   upload: (file: any) => {
+  //     // fake upload return base 64
+  //     const reader = new FileReader();
+  //     reader.readAsDataURL(file);
 
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          const blob = convertBase64ToBlob(reader.result as string);
-          resolve(URL.createObjectURL(blob));
-        }, 300);
-      });
-    },
-  }),
-  Twitter,
-  Mention.configure({
-    // suggestion: {
-    //   char: '@',
-    //   items: async ({ query }: any) => {
-    //     return MOCK_USERS.filter(item => item.label.toLowerCase().startsWith(query.toLowerCase()));
-    //   },
-    // }
-    suggestions: [
-      {
-        char: '@',
-        items: async ({ query }: any) => {
-          return MOCK_USERS.filter((item) =>
-            item.label.toLowerCase().startsWith(query.toLowerCase()),
-          );
-        },
-      },
-      {
-        char: '#',
-        items: async ({ query }: any) => {
-          return MOCK_USERS.filter((item) =>
-            item.label.toLowerCase().startsWith(query.toLowerCase()),
-          );
-        },
-      },
-    ],
-  }),
+  //     return new Promise((resolve) => {
+  //       setTimeout(() => {
+  //         const blob = convertBase64ToBlob(reader.result as string);
+  //         resolve(URL.createObjectURL(blob));
+  //       }, 300);
+  //     });
+  //   },
+  // }),
+  // Twitter,
+  // Mention.configure({
+  //   // suggestion: {
+  //   //   char: '@',
+  //   //   items: async ({ query }: any) => {
+  //   //     return MOCK_USERS.filter(item => item.label.toLowerCase().startsWith(query.toLowerCase()));
+  //   //   },
+  //   // }
+  //   suggestions: [
+  //     {
+  //       char: '@',
+  //       items: async ({ query }: any) => {
+  //         return MOCK_USERS.filter((item) =>
+  //           item.label.toLowerCase().startsWith(query.toLowerCase()),
+  //         );
+  //       },
+  //     },
+  //     {
+  //       char: '#',
+  //       items: async ({ query }: any) => {
+  //         return MOCK_USERS.filter((item) =>
+  //           item.label.toLowerCase().startsWith(query.toLowerCase()),
+  //         );
+  //       },
+  //     },
+  //   ],
+  // }),
   SlashCommand,
   CodeView,
   Callout,
@@ -428,7 +428,7 @@ const RichTextToolbar = () => {
       <RichTextLink />
       <RichTextImage />
       <RichTextVideo />
-      <RichTextImageGif />
+      {/* <RichTextImageGif /> */}
       <RichTextBlockquote />
       <RichTextHorizontalRule />
       <RichTextCode />
@@ -436,16 +436,16 @@ const RichTextToolbar = () => {
       <RichTextColumn />
       <RichTextTable />
       <RichTextIframe />
-      <RichTextExportPdf />
-      <RichTextImportWord />
-      <RichTextExportWord />
+      {/* <RichTextExportPdf /> */}
+      {/* <RichTextImportWord /> */}
+      {/* <RichTextExportWord /> */}
       <RichTextTextDirection />
       <RichTextAttachment />
       <RichTextKatex />
-      <RichTextExcalidraw />
-      <RichTextMermaid />
-      <RichTextDrawer />
-      <RichTextTwitter />
+      {/* <RichTextExcalidraw /> */}
+      {/* <RichTextMermaid /> */}
+      {/* <RichTextDrawer /> */}
+      {/* <RichTextTwitter /> */}
       <RichTextCodeView />
       <RichTextCallout />
     </div>
