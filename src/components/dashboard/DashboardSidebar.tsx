@@ -44,7 +44,7 @@ export default function DashboardSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Dashboard</SidebarGroupLabel>
+          <SidebarGroupLabel>Navigation</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {MenuOptions.map((option, index) => (
@@ -61,13 +61,6 @@ export default function DashboardSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      {/* <SidebarFooter>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarThemeToggle />
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarFooter> */}
     </Sidebar>
   )
 }
