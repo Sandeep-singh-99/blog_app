@@ -13,6 +13,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import BookmarkButton from "./bookmark-button";
 import { Badge } from "../ui/badge";
 import EditorClientPreview from "../Editor/EditorClientPreview";
+import TableOfContents from "./table-of-contents";
 
 type ArticleDetailPageProps = {
   article: Prisma.ArticleGetPayload<{
@@ -79,7 +80,7 @@ export default async function ArticleDetails({
   return (
     <div className="min-h-screen bg-white">
       <main className="mx-auto max-w-7xl px-4 py-10">
-        <article className="mx-auto max-w-4xl rounded-2xl">
+        <article className="mx-auto max-w-5xl rounded-2xl">
           {/* Featured Image */}
           <div className="relative h-[250px] md:h-[420px] overflow-hidden rounded-t-2xl">
             <Image
@@ -143,7 +144,16 @@ export default async function ArticleDetails({
             </div>
 
             {/* Content */}
-            <EditorClientPreview content={article.content} />
+            <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 mt-8">
+              <div className="lg:col-span-9">
+                <EditorClientPreview content={article.content} />
+              </div>
+              <div className="hidden lg:block lg:col-span-3">
+                <div className="sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto pr-2">
+                  <TableOfContents content={article.content} />
+                </div>
+              </div>
+            </div>
 
             {/* Actions */}
             <div className="mt-12 flex flex-wrap items-center gap-4 border-t border-gray-200 pt-6">

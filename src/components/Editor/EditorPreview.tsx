@@ -33,6 +33,40 @@ export default function EditorPreview({ content }: EditorPreviewProps) {
     }
   }, [content, editor]);
 
+  useEffect(() => {
+    if (!editor) return;
+    
+    const addHeadingIds = () => {
+      const container = document.querySelector(".editor-preview-content");
+      if (!container) return;
+      
+      const headings = container.querySelectorAll("h1, h2, h3, h4, h5, h6");
+      const seenSlugs: Record<string, number> = {};
+
+      headings.forEach((heading, idx) => {
+        const text = heading.textContent?.trim() || "";
+        const baseSlug = text
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/(^-|-$)/g, "") || `heading-${idx}`;
+        
+        let uniqueSlug = baseSlug;
+        if (seenSlugs[baseSlug] === undefined) {
+          seenSlugs[baseSlug] = 0;
+        } else {
+          seenSlugs[baseSlug] += 1;
+          uniqueSlug = `${baseSlug}-${seenSlugs[baseSlug]}`;
+        }
+        
+        heading.setAttribute("id", uniqueSlug);
+      });
+    };
+
+    // Run after editor renders or content updates
+    const timer = setTimeout(addHeadingIds, 150);
+    return () => clearTimeout(timer);
+  }, [editor, content]);
+
   if (!editor) return null;
 
   return (
