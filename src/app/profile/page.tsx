@@ -6,6 +6,7 @@ import { prisma } from "@/lib/prisma";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Link from "next/link";
 import { auth, currentUser } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 import EditProfile from "@/components/edit-profile";
 import SocialMediaList from "@/components/social-media-list";
 import FollowButton from "@/components/follow-user";
@@ -26,7 +27,7 @@ export default async function ProfilePage() {
 console.log("authUser:", authUser?.id);
 
   if (!userId) {
-    throw new Error("User not logged in");
+    redirect("/sign-in");
   }
   const currentDbUser = await prisma.user.findUnique({
     where: {

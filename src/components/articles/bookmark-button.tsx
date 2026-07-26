@@ -21,7 +21,7 @@ export default function BookmarkButton({
     if (!userId) return;
     startTransition(async () => {
       const res = await bookmarkArticle(articleId, userId);
-      if (res.success) {
+      if (res.success && res.bookmarked !== undefined) {
         setBookmarked(res.bookmarked);
       }
     });

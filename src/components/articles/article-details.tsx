@@ -109,7 +109,7 @@ export default async function ArticleDetails({
             {/* Author Card */}
             <div className="flex flex-col justify-between gap-4 rounded-xl border border-gray-200 bg-gray-50 p-5 md:flex-row md:items-center">
               <Link
-                href={`/profile/${article.author.id}`}
+                href={`/profile`}
                 className="flex items-center gap-4"
               >
                 <Avatar className="h-14 w-14 border-2 border-white shadow">
