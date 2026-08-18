@@ -2,6 +2,8 @@ import EditArticle from '@/components/articles/edit-article'
 import { prisma } from '@/lib/prisma';
 import React from 'react'
 import type { Metadata } from 'next';
+import { currentUser } from '@clerk/nextjs/server';
+import { redirect } from 'next/navigation';
 
 type Props = {
     params:Promise<{id:string}>
@@ -20,19 +22,28 @@ export async function generateMetadata({params}: Props): Promise<Metadata> {
 }
 
 export default async function page({params}: Props) {
-    const { id } = await params;
+  const { id } = await params;
+  const authUser = await currentUser();
 
-     const article = await prisma.article.findUnique({
-        where:{
-          id
-        }
-      });
-      if(!article){
-        return <h1>Article not found.</h1>
-      }
+  if (!authUser) {
+    redirect("/sign-in");
+  }
+
+  const dbUser = await prisma.user.findUnique({
+    where: { clerkUserId: authUser.id },
+  });
+
+  const article = await prisma.article.findUnique({
+    where: { id },
+  });
+
+  if (!article || article.authorId !== dbUser?.id) {
+    return <h1>Article not found or access denied.</h1>;
+  }
+
   return (
     <div>
-        <EditArticle article={article}/>
+      <EditArticle article={article}/>
     </div>
-  )
+  );
 }
