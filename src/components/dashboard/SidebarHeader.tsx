@@ -1,13 +1,9 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
-import { ThemeToggle } from "@/components/theme-toggle";
-import { Button } from "@/components/ui/button";
-import { Plus, ExternalLink, ShieldCheck } from "lucide-react";
 
 export default function SidebarHeader() {
   const pathname = usePathname();
@@ -37,29 +33,6 @@ export default function SidebarHeader() {
             {getPageTitle()}
           </span>
         </div>
-      </div>
-
-      <div className="flex items-center gap-2 md:gap-3">
-        <Link href="/dashboard/notes/create" className="hidden sm:inline-flex">
-          <Button
-            size="sm"
-            className="h-9 gap-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs shadow-md shadow-indigo-500/20 transition-all cursor-pointer"
-          >
-            <Plus className="h-4 w-4" />
-            <span>New Note</span>
-          </Button>
-        </Link>
-        <Link href="/" target="_blank" className="hidden md:inline-flex">
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-9 gap-1.5 text-muted-foreground hover:text-foreground text-xs transition-colors cursor-pointer"
-          >
-            <ExternalLink className="h-3.5 w-3.5" />
-            <span>Visit Site</span>
-          </Button>
-        </Link>
-        <ThemeToggle />
       </div>
     </header>
   );

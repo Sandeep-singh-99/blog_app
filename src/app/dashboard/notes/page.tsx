@@ -1,9 +1,6 @@
 import React from "react";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { prisma } from "@/lib/prisma";
 import { currentUser } from "@clerk/nextjs/server";
-import { FileText, Plus, Search, Tag, Calendar, Lock } from "lucide-react";
 import RecentNotes from "@/components/dashboard/recent-notes";
 import type { Metadata } from "next";
 
@@ -60,13 +57,6 @@ export default async function NotesPage() {
             Capture, search, and interlink your personal engineering notes and specs.
           </p>
         </div>
-
-        <Link href="/dashboard/notes/create">
-          <Button className="h-9 gap-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs shadow-md shadow-indigo-500/20">
-            <Plus className="h-4 w-4" />
-            <span>Create New Note</span>
-          </Button>
-        </Link>
       </div>
 
       <RecentNotes notes={notes} />
