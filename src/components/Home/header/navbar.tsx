@@ -36,34 +36,32 @@ export default function Navbar() {
     <header
       className={`sticky top-0 z-50 w-full transition-all duration-300 ${
         scrolled
-          ? "border-b border-border/80 bg-background/80 backdrop-blur-xl shadow-sm"
-          : "border-b border-border/40 bg-background/60 backdrop-blur-md"
+          ? "border-b border-border/80 bg-background/90 backdrop-blur-xl shadow-xs"
+          : "border-b border-border/40 bg-background/70 backdrop-blur-md"
       }`}
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        {/* Brand Logo & Name */}
+        {/* Brand Logo & Name - High Contrast & Crisp Visibility */}
         <Link href="/" className="group flex items-center gap-2.5">
-          <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-violet-600 via-indigo-600 to-cyan-500 p-0.5 shadow-md shadow-indigo-500/20 transition-transform duration-300 group-hover:scale-105 group-hover:shadow-indigo-500/30">
-            <div className="flex h-full w-full items-center justify-center rounded-[10px] bg-background/90 backdrop-blur-xs transition-colors group-hover:bg-background/80">
-              <ShieldCheck className="h-5 w-5 text-indigo-500 transition-transform duration-300 group-hover:scale-110 dark:text-indigo-400" />
-            </div>
-            {/* Subtle pulsing badge */}
-            <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
+          <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-600 via-violet-600 to-purple-600 text-white shadow-md shadow-indigo-500/25 ring-1 ring-white/20 transition-all duration-300 group-hover:scale-105 group-hover:shadow-indigo-500/40">
+            <ShieldCheck className="h-5 w-5 text-white" />
+            {/* Subtle live indicator badge */}
+            <span className="absolute -top-0.5 -right-0.5 flex h-2.5 w-2.5">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-75"></span>
-              <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-cyan-500"></span>
+              <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-cyan-400 ring-2 ring-background"></span>
             </span>
           </div>
 
           <div className="flex flex-col">
             <div className="flex items-center gap-1.5">
-              <span className="text-xl font-black tracking-tight bg-gradient-to-r from-foreground via-foreground to-foreground/80">
-                Note<span className="bg-gradient-to-r from-violet-600 via-indigo-500 to-cyan-500 bg-clip-text text-transparent">Vault</span>
+              <span className="text-2xl font-black tracking-tight text-neutral-900 dark:text-white select-none">
+                Note<span className="bg-gradient-to-r from-indigo-500 via-violet-500 to-cyan-500 bg-clip-text text-transparent">Vault</span>
               </span>
-              <span className="rounded-full border border-indigo-500/30 bg-indigo-500/10 px-1.5 py-0.2 text-[10px] font-semibold text-indigo-600 dark:text-indigo-300">
+              <span className="rounded-md border border-indigo-500/30 bg-indigo-500/10 px-1.5 py-0.5 text-[10px] font-bold text-indigo-600 dark:text-indigo-300 tracking-wider">
                 v2.0
               </span>
             </div>
-            <span className="hidden sm:inline-block text-[10px] font-medium text-muted-foreground tracking-wide -mt-0.5">
+            <span className="hidden sm:inline-block text-[11px] font-semibold text-neutral-600 dark:text-neutral-400 tracking-tight -mt-0.5">
               Personal Workspace & Vault
             </span>
           </div>
@@ -71,10 +69,12 @@ export default function Navbar() {
 
         {/* Right Section */}
         <div className="flex items-center gap-2.5 sm:gap-3">
-          {/* Search (Desktop) */}
-          <div className="hidden md:block">
-            <SearchInput />
-          </div>
+          {/* Search: ONLY VISIBLE IF USER IS LOGGED IN VIA CLERK */}
+          <SignedIn>
+            <div className="hidden md:block">
+              <SearchInput />
+            </div>
+          </SignedIn>
 
           {/* Theme Mode Toggle with Cool Animation */}
           <ThemeToggle />
@@ -99,11 +99,22 @@ export default function Navbar() {
                 }}
               />
             </div>
+
+            {/* Mobile Menu Button for LoggedIn user (to show Search & Quick Workspace on mobile) */}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="md:hidden rounded-lg text-muted-foreground hover:bg-accent hover:text-foreground"
+              onClick={() => setIsOpen(!isOpen)}
+              aria-label="Toggle navigation menu"
+            >
+              {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </Button>
           </SignedIn>
 
           {/* SignedOut State */}
           <SignedOut>
-            <div className="hidden sm:flex items-center gap-2">
+            <div className="flex items-center gap-2">
               <SignInButton mode="modal">
                 <Button
                   variant="ghost"
@@ -127,32 +138,21 @@ export default function Navbar() {
               </SignUpButton>
             </div>
           </SignedOut>
-
-          {/* Mobile Menu Button */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="sm:hidden rounded-lg text-muted-foreground hover:bg-accent hover:text-foreground"
-            onClick={() => setIsOpen(!isOpen)}
-            aria-label="Toggle navigation menu"
-          >
-            {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </Button>
         </div>
       </div>
 
-      {/* Mobile Drawer Menu */}
-      {isOpen && (
-        <div className="border-t border-border/80 bg-background/95 backdrop-blur-2xl sm:hidden transition-all duration-200 animate-in slide-in-from-top-2">
-          <div className="space-y-4 px-4 py-5">
-            {/* Search */}
-            <div className="w-full">
-              <SearchInput />
-            </div>
+      {/* Mobile Drawer Menu - Only for LoggedIn search and quick controls */}
+      <SignedIn>
+        {isOpen && (
+          <div className="border-t border-border/80 bg-background/95 backdrop-blur-2xl md:hidden transition-all duration-200 animate-in slide-in-from-top-2">
+            <div className="space-y-4 px-4 py-5">
+              {/* Search on mobile */}
+              <div className="w-full">
+                <SearchInput />
+              </div>
 
-            {/* Auth Section in Mobile Menu */}
-            <div className="border-t border-border/60 pt-3">
-              <SignedIn>
+              {/* Quick Workspace link on mobile */}
+              <div className="border-t border-border/60 pt-3">
                 <Link
                   href="/dashboard"
                   onClick={() => setIsOpen(false)}
@@ -161,34 +161,11 @@ export default function Navbar() {
                   <Layers className="h-4 w-4" />
                   <span>Go to Workspace Dashboard</span>
                 </Link>
-              </SignedIn>
-
-              <SignedOut>
-                <div className="flex flex-col gap-2.5">
-                  <SignInButton mode="modal">
-                    <Button
-                      variant="outline"
-                      className="w-full rounded-xl justify-center"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      Sign In
-                    </Button>
-                  </SignInButton>
-
-                  <SignUpButton mode="modal">
-                    <Button
-                      className="w-full rounded-xl bg-gradient-to-r from-violet-600 via-indigo-600 to-cyan-600 text-white justify-center shadow-md shadow-indigo-500/20"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      Get Started Free
-                    </Button>
-                  </SignUpButton>
-                </div>
-              </SignedOut>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </SignedIn>
     </header>
   );
 }

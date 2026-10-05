@@ -33,13 +33,11 @@ export function Footer() {
           {/* Brand Column */}
           <div className="md:col-span-2 lg:col-span-2 space-y-4">
             <Link href="/" className="group flex items-center gap-2.5">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-violet-600 via-indigo-600 to-cyan-500 p-0.5 shadow-md shadow-indigo-500/20">
-                <div className="flex h-full w-full items-center justify-center rounded-[10px] bg-background">
-                  <ShieldCheck className="h-5 w-5 text-indigo-500" />
-                </div>
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-600 via-violet-600 to-purple-600 text-white shadow-md shadow-indigo-500/25 ring-1 ring-white/20">
+                <ShieldCheck className="h-5 w-5 text-white" />
               </div>
-              <span className="text-xl font-black tracking-tight text-foreground">
-                Note<span className="bg-gradient-to-r from-violet-600 via-indigo-600 to-cyan-500 bg-clip-text text-transparent">Vault</span>
+              <span className="text-2xl font-black tracking-tight text-neutral-900 dark:text-white">
+                Note<span className="bg-gradient-to-r from-indigo-500 via-violet-500 to-cyan-500 bg-clip-text text-transparent">Vault</span>
               </span>
             </Link>
 

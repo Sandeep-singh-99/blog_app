@@ -21,6 +21,9 @@ export const metadata: Metadata = {
     default: "NoteVault | Personal Knowledge & Project Management Workspace",
     template: "%s | NoteVault",
   },
+  icons: {
+    icon: "/favicon.ico",
+  },
   description: "Personal Workspace — Manage notes, PDFs/documents, projects, encrypted secrets, tasks, and personal knowledge in one secure place.",
   keywords: [
     "note taking",
