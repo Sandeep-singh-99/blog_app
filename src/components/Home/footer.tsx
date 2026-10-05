@@ -33,11 +33,11 @@ export function Footer() {
           {/* Brand Column */}
           <div className="md:col-span-2 lg:col-span-2 space-y-4">
             <Link href="/" className="group flex items-center gap-2.5">
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-600 via-violet-600 to-purple-600 text-white shadow-md shadow-indigo-500/25 ring-1 ring-white/20">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-indigo-600 text-white shadow-md shadow-indigo-600/20 ring-1 ring-indigo-500/30">
                 <ShieldCheck className="h-5 w-5 text-white" />
               </div>
               <span className="text-2xl font-black tracking-tight text-neutral-900 dark:text-white">
-                Note<span className="bg-gradient-to-r from-indigo-500 via-violet-500 to-cyan-500 bg-clip-text text-transparent">Vault</span>
+                Note<span className="text-indigo-600 dark:text-indigo-400">Vault</span>
               </span>
             </Link>
 
@@ -174,7 +174,7 @@ export function Footer() {
               <Button
                 type="submit"
                 size="sm"
-                className="h-10 rounded-xl bg-gradient-to-r from-violet-600 via-indigo-600 to-cyan-600 text-white font-semibold text-xs px-4 shadow-sm"
+                className="h-10 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs px-4 shadow-sm"
               >
                 <span>Subscribe</span>
                 <ArrowRight className="h-3.5 w-3.5 ml-1" />

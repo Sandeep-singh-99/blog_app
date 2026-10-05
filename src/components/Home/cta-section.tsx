@@ -15,7 +15,7 @@ export function CTASection() {
       </div>
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="relative rounded-3xl border border-indigo-500/30 bg-gradient-to-br from-indigo-950/20 via-background to-violet-950/20 p-8 sm:p-14 lg:p-20 text-center shadow-2xl overflow-hidden backdrop-blur-xl">
+        <div className="relative rounded-3xl border border-indigo-500/30 bg-card p-8 sm:p-14 lg:p-20 text-center shadow-xl overflow-hidden backdrop-blur-xl">
           {/* Subtle grid pattern background */}
           <div className="absolute inset-0 bg-grid-pattern opacity-10 pointer-events-none" />
 
@@ -39,7 +39,7 @@ export function CTASection() {
                 <SignUpButton mode="modal">
                   <Button
                     size="lg"
-                    className="w-full sm:w-auto h-12 rounded-full bg-gradient-to-r from-violet-600 via-indigo-600 to-cyan-600 px-8 text-base font-bold text-white shadow-lg shadow-indigo-500/30 hover:opacity-95 active:scale-95 transition-all"
+                    className="w-full sm:w-auto h-12 rounded-full bg-indigo-600 hover:bg-indigo-700 px-8 text-base font-bold text-white shadow-lg shadow-indigo-600/20 active:scale-95 transition-all"
                   >
                     <span className="flex items-center gap-2">
                       <ShieldCheck className="h-5 w-5" />
@@ -54,7 +54,7 @@ export function CTASection() {
                 <Link href="/dashboard" className="w-full sm:w-auto">
                   <Button
                     size="lg"
-                    className="w-full sm:w-auto h-12 rounded-full bg-gradient-to-r from-violet-600 via-indigo-600 to-cyan-600 px-8 text-base font-bold text-white shadow-lg shadow-indigo-500/30 transition-all"
+                    className="w-full sm:w-auto h-12 rounded-full bg-indigo-600 hover:bg-indigo-700 px-8 text-base font-bold text-white shadow-lg shadow-indigo-600/20 transition-all"
                   >
                     <span className="flex items-center gap-2">
                       <Layers className="h-5 w-5" />

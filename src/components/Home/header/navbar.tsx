@@ -43,19 +43,19 @@ export default function Navbar() {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Brand Logo & Name - High Contrast & Crisp Visibility */}
         <Link href="/" className="group flex items-center gap-2.5">
-          <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-600 via-violet-600 to-purple-600 text-white shadow-md shadow-indigo-500/25 ring-1 ring-white/20 transition-all duration-300 group-hover:scale-105 group-hover:shadow-indigo-500/40">
+          <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-indigo-600 text-white shadow-md shadow-indigo-600/20 ring-1 ring-indigo-500/30 transition-all duration-300 group-hover:scale-105 group-hover:bg-indigo-700">
             <ShieldCheck className="h-5 w-5 text-white" />
             {/* Subtle live indicator badge */}
             <span className="absolute -top-0.5 -right-0.5 flex h-2.5 w-2.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-75"></span>
-              <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-cyan-400 ring-2 ring-background"></span>
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500 ring-2 ring-background"></span>
             </span>
           </div>
 
           <div className="flex flex-col">
             <div className="flex items-center gap-1.5">
               <span className="text-2xl font-black tracking-tight text-neutral-900 dark:text-white select-none">
-                Note<span className="bg-gradient-to-r from-indigo-500 via-violet-500 to-cyan-500 bg-clip-text text-transparent">Vault</span>
+                Note<span className="text-indigo-600 dark:text-indigo-400">Vault</span>
               </span>
               <span className="rounded-md border border-indigo-500/30 bg-indigo-500/10 px-1.5 py-0.5 text-[10px] font-bold text-indigo-600 dark:text-indigo-300 tracking-wider">
                 v2.0
@@ -128,7 +128,7 @@ export default function Navbar() {
               <SignUpButton mode="modal">
                 <Button
                   size="sm"
-                  className="group relative overflow-hidden rounded-full bg-gradient-to-r from-violet-600 via-indigo-600 to-cyan-600 px-4 py-2 font-medium text-white shadow-md shadow-indigo-500/20 transition-all duration-300 hover:opacity-95 hover:shadow-indigo-500/30 active:scale-95"
+                  className="group relative overflow-hidden rounded-full bg-indigo-600 hover:bg-indigo-700 px-4 py-2 font-medium text-white shadow-md shadow-indigo-600/20 transition-all duration-300 active:scale-95"
                 >
                   <span className="flex items-center gap-1.5">
                     <span>Get Started</span>

@@ -50,7 +50,7 @@ export function SecuritySection() {
       <div className="pointer-events-none absolute bottom-10 right-1/4 -z-10 h-72 w-72 rounded-full bg-emerald-500/10 blur-[120px]" />
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="rounded-3xl border border-emerald-500/30 bg-gradient-to-b from-card to-background p-8 sm:p-12 lg:p-16 relative overflow-hidden shadow-xl">
+        <div className="rounded-3xl border border-emerald-500/30 bg-card p-8 sm:p-12 lg:p-16 relative overflow-hidden shadow-xl">
           {/* Subtle security grid watermark */}
           <div className="absolute top-0 right-0 p-8 opacity-5 dark:opacity-10 pointer-events-none hidden md:block">
             <ShieldCheck className="h-96 w-96 text-emerald-500" />

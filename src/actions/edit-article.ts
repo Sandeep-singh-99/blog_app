@@ -1,37 +1,25 @@
 "use server";
 import { auth } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
 import { z } from "zod";
-
-import { v2 as cloudinary, UploadApiResponse } from "cloudinary";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { countWords } from "@/lib/utils";
 
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
-
-const createArticleSchema = z.object({
-  title: z.string().min(3).max(100),
-  content: z.string().min(10).refine((val) => countWords(val) <= 5000, {
-    message: "Content cannot exceed 5000 words",
+const editArticleSchema = z.object({
+  title: z.string().min(1, "Title is required").max(150),
+  content: z.string().min(1, "Content is required").refine((val) => countWords(val) <= 10000, {
+    message: "Content cannot exceed 10000 words",
   }),
-  category: z.string().min(3).max(50),
-  tags: z.string().min(1, "At least one tag required"),
 });
 
-type EditArticlesFormState = {
+export type EditArticlesFormState = {
   errors: {
     title?: string[];
     content?: string[];
-    category?: string[];
-    tags?: string[];
-    featuredImageUrl?: string[];
     formErrors?: string[];
   };
+  success?: boolean;
+  updatedNoteId?: string;
 };
 
 export const editArticle = async (
@@ -39,11 +27,9 @@ export const editArticle = async (
   prevState: EditArticlesFormState,
   formData: FormData
 ): Promise<EditArticlesFormState> => {
-  const result = createArticleSchema.safeParse({
+  const result = editArticleSchema.safeParse({
     title: formData.get("title"),
     content: formData.get("content"),
-    category: formData.get("category"),
-    tags: formData.get("tags"),
   });
 
   if (!result.success) {
@@ -56,7 +42,7 @@ export const editArticle = async (
   if (!userId) {
     return {
       errors: {
-        formErrors: ["You must be logged in to create an article."],
+        formErrors: ["You must be logged in to edit this note."],
       },
     };
   }
@@ -68,7 +54,7 @@ export const editArticle = async (
   if (!existingArticle) {
     return {
       errors: {
-        formErrors: ["Article not found."],
+        formErrors: ["Note not found."],
       },
     };
   }
@@ -80,93 +66,32 @@ export const editArticle = async (
   if (!existingUser || existingUser.id !== existingArticle.authorId) {
     return {
       errors: {
-        formErrors: ["User not found."],
-      },
-    };
-  }
-
-  // Start creating article
-
-  const imageFile = formData.get("featuredImageUrl") as File | null;
-  let imageUrl = existingArticle.featuredImageUrl;
-  if (imageFile && imageFile.size > 5 * 1024 * 1024) {
-    // 5MB limit
-    return {
-      errors: {
-        featuredImageUrl: ["Image size must be less than 5MB."],
-      },
-    };
-  }
-
-  if (imageFile && imageFile.name !== "undefined") {
-    try {
-      const arrayBuffer = await imageFile.arrayBuffer();
-      const imageBuffer = Buffer.from(arrayBuffer);
-
-      const uploadResponse: UploadApiResponse | undefined = await new Promise(
-        (resolve, reject) => {
-          const uploadStream = cloudinary.uploader.upload_stream(
-            { resource_type: "auto" },
-            (error, result) => {
-              if (error) {
-                reject(error);
-              } else {
-                resolve(result);
-              }
-            }
-          );
-          uploadStream.end(imageBuffer);
-        }
-      );
-
-      if (uploadResponse?.secure_url) {
-        imageUrl = uploadResponse.secure_url;
-      } else {
-        return {
-          errors: {
-            featuredImageUrl: ["Failed to upload image."],
-          },
-        };
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        return {
-          errors: {
-            featuredImageUrl: [error.message],
-          },
-        };
-      } else {
-        return {
-          errors: {
-            featuredImageUrl: ["Some internal server error occurred."],
-          },
-        };
-      }
-    }
-  }
-
-  //   let imageUrl = existingArticle.featuredImageUrl;
-
-  if (!imageUrl) {
-    return {
-      errors: {
-        featuredImageUrl: ["Failed to upload image."],
+        formErrors: ["Access denied."],
       },
     };
   }
 
   try {
-    await prisma.article.update({
+    const updated = await prisma.article.update({
       where: { id: articleId },
       data: {
         title: result.data.title,
         content: result.data.content,
-        category: result.data.category,
-        tags: result.data.tags.split(",").map((tag) => tag.trim()),
-        featuredImageUrl: imageUrl,
-        authorId: existingUser.id,
       },
     });
+
+    revalidatePath("/dashboard");
+    revalidatePath("/dashboard/notes");
+    revalidatePath(`/dashboard/notes/${articleId}`);
+    if (existingArticle.parentId) {
+      revalidatePath(`/dashboard/notes/${existingArticle.parentId}`);
+    }
+
+    return {
+      errors: {},
+      success: true,
+      updatedNoteId: updated.id,
+    };
   } catch (error) {
     if (error instanceof Error) {
       return {
@@ -177,12 +102,9 @@ export const editArticle = async (
     } else {
       return {
         errors: {
-          formErrors: ["Some internal server error occurred."],
+          formErrors: ["An error occurred while updating the note."],
         },
       };
     }
   }
-
-  revalidatePath("/dashboard");
-  redirect("/dashboard");
 };

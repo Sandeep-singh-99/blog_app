@@ -301,7 +301,7 @@ export function InteractiveBento() {
               {/* Progress Bar */}
               <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
                 <div
-                  className="bg-gradient-to-r from-violet-600 to-indigo-600 h-2 rounded-full transition-all duration-500"
+                  className="bg-indigo-600 h-2 rounded-full transition-all duration-500"
                   style={{ width: `${progressPercent}%` }}
                 />
               </div>

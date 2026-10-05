@@ -94,8 +94,8 @@ export default async function BookmarksPage() {
                   </div>
                 </CardHeader>
               ) : (
-                <div className="h-24 w-full bg-gradient-to-br from-indigo-500/10 via-purple-500/5 to-transparent rounded-t-xl flex items-center justify-center border-b border-border/40">
-                  <span className="text-xs font-mono text-muted-foreground/60">Saved Note</span>
+                <div className="h-24 w-full bg-muted/60 rounded-t-xl flex items-center justify-center border-b border-border/40">
+                  <span className="text-xs font-mono text-muted-foreground/70">Saved Note</span>
                 </div>
               )}
 

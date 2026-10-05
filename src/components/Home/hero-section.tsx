@@ -77,7 +77,7 @@ const HeroSection = () => {
         <div className="mt-8 text-center max-w-4xl mx-auto space-y-6">
           <h1 className="text-4xl font-black tracking-tight sm:text-6xl lg:text-7xl">
             One Unified Workspace for Your{" "}
-            <span className="block mt-1 bg-gradient-to-r from-violet-600 via-indigo-600 to-cyan-500 bg-clip-text text-transparent">
+            <span className="block mt-1 text-indigo-600 dark:text-indigo-400">
               Knowledge, Projects & Secrets
             </span>
           </h1>
@@ -94,7 +94,7 @@ const HeroSection = () => {
               <SignUpButton mode="modal">
                 <Button
                   size="lg"
-                  className="w-full sm:w-auto h-12 rounded-full bg-gradient-to-r from-violet-600 via-indigo-600 to-cyan-600 px-8 text-base font-semibold text-white shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:opacity-95 active:scale-95 transition-all"
+                  className="w-full sm:w-auto h-12 rounded-full bg-indigo-600 hover:bg-indigo-700 px-8 text-base font-semibold text-white shadow-lg shadow-indigo-600/20 active:scale-95 transition-all"
                 >
                   <span className="flex items-center gap-2">
                     <ShieldCheck className="h-5 w-5" />
@@ -109,7 +109,7 @@ const HeroSection = () => {
               <Link href="/dashboard" className="w-full sm:w-auto">
                 <Button
                   size="lg"
-                  className="w-full sm:w-auto h-12 rounded-full bg-gradient-to-r from-violet-600 via-indigo-600 to-cyan-600 px-8 text-base font-semibold text-white shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 transition-all"
+                  className="w-full sm:w-auto h-12 rounded-full bg-indigo-600 hover:bg-indigo-700 px-8 text-base font-semibold text-white shadow-lg shadow-indigo-600/20 transition-all"
                 >
                   <span className="flex items-center gap-2">
                     <FolderKanban className="h-5 w-5" />
@@ -155,7 +155,7 @@ const HeroSection = () => {
         {/* Interactive App Workspace Mockup */}
         <div className="relative mt-12 sm:mt-16 mx-auto max-w-6xl">
           {/* Subtle Ambient Backing Glow */}
-          <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-violet-600/30 via-indigo-600/30 to-cyan-500/30 blur-xl opacity-70 -z-10" />
+          <div className="absolute -inset-1 rounded-3xl bg-indigo-500/10 blur-xl opacity-70 -z-10" />
 
           {/* Floating interactive badge cards */}
           <div className="hidden lg:flex absolute -top-6 -left-6 z-20 items-center gap-3 rounded-2xl border border-emerald-500/30 bg-background/90 px-4 py-3 shadow-xl backdrop-blur-xl animate-float-slow">

@@ -37,6 +37,14 @@ export default async function EditNotePage({ params }: Props) {
 
   const note = await prisma.article.findUnique({
     where: { id },
+    include: {
+      parent: {
+        select: {
+          id: true,
+          title: true,
+        },
+      },
+    },
   });
 
   if (!note || note.authorId !== dbUser?.id) {

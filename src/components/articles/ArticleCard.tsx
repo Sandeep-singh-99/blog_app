@@ -41,7 +41,7 @@ export default function ArticleCard({ article }: ArticleCardProps) {
               />
             </div>
           ) : (
-            <div className="relative mb-4 h-32 w-full overflow-hidden rounded-xl bg-gradient-to-br from-indigo-500/10 via-purple-500/5 to-pink-500/10 border border-border/40 flex items-center justify-center text-muted-foreground/50">
+            <div className="relative mb-4 h-32 w-full overflow-hidden rounded-xl bg-muted/60 border border-border/40 flex items-center justify-center text-muted-foreground/70">
               <span className="text-xs font-mono font-medium">NoteVault Document</span>
             </div>
           )}

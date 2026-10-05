@@ -66,8 +66,7 @@ export default async function OgImage({ params }: { params: Promise<{ id: string
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          backgroundColor: "#09090b", // zinc-950
-          backgroundImage: "radial-gradient(circle at top left, #1e1b4b 0%, #09090b 80%)",
+          backgroundColor: "#0f172a",
           padding: "80px",
           boxSizing: "border-box",
           fontFamily: "sans-serif",

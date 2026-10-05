@@ -34,9 +34,9 @@ export default async function AllTags() {
             key={tag}
             href={`/tags/${encodeURIComponent(tag)}`}
             // href={`/tags/${tag}`}
-            className="group relative flex items-center gap-2 rounded-full border border-border/50 bg-background px-4 py-2 text-sm font-medium text-foreground shadow-sm transition-all hover:-translate-y-1 hover:border-primary hover:bg-gradient-to-r hover:from-primary/10 hover:to-purple-500/10"
+            className="group relative flex items-center gap-2 rounded-full border border-border/50 bg-background px-4 py-2 text-sm font-medium text-foreground shadow-sm transition-all hover:-translate-y-1 hover:border-indigo-500/40 hover:bg-indigo-500/10"
           >
-            <Tag className="h-4 w-4 text-primary transition-colors group-hover:text-purple-600" />
+            <Tag className="h-4 w-4 text-indigo-600 dark:text-indigo-400 transition-colors" />
             <span className="capitalize">{tag}</span>
           </Link>
         ))}

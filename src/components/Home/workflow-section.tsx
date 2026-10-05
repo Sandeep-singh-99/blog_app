@@ -66,7 +66,7 @@ export function WorkflowSection() {
 
         <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 relative">
           {/* Connector Line (Desktop) */}
-          <div className="hidden md:block absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-indigo-500/20 via-cyan-500/20 to-emerald-500/20 -translate-y-12 -z-10" />
+          <div className="hidden md:block absolute top-1/2 left-0 right-0 h-0.5 bg-border/60 -translate-y-12 -z-10" />
 
           {steps.map((s, idx) => {
             const Icon = s.icon;

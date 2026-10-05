@@ -259,7 +259,7 @@ export default function NotesSidebar() {
           <div className="space-y-2 pt-1">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-purple-600 via-indigo-600 to-violet-700 text-white shadow-xs">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-600 text-white shadow-xs">
                   <BookOpen className="h-4 w-4" />
                 </div>
                 <div className="flex flex-col">

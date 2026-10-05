@@ -143,7 +143,7 @@ export default function ProjectsPage() {
           </div>
           <div className="w-16 bg-muted rounded-full h-2 overflow-hidden">
             <div
-              className="bg-gradient-to-r from-violet-600 to-indigo-600 h-2 rounded-full transition-all duration-300"
+              className="bg-indigo-600 h-2 rounded-full transition-all duration-300"
               style={{ width: `${progressPercent}%` }}
             />
           </div>

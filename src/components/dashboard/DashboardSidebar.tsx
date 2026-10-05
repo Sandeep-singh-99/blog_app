@@ -141,7 +141,7 @@ export default function DashboardSidebar() {
             href="/"
             className="flex items-center gap-3 transition-opacity hover:opacity-90 group w-full"
           >
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-600 via-violet-600 to-purple-600 text-white shadow-md shadow-indigo-500/25 ring-1 ring-white/20 group-hover:scale-105 transition-transform">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-indigo-600 text-white shadow-md shadow-indigo-600/20 ring-1 ring-indigo-500/30 group-hover:scale-105 transition-transform">
               <ShieldCheck className="h-5 w-5 text-white" />
             </div>
 
@@ -149,7 +149,7 @@ export default function DashboardSidebar() {
               <div className="flex flex-col min-w-0">
                 <div className="flex items-center gap-1.5">
                   <span className="text-lg font-black tracking-tight text-neutral-900 dark:text-white">
-                    Note<span className="bg-gradient-to-r from-indigo-500 via-violet-500 to-cyan-500 bg-clip-text text-transparent">Vault</span>
+                    Note<span className="text-indigo-600 dark:text-indigo-400">Vault</span>
                   </span>
                   <span className="rounded-md bg-indigo-500/10 px-1.5 py-0.5 text-[10px] font-bold text-indigo-600 dark:text-indigo-400">
                     v2.0

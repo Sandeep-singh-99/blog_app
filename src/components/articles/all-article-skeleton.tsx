@@ -11,7 +11,7 @@ export function AllArticlesPageSkeleton() {
         >
           <div className="p-6">
             {/* Article Image Skeleton */}
-            <Skeleton className="mb-4 h-48 w-full rounded-xl bg-gradient-to-br from-purple-100/50 to-blue-100/50 dark:from-purple-900/20 dark:to-blue-900/20" />
+            <Skeleton className="mb-4 h-48 w-full rounded-xl bg-muted" />
 
             {/* Article Title Skeleton */}
             <Skeleton className="h-6 w-3/4 rounded-lg" />

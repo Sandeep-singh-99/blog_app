@@ -28,7 +28,7 @@ export function ModulesSection() {
       id: "notes",
       icon: FileText,
       color: "text-indigo-500",
-      bgGlow: "from-indigo-500/20 to-purple-500/10",
+      bgGlow: "bg-indigo-500/10",
       borderGlow: "group-hover:border-indigo-500/50",
       badge: "Markdown & Rich-Text",
       title: "Personal Knowledge & Notes",
@@ -54,7 +54,7 @@ export function ModulesSection() {
       id: "pdfs",
       icon: FileUp,
       color: "text-cyan-500",
-      bgGlow: "from-cyan-500/20 to-blue-500/10",
+      bgGlow: "bg-cyan-500/10",
       borderGlow: "group-hover:border-cyan-500/50",
       badge: "Document Library",
       title: "PDFs & Technical Documents",
@@ -80,7 +80,7 @@ export function ModulesSection() {
       id: "projects",
       icon: FolderKanban,
       color: "text-violet-500",
-      bgGlow: "from-violet-500/20 to-pink-500/10",
+      bgGlow: "bg-violet-500/10",
       borderGlow: "group-hover:border-violet-500/50",
       badge: "Project Management",
       title: "Agile Projects & Kanban Sprints",
@@ -106,7 +106,7 @@ export function ModulesSection() {
       id: "vault",
       icon: Lock,
       color: "text-emerald-500",
-      bgGlow: "from-emerald-500/20 to-teal-500/10",
+      bgGlow: "bg-emerald-500/10",
       borderGlow: "group-hover:border-emerald-500/50",
       badge: "Zero-Knowledge Encryption",
       title: "Encrypted Secrets & Credentials",
@@ -132,7 +132,7 @@ export function ModulesSection() {
       id: "tasks",
       icon: CheckSquare,
       color: "text-amber-500",
-      bgGlow: "from-amber-500/20 to-orange-500/10",
+      bgGlow: "bg-amber-500/10",
       borderGlow: "group-hover:border-amber-500/50",
       badge: "Action Management",
       title: "Unified Tasks & Action Inbox",
@@ -158,7 +158,7 @@ export function ModulesSection() {
       id: "search",
       icon: Search,
       color: "text-rose-500",
-      bgGlow: "from-rose-500/20 to-red-500/10",
+      bgGlow: "bg-rose-500/10",
       borderGlow: "group-hover:border-rose-500/50",
       badge: "Lightning Index",
       title: "Command-K Instant Search",
@@ -193,7 +193,7 @@ export function ModulesSection() {
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-foreground">
             Everything Your Mind Needs.{" "}
-            <span className="bg-gradient-to-r from-violet-600 via-indigo-600 to-cyan-500 bg-clip-text text-transparent">
+            <span className="text-indigo-600 dark:text-indigo-400">
               Unified in One Vault.
             </span>
           </h2>
@@ -214,7 +214,7 @@ export function ModulesSection() {
               >
                 {/* Background Ambient Glow */}
                 <div
-                  className={`absolute inset-0 -z-10 rounded-2xl sm:rounded-3xl bg-gradient-to-br ${m.bgGlow} opacity-0 blur-xl transition-opacity duration-300 group-hover:opacity-100`}
+                  className={`absolute inset-0 -z-10 rounded-2xl sm:rounded-3xl ${m.bgGlow} opacity-0 blur-xl transition-opacity duration-300 group-hover:opacity-100`}
                 />
 
                 <div className="space-y-4">

@@ -27,12 +27,12 @@ import { countWords } from "@/lib/utils";
 
 const NOTION_ICONS = ["📝", "💡", "🚀", "📌", "⚡", "🎯", "📚", "🧠", "💻", "🎨", "📋", "📂", "🔥", "✨"];
 
-const COVER_GRADIENTS = [
-  { name: "Aurora", class: "from-indigo-500/20 via-purple-500/15 to-pink-500/20" },
-  { name: "Ocean", class: "from-cyan-500/20 via-blue-500/15 to-indigo-500/20" },
-  { name: "Sunset", class: "from-amber-500/20 via-orange-500/15 to-rose-500/20" },
-  { name: "Emerald", class: "from-emerald-500/20 via-teal-500/15 to-cyan-500/20" },
-  { name: "Slate", class: "from-slate-500/20 via-zinc-500/15 to-stone-500/20" },
+const COVER_COLORS = [
+  { name: "Indigo", class: "bg-indigo-500/15 border-indigo-500/30" },
+  { name: "Cyan", class: "bg-cyan-500/15 border-cyan-500/30" },
+  { name: "Amber", class: "bg-amber-500/15 border-amber-500/30" },
+  { name: "Emerald", class: "bg-emerald-500/15 border-emerald-500/30" },
+  { name: "Slate", class: "bg-slate-500/15 border-slate-500/30" },
 ];
 
 export default function CreateArticle() {
@@ -225,19 +225,16 @@ export default function CreateArticle() {
 
         {/* Notion Optional Cover */}
         {showCover && (
-          <div className="relative group rounded-2xl overflow-hidden h-36 sm:h-44 w-full bg-gradient-to-r border border-slate-200/80 dark:border-border/40 transition-all duration-300">
-            <div
-              className={`absolute inset-0 bg-gradient-to-r ${COVER_GRADIENTS[coverIndex].class}`}
-            />
+          <div className={`relative group rounded-2xl overflow-hidden h-36 sm:h-44 w-full border transition-all duration-300 ${COVER_COLORS[coverIndex].class}`}>
             <div className="absolute top-3 right-3 flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
               <button
                 type="button"
                 onClick={() =>
-                  setCoverIndex((prev) => (prev + 1) % COVER_GRADIENTS.length)
+                  setCoverIndex((prev) => (prev + 1) % COVER_COLORS.length)
                 }
                 className="rounded-lg bg-white/90 dark:bg-background/80 hover:bg-white dark:hover:bg-background px-2.5 py-1 text-[11px] font-medium backdrop-blur-md border border-slate-200 dark:border-border/60 shadow-xs transition-colors text-slate-800 dark:text-foreground cursor-pointer"
               >
-                Change Style ({COVER_GRADIENTS[coverIndex].name})
+                Change Style ({COVER_COLORS[coverIndex].name})
               </button>
               <button
                 type="button"

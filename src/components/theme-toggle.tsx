@@ -45,8 +45,8 @@ export function ThemeToggle({ className }: { className?: string }) {
       <span
         className={`absolute inset-0 -z-10 rounded-full opacity-0 blur-xs transition-opacity duration-300 group-hover:opacity-100 ${
           isDark
-            ? "bg-gradient-to-tr from-indigo-500/30 to-purple-500/20"
-            : "bg-gradient-to-tr from-amber-400/30 to-orange-400/20"
+            ? "bg-indigo-500/20"
+            : "bg-amber-400/20"
         }`}
       />
 
