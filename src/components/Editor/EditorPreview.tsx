@@ -4,6 +4,8 @@ import React, { useEffect } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import { RichTextProvider } from "reactjs-tiptap-editor";
 import { extensions } from "./Editor";
+import { useTheme } from "next-themes";
+import { themeActions } from "reactjs-tiptap-editor/theme";
 
 // Ensure style is imported
 import "reactjs-tiptap-editor/style.css";
@@ -13,6 +15,16 @@ interface EditorPreviewProps {
 }
 
 export default function EditorPreview({ content }: EditorPreviewProps) {
+  const { resolvedTheme } = useTheme();
+
+  useEffect(() => {
+    if (resolvedTheme === 'dark') {
+      themeActions.setTheme('dark');
+    } else {
+      themeActions.setTheme('light');
+    }
+  }, [resolvedTheme]);
+
   const editor = useEditor({
     textDirection: "auto",
     content: content,
