@@ -1,8 +1,6 @@
-# 🖊️ BitWrite
+# 🛡️ NoteVault
 
-**BitWrite** is a premier, full-stack blogging platform and social network built for modern software engineers, developers, and tech writers. It provides an elegant space for technical writers to publish articles using a rich-text editor, build an audience, connect with other developers, and save resources for continuous learning.
-
-![Banner](./screenshot/blog.jpg)
+**NoteVault** is an all-in-one Personal Workspace and Knowledge Management application. It empowers users to capture rich notes, upload & index PDFs/documents, track agile projects and Kanban milestones, protect confidential credentials inside a zero-knowledge AES-256 encrypted secrets vault, manage actionable tasks, and interlink their entire second brain in one secure hub.
 
 ---
 
