@@ -1,36 +1,21 @@
 "use server";
 import { auth } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
 import { z } from "zod";
-
-import { v2 as cloudinary, UploadApiResponse } from "cloudinary";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { countWords } from "@/lib/utils";
 
-
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
-
 const createArticleSchema = z.object({
-  title: z.string().min(3).max(100),
-  content: z.string().min(10).refine((val) => countWords(val) <= 5000, {
-    message: "Content cannot exceed 5000 words",
+  title: z.string().min(1, "Title is required").max(150),
+  content: z.string().min(1, "Content is required").refine((val) => countWords(val) <= 10000, {
+    message: "Content cannot exceed 10000 words",
   }),
-  category: z.string().min(3).max(50),
-  tags: z.string().min(1, "At least one tag required"),
 });
 
 export type CreateArticlesFormState = {
   errors: {
     title?: string[];
     content?: string[];
-    category?: string[];
-    tags?: string[];
-    featuredImageUrl?: string[];
     formErrors?: string[];
   };
 };
@@ -42,8 +27,6 @@ export const createArticle = async (
   const result = createArticleSchema.safeParse({
     title: formData.get("title"),
     content: formData.get("content"),
-    category: formData.get("category"),
-    tags: formData.get("tags"),
   });
 
   if (!result.success) {
@@ -56,7 +39,7 @@ export const createArticle = async (
   if (!userId) {
     return {
       errors: {
-        formErrors: ["You must be logged in to create an article."],
+        formErrors: ["You must be logged in to create a note."],
       },
     };
   }
@@ -73,66 +56,17 @@ export const createArticle = async (
     };
   }
 
-  // Start creating article
-
-  const imageFile = formData.get("featuredImageUrl") as File | null;
-  if (imageFile && imageFile.size > 5 * 1024 * 1024) {
-    // 5MB limit
-    return {
-      errors: {
-        featuredImageUrl: ["Image size must be less than 5MB."],
-      },
-    };
-  }
-
-  if (!imageFile || imageFile.name === "undefined") {
-    return {
-      errors: {
-        featuredImageUrl: ["Featured image is required."],
-      },
-    };
-  }
-
-  const arrayBuffer = await imageFile.arrayBuffer();
-  const imageBuffer = Buffer.from(arrayBuffer);
-
-  const uploadResponse: UploadApiResponse | undefined = await new Promise(
-    (resolve, reject) => {
-      const uploadStream = cloudinary.uploader.upload_stream(
-        { resource_type: "auto" },
-        (error, result) => {
-          if (error) {
-            reject(error);
-          } else {
-            resolve(result);
-          }
-        }
-      );
-      uploadStream.end(imageBuffer);
-    }
-  );
-
-  const imageUrl = uploadResponse?.secure_url;
-
-  if (!imageUrl) {
-    return {
-      errors: {
-        featuredImageUrl: ["Failed to upload image."],
-      },
-    };
-  }
-
   try {
     await prisma.article.create({
       data: {
         title: result.data.title,
         content: result.data.content,
-        category: result.data.category,
-        tags: result.data.tags.split(",").map((tag) => tag.trim()),
-        featuredImageUrl: imageUrl,
         authorId: existingUser.id,
       },
     });
+
+    revalidatePath("/dashboard");
+    revalidatePath("/dashboard/notes");
     return { errors: {}, success: true };
   } catch (error) {
     if (error instanceof Error) {
@@ -149,7 +83,4 @@ export const createArticle = async (
       };
     }
   }
-
-  revalidatePath("/dashboard");
-  redirect("/dashboard");
 };

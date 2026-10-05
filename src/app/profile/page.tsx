@@ -133,13 +133,15 @@ console.log("authUser:", authUser?.id);
                       </div>
                     </div>
 
-                    <Image
-                      src={article.featuredImageUrl}
-                      alt="post thumbnail"
-                      width={120}
-                      height={80}
-                      className="rounded-md object-cover"
-                    />
+                    {article.featuredImageUrl && (
+                      <Image
+                        src={article.featuredImageUrl}
+                        alt="post thumbnail"
+                        width={120}
+                        height={80}
+                        className="rounded-md object-cover"
+                      />
+                    )}
                   </div>
                 ))}
               </div>

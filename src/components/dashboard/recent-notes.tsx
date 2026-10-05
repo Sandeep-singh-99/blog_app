@@ -13,7 +13,7 @@ import { Badge } from "../ui/badge";
 import Link from "next/link";
 import DeleteBtn from "./delete-btn";
 import { Prisma } from "@prisma/client";
-import { FileText, PlusCircle, ExternalLink, Edit3, Lock, Calendar } from "lucide-react";
+import { FileText, PlusCircle, ExternalLink, Edit3, Lock, Calendar, Eye } from "lucide-react";
 
 type RecentNotesProps = {
   notes: Prisma.ArticleGetPayload<{
@@ -88,12 +88,15 @@ export default function RecentNotes({ notes }: RecentNotesProps) {
                   return (
                     <TableRow key={note.id} className="hover:bg-muted/40 transition-colors border-border/50">
                       <TableCell className="font-semibold text-foreground max-w-[260px]">
-                        <div className="flex items-center gap-2">
-                          <FileText className="h-4 w-4 text-muted-foreground shrink-0" />
-                          <span className="truncate" title={note.title}>
+                        <Link
+                          href={`/dashboard/notes/${note.id}`}
+                          className="flex items-center gap-2 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors group"
+                        >
+                          <FileText className="h-4 w-4 text-muted-foreground group-hover:text-indigo-500 shrink-0" />
+                          <span className="truncate group-hover:underline" title={note.title}>
                             {note.title}
                           </span>
-                        </div>
+                        </Link>
                       </TableCell>
 
                       <TableCell>
@@ -121,7 +124,13 @@ export default function RecentNotes({ notes }: RecentNotesProps) {
                       </TableCell>
 
                       <TableCell className="text-right">
-                        <div className="flex items-center justify-end gap-1.5">
+                        <div className="flex items-center justify-end gap-1">
+                          <Link href={`/dashboard/notes/${note.id}`}>
+                            <Button variant="ghost" size="sm" className="h-8 px-2.5 text-xs gap-1 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-950/40">
+                              <Eye className="h-3.5 w-3.5" />
+                              <span>View</span>
+                            </Button>
+                          </Link>
                           <Link href={`/dashboard/notes/${note.id}/edit`}>
                             <Button variant="ghost" size="sm" className="h-8 px-2.5 text-xs gap-1 hover:text-indigo-600">
                               <Edit3 className="h-3.5 w-3.5" />

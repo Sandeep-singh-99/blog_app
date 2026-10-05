@@ -82,15 +82,17 @@ export default async function ArticleDetails({
       <main className="mx-auto max-w-7xl px-4 py-10">
         <article className="mx-auto max-w-5xl rounded-2xl">
           {/* Featured Image */}
-          <div className="relative h-[250px] md:h-[420px] overflow-hidden rounded-t-2xl">
-            <Image
-              src={article.featuredImageUrl as string}
-              alt={article.title}
-              fill
-              priority
-              className="object-cover"
-            />
-          </div>
+          {article.featuredImageUrl && (
+            <div className="relative h-[250px] md:h-[420px] overflow-hidden rounded-t-2xl">
+              <Image
+                src={article.featuredImageUrl}
+                alt={article.title}
+                fill
+                priority
+                className="object-cover"
+              />
+            </div>
+          )}
 
           <div className="py-5">
             {/* Category */}

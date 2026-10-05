@@ -82,16 +82,22 @@ export default async function BookmarksPage() {
               key={bookmark.id}
               className="group border border-border hover:shadow-md transition-all duration-200 bg-card"
             >
-              <CardHeader className="p-0">
-                <div className="relative w-full h-48 overflow-hidden rounded-t-xl">
-                  <Image
-                    src={article.featuredImageUrl}
-                    alt={article.title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
+              {article.featuredImageUrl ? (
+                <CardHeader className="p-0">
+                  <div className="relative w-full h-48 overflow-hidden rounded-t-xl">
+                    <Image
+                      src={article.featuredImageUrl}
+                      alt={article.title}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                </CardHeader>
+              ) : (
+                <div className="h-24 w-full bg-gradient-to-br from-indigo-500/10 via-purple-500/5 to-transparent rounded-t-xl flex items-center justify-center border-b border-border/40">
+                  <span className="text-xs font-mono text-muted-foreground/60">Saved Note</span>
                 </div>
-              </CardHeader>
+              )}
 
               <CardContent className="p-4 flex flex-col justify-between">
                 <div>

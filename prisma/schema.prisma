@@ -56,9 +56,9 @@ model Article {
   id               String     @id @default(cuid())
   title            String
   content          String
-  category         String
-  tags             String[] @default([])
-  featuredImageUrl String
+  category         String?    @default("General")
+  tags             String[]   @default([])
+  featuredImageUrl String?
   author           User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId         String
   comments         Comment[]  

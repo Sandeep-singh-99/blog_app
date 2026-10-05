@@ -9,8 +9,8 @@ interface ArticleCardProps {
   article: {
     id: string;
     title: string;
-    featuredImageUrl: string;
-    category: string;
+    featuredImageUrl: string | null;
+    category: string | null;
     createdAt: Date;
     author: {
       name: string;
@@ -31,14 +31,20 @@ export default function ArticleCard({ article }: ArticleCardProps) {
     >
       <div className="p-6">
         <Link href={`/articles/${article.id}`} className="flex flex-col">
-          <div className="relative mb-4 h-48 w-full overflow-hidden rounded-xl">
-            <Image
-              src={article.featuredImageUrl}
-              alt="Article Image"
-              fill
-              className="object-cover"
-            />
-          </div>
+          {article.featuredImageUrl ? (
+            <div className="relative mb-4 h-48 w-full overflow-hidden rounded-xl">
+              <Image
+                src={article.featuredImageUrl}
+                alt="Article Image"
+                fill
+                className="object-cover"
+              />
+            </div>
+          ) : (
+            <div className="relative mb-4 h-32 w-full overflow-hidden rounded-xl bg-gradient-to-br from-indigo-500/10 via-purple-500/5 to-pink-500/10 border border-border/40 flex items-center justify-center text-muted-foreground/50">
+              <span className="text-xs font-mono font-medium">NoteVault Document</span>
+            </div>
+          )}
           <div className="flex items-center gap-3 text-sm text-gray-500 dark:text-gray-400">
             <Avatar className="h-8 w-8">
               <AvatarImage src={article.author.imageUrl || ""} />
