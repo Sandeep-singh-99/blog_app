@@ -6,13 +6,13 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Capture New Note | NoteVault",
-  description: "Create and publish a new rich markdown note in your NoteVault workspace.",
+  description: "Create and organize a new rich markdown note in your personal knowledge workspace.",
 };
 
-export default function page() {
+export default function CreateNotePage() {
   return (
-    <>
+    <div className="space-y-4">
       <CreateArticle />
-    </>
+    </div>
   );
 }

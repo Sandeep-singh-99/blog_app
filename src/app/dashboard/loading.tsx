@@ -19,12 +19,12 @@ export default function DashboardLoading() {
 
         {/* Heading */}
         <h1 className="text-2xl font-bold tracking-tight">
-          Preparing your dashboard
+          Preparing your workspace
         </h1>
 
         {/* Description */}
         <p className="mt-2 text-sm text-muted-foreground">
-          Loading your analytics, articles, and personalized data...
+          Loading your knowledge notes, documents, projects, and encrypted vault...
         </p>
 
         {/* Progress Bar */}

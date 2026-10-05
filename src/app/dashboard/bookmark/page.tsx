@@ -12,8 +12,8 @@ import type { Metadata } from "next";
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: "Bookmarks",
-  description: "View and read all of your bookmarked and saved articles on BitWrite.",
+  title: "Pinned Knowledge | NoteVault",
+  description: "View and access your pinned knowledge bases, notes, and technical references.",
 };
 
 export default async function BookmarksPage() {
@@ -61,18 +61,18 @@ export default async function BookmarksPage() {
 
   if (bookmarks.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen text-center">
-        <h2 className="text-2xl font-semibold mb-2">No bookmarks yet 📑</h2>
-        <p className="text-muted-foreground">
-          Articles you bookmark will appear here.
+      <div className="flex flex-col items-center justify-center min-h-[400px] text-center">
+        <h2 className="text-2xl font-semibold mb-2">No pinned notes yet 📑</h2>
+        <p className="text-muted-foreground text-sm">
+          Knowledge notes and references you pin or save will appear here.
         </p>
       </div>
     );
   }
 
   return (
-    <main className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 w-full">
-      <h1 className="text-3xl font-bold mb-8">Your Bookmarked Articles</h1>
+    <main className="max-w-7xl mx-auto py-6 px-2 sm:px-4 w-full">
+      <h1 className="text-2xl sm:text-3xl font-black mb-6">Pinned Knowledge & Notes</h1>
 
       <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
         {bookmarks.map((bookmark) => {

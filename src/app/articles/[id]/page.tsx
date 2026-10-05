@@ -3,6 +3,8 @@ import { prisma } from '@/lib/prisma';
 import React from 'react'
 import type { Metadata } from 'next';
 
+export const dynamic = 'force-dynamic';
+
 type ArticleDetailProps = {
     params: Promise<{id: string}>
 }

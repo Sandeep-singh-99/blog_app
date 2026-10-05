@@ -1,18 +1,19 @@
-import BlogDashboard from '@/components/dashboard/blog-dashboard'
-import React from 'react'
+import WorkspaceDashboard from "@/components/dashboard/workspace-dashboard";
+import React from "react";
 import type { Metadata } from "next";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Dashboard",
-  description: "Monitor your posts, analytics, bookmarks, and connections on the BitWrite creator dashboard.",
+  title: "Workspace Overview | NoteVault",
+  description:
+    "Personal Workspace — Manage notes, PDFs/documents, projects, encrypted secrets, tasks, and personal knowledge in one place.",
 };
 
 export default function Dashboard() {
   return (
-    <div>
-        <BlogDashboard/>
+    <div className="w-full">
+      <WorkspaceDashboard />
     </div>
-  )
+  );
 }

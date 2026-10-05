@@ -1,20 +1,18 @@
 import React, { ReactNode } from "react";
-import { auth } from "@clerk/nextjs/server";
-import { prisma } from "@/lib/prisma";
 import Sidebar from "@/components/dashboard/DashboardSidebar";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import SidebarHeader from "@/components/dashboard/SidebarHeader";
 
-const Layout = async ({ children }: { children: ReactNode }) => {
+export default function Layout({ children }: { children: ReactNode }) {
   return (
     <SidebarProvider>
       <Sidebar />
-      <div className="w-full p-5">
+      <SidebarInset className="min-h-screen bg-muted/15 dark:bg-background">
         <SidebarHeader />
-        {children}
-      </div>
+        <div className="flex-1 p-4 md:p-6 lg:p-8 max-w-7xl w-full mx-auto">
+          {children}
+        </div>
+      </SidebarInset>
     </SidebarProvider>
   );
-};
-
-export default Layout;
+}
