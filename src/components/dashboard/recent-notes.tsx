@@ -13,24 +13,34 @@ import { Badge } from "../ui/badge";
 import Link from "next/link";
 import DeleteBtn from "./delete-btn";
 import { Prisma } from "@prisma/client";
-import { FileText, PlusCircle, ExternalLink, Edit3, Lock, Calendar, Eye } from "lucide-react";
+import { FileText, PlusCircle, ExternalLink, Edit3, Lock, Calendar, Eye, CornerDownRight } from "lucide-react";
 
 type RecentNotesProps = {
-  notes: Prisma.ArticleGetPayload<{
-    include: {
-      comments: true;
-      author: {
-        select: {
-          name: true;
-          email: true;
-          imageUrl: true;
+  notes: Array<
+    Prisma.ArticleGetPayload<{
+      include: {
+        comments: true;
+        author: {
+          select: {
+            name: true;
+            email: true;
+            imageUrl: true;
+          };
         };
       };
-    };
-  }>[];
+    }> & {
+      subNotes?: Array<{
+        id: string;
+        title: string;
+      }>;
+    }
+  >;
 };
 
 export default function RecentNotes({ notes }: RecentNotesProps) {
+  // Subnotes should not show in Recent Notes; only top-level main notes are displayed
+  const displayNotes = (notes || []).filter((note) => !note.parentId);
+
   return (
     <Card className="border border-border/80 shadow-xs hover:shadow-md transition-all">
       <CardHeader className="flex flex-row items-center justify-between pb-3">
@@ -51,7 +61,7 @@ export default function RecentNotes({ notes }: RecentNotesProps) {
         </Link>
       </CardHeader>
 
-      {!notes.length ? (
+      {!displayNotes.length ? (
         <CardContent className="py-12 text-center space-y-3">
           <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-500/10 text-indigo-500">
             <FileText className="h-6 w-6" />
@@ -84,19 +94,30 @@ export default function RecentNotes({ notes }: RecentNotesProps) {
               </TableHeader>
 
               <TableBody>
-                {notes.map((note) => {
+                {displayNotes.map((note) => {
                   return (
                     <TableRow key={note.id} className="hover:bg-muted/40 transition-colors border-border/50">
-                      <TableCell className="font-semibold text-foreground max-w-[260px]">
-                        <Link
-                          href={`/dashboard/notes/${note.id}`}
-                          className="flex items-center gap-2 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors group"
-                        >
-                          <FileText className="h-4 w-4 text-muted-foreground group-hover:text-indigo-500 shrink-0" />
-                          <span className="truncate group-hover:underline" title={note.title}>
-                            {note.title}
-                          </span>
-                        </Link>
+                      <TableCell className="font-semibold text-foreground max-w-[280px]">
+                        <div className="flex items-center gap-2 min-w-0">
+                          <Link
+                            href={`/dashboard/notes/${note.id}`}
+                            className="flex items-center gap-2 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors group min-w-0 truncate"
+                          >
+                            <FileText className="h-4 w-4 text-muted-foreground group-hover:text-indigo-500 shrink-0" />
+                            <span className="truncate group-hover:underline" title={note.title}>
+                              {note.title}
+                            </span>
+                          </Link>
+                          {note.subNotes && note.subNotes.length > 0 && (
+                            <span
+                              className="inline-flex items-center gap-1 text-[10px] font-mono px-1.5 py-0.5 rounded-md bg-purple-500/10 text-purple-700 dark:text-purple-300 border border-purple-500/20 shrink-0 font-medium"
+                              title={`${note.subNotes.length} nested subpages`}
+                            >
+                              <CornerDownRight className="h-2.5 w-2.5 text-purple-600 dark:text-purple-400" />
+                              <span>{note.subNotes.length}</span>
+                            </span>
+                          )}
+                        </div>
                       </TableCell>
 
                       <TableCell>
@@ -125,6 +146,17 @@ export default function RecentNotes({ notes }: RecentNotesProps) {
 
                       <TableCell className="text-right">
                         <div className="flex items-center justify-end gap-1">
+                          <Link href={`/dashboard/notes/create?parentId=${note.id}`}>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-8 px-2 text-xs gap-1 text-muted-foreground hover:text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-950/40"
+                              title={`Create subpage under "${note.title}"`}
+                            >
+                              <PlusCircle className="h-3.5 w-3.5" />
+                              <span className="hidden xl:inline text-[11px]">+ Subpage</span>
+                            </Button>
+                          </Link>
                           <Link href={`/dashboard/notes/${note.id}`}>
                             <Button variant="ghost" size="sm" className="h-8 px-2.5 text-xs gap-1 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-950/40">
                               <Eye className="h-3.5 w-3.5" />

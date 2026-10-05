@@ -59,6 +59,9 @@ model Article {
   category         String?    @default("General")
   tags             String[]   @default([])
   featuredImageUrl String?
+  parentId         String?
+  parent           Article?   @relation("SubNotes", fields: [parentId], references: [id], onDelete: Cascade)
+  subNotes         Article[]  @relation("SubNotes")
   author           User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId         String
   comments         Comment[]  

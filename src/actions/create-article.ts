@@ -10,6 +10,7 @@ const createArticleSchema = z.object({
   content: z.string().min(1, "Content is required").refine((val) => countWords(val) <= 10000, {
     message: "Content cannot exceed 10000 words",
   }),
+  parentId: z.string().optional().nullable(),
 });
 
 export type CreateArticlesFormState = {
@@ -18,15 +19,21 @@ export type CreateArticlesFormState = {
     content?: string[];
     formErrors?: string[];
   };
+  createdNoteId?: string;
+  parentId?: string | null;
 };
 
 export const createArticle = async (
   prevState: CreateArticlesFormState,
   formData: FormData
 ): Promise<CreateArticlesFormState & { success?: boolean }> => {
+  const parentIdRaw = formData.get("parentId") as string | null;
+  const parentId = parentIdRaw && parentIdRaw.trim() !== "" ? parentIdRaw.trim() : null;
+
   const result = createArticleSchema.safeParse({
     title: formData.get("title"),
     content: formData.get("content"),
+    parentId,
   });
 
   if (!result.success) {
@@ -57,17 +64,21 @@ export const createArticle = async (
   }
 
   try {
-    await prisma.article.create({
+    const createdNote = await prisma.article.create({
       data: {
         title: result.data.title,
         content: result.data.content,
+        parentId: result.data.parentId || null,
         authorId: existingUser.id,
       },
     });
 
     revalidatePath("/dashboard");
     revalidatePath("/dashboard/notes");
-    return { errors: {}, success: true };
+    if (createdNote.parentId) {
+      revalidatePath(`/dashboard/notes/${createdNote.parentId}`);
+    }
+    return { errors: {}, success: true, createdNoteId: createdNote.id, parentId: createdNote.parentId };
   } catch (error) {
     if (error instanceof Error) {
       return {

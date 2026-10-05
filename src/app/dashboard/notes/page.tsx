@@ -31,10 +31,19 @@ export default async function NotesPage() {
 
   const notes = dbUser
     ? await prisma.article.findMany({
-        where: { authorId: dbUser.id },
+        where: {
+          authorId: dbUser.id,
+          parentId: null,
+        },
         orderBy: { createdAt: "desc" },
         include: {
           comments: true,
+          subNotes: {
+            select: {
+              id: true,
+              title: true,
+            },
+          },
           author: {
             select: {
               name: true,

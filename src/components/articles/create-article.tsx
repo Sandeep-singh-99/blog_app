@@ -16,15 +16,13 @@ import {
   Lock,
   Calendar,
   Clock,
-  Sparkles,
   Smile,
   ImageIcon,
   X,
   ChevronRight,
-  FileText,
 } from "lucide-react";
 import EditorClient from "../Editor/EditorClient";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { countWords } from "@/lib/utils";
 
 const NOTION_ICONS = ["📝", "💡", "🚀", "📌", "⚡", "🎯", "📚", "🧠", "💻", "🎨", "📋", "📂", "🔥", "✨"];
@@ -38,29 +36,62 @@ const COVER_GRADIENTS = [
 ];
 
 export default function CreateArticle() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const parentId = searchParams.get("parentId");
+
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
   const [icon, setIcon] = useState<string | null>("📝");
   const [showIconPicker, setShowIconPicker] = useState(false);
   const [showCover, setShowCover] = useState(false);
   const [coverIndex, setCoverIndex] = useState(0);
+  const [parentTitle, setParentTitle] = useState<string | null>(null);
 
   const formRef = useRef<HTMLFormElement>(null);
-  const router = useRouter();
 
   const [formState, action, isPending] = useActionState(createArticle, {
     errors: {},
   });
 
+  // Fetch parent title if parentId is present to display in breadcrumb
+  useEffect(() => {
+    if (!parentId) {
+      setParentTitle(null);
+      return;
+    }
+
+    const fetchParentInfo = async () => {
+      try {
+        const res = await fetch("/api/notes/tree");
+        if (res.ok) {
+          const data = await res.json();
+          const match = data.notes?.find((n: { id: string }) => n.id === parentId);
+          if (match) {
+            setParentTitle(match.title);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to fetch parent note title", err);
+      }
+    };
+    fetchParentInfo();
+  }, [parentId]);
+
   // Watch for successful action and redirect/notify
   useEffect(() => {
     if (formState.success) {
-      toast.success("Note created successfully!");
-      router.push("/dashboard/notes");
+      window.dispatchEvent(new Event("notes-updated"));
+      toast.success(parentId ? "Subnote created successfully!" : "Note created successfully!");
+      if (formState.createdNoteId) {
+        router.push(`/dashboard/notes/${formState.createdNoteId}`);
+      } else {
+        router.push("/dashboard/notes");
+      }
     } else if (formState.errors.formErrors?.length) {
       toast.error(formState.errors.formErrors[0]);
     }
-  }, [formState, router]);
+  }, [formState, router, parentId]);
 
   // Keyboard shortcut Ctrl+S / Cmd+S
   useEffect(() => {
@@ -102,6 +133,9 @@ export default function CreateArticle() {
     const formData = new FormData();
     formData.set("title", cleanTitle);
     formData.set("content", content);
+    if (parentId) {
+      formData.set("parentId", parentId);
+    }
 
     startTransition(() => {
       action(formData);
@@ -119,8 +153,8 @@ export default function CreateArticle() {
       <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
         {/* Notion Top Navigation Bar */}
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200/80 dark:border-border/50 pb-3">
-          {/* Breadcrumb */}
-          <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-muted-foreground">
+          {/* Clean Breadcrumb */}
+          <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-muted-foreground flex-wrap">
             <button
               type="button"
               onClick={() => router.push("/dashboard/notes")}
@@ -129,9 +163,24 @@ export default function CreateArticle() {
               <ArrowLeft className="h-3.5 w-3.5" />
               <span>Notes</span>
             </button>
-            <ChevronRight className="h-3 w-3 opacity-40" />
-            <span className="text-slate-900 dark:text-foreground font-semibold truncate max-w-[200px]">
-              {title || "Untitled"}
+
+            {parentTitle && (
+              <>
+                <ChevronRight className="h-3 w-3 opacity-40 shrink-0" />
+                <button
+                  type="button"
+                  onClick={() => router.push(`/dashboard/notes/${parentId}`)}
+                  className="hover:text-slate-900 dark:hover:text-foreground font-medium truncate max-w-[140px] text-indigo-600 dark:text-indigo-400 hover:underline"
+                  title={`Parent note: ${parentTitle}`}
+                >
+                  {parentTitle}
+                </button>
+              </>
+            )}
+
+            <ChevronRight className="h-3 w-3 opacity-40 shrink-0" />
+            <span className="text-slate-900 dark:text-foreground font-semibold truncate max-w-[180px]">
+              {title || (parentId ? "Untitled Subnote" : "Untitled")}
             </span>
           </div>
 
@@ -139,7 +188,7 @@ export default function CreateArticle() {
           <div className="flex items-center gap-2">
             <div className="hidden sm:flex items-center gap-1.5 text-[11px] font-mono text-slate-500 dark:text-muted-foreground mr-1">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-              <span>Draft</span>
+              <span>{parentId ? "Subnote Draft" : "Draft"}</span>
             </div>
 
             <Button
@@ -148,7 +197,7 @@ export default function CreateArticle() {
               size="sm"
               onClick={() => router.push("/dashboard/notes")}
               disabled={isPending}
-              className="h-8 px-2.5 text-xs font-medium rounded-lg text-slate-600 hover:text-slate-900 dark:text-muted-foreground dark:hover:text-foreground"
+              className="h-8 px-2.5 text-xs font-medium rounded-lg text-slate-600 hover:text-slate-900 dark:text-muted-foreground dark:hover:text-foreground cursor-pointer"
             >
               Cancel
             </Button>
@@ -186,14 +235,14 @@ export default function CreateArticle() {
                 onClick={() =>
                   setCoverIndex((prev) => (prev + 1) % COVER_GRADIENTS.length)
                 }
-                className="rounded-lg bg-white/90 dark:bg-background/80 hover:bg-white dark:hover:bg-background px-2.5 py-1 text-[11px] font-medium backdrop-blur-md border border-slate-200 dark:border-border/60 shadow-xs transition-colors text-slate-800 dark:text-foreground"
+                className="rounded-lg bg-white/90 dark:bg-background/80 hover:bg-white dark:hover:bg-background px-2.5 py-1 text-[11px] font-medium backdrop-blur-md border border-slate-200 dark:border-border/60 shadow-xs transition-colors text-slate-800 dark:text-foreground cursor-pointer"
               >
                 Change Style ({COVER_GRADIENTS[coverIndex].name})
               </button>
               <button
                 type="button"
                 onClick={() => setShowCover(false)}
-                className="rounded-lg bg-white/90 dark:bg-background/80 hover:bg-white dark:hover:bg-background p-1 text-[11px] font-medium backdrop-blur-md border border-slate-200 dark:border-border/60 shadow-xs transition-colors text-slate-800 dark:text-foreground"
+                className="rounded-lg bg-white/90 dark:bg-background/80 hover:bg-white dark:hover:bg-background p-1 text-[11px] font-medium backdrop-blur-md border border-slate-200 dark:border-border/60 shadow-xs transition-colors text-slate-800 dark:text-foreground cursor-pointer"
               >
                 <X className="h-3.5 w-3.5" />
               </button>
@@ -207,7 +256,7 @@ export default function CreateArticle() {
             <button
               type="button"
               onClick={() => setIcon("📝")}
-              className="hover:text-slate-900 dark:hover:text-foreground inline-flex items-center gap-1 px-2 py-1 rounded-md hover:bg-slate-100 dark:hover:bg-muted/50 transition-colors"
+              className="hover:text-slate-900 dark:hover:text-foreground inline-flex items-center gap-1 px-2 py-1 rounded-md hover:bg-slate-100 dark:hover:bg-muted/50 transition-colors cursor-pointer"
             >
               <Smile className="h-3.5 w-3.5" />
               <span>Add icon</span>
@@ -218,7 +267,7 @@ export default function CreateArticle() {
             <button
               type="button"
               onClick={() => setShowCover(true)}
-              className="hover:text-slate-900 dark:hover:text-foreground inline-flex items-center gap-1 px-2 py-1 rounded-md hover:bg-slate-100 dark:hover:bg-muted/50 transition-colors"
+              className="hover:text-slate-900 dark:hover:text-foreground inline-flex items-center gap-1 px-2 py-1 rounded-md hover:bg-slate-100 dark:hover:bg-muted/50 transition-colors cursor-pointer"
             >
               <ImageIcon className="h-3.5 w-3.5" />
               <span>Add cover</span>
@@ -248,7 +297,7 @@ export default function CreateArticle() {
                       setIcon(item);
                       setShowIconPicker(false);
                     }}
-                    className="h-8 w-8 text-lg rounded-lg hover:bg-slate-100 dark:hover:bg-muted/80 flex items-center justify-center transition-colors"
+                    className="h-8 w-8 text-lg rounded-lg hover:bg-slate-100 dark:hover:bg-muted/80 flex items-center justify-center transition-colors cursor-pointer"
                   >
                     {item}
                   </button>
@@ -259,7 +308,7 @@ export default function CreateArticle() {
                     setIcon(null);
                     setShowIconPicker(false);
                   }}
-                  className="w-full text-xs text-slate-500 hover:text-destructive pt-1 text-center font-medium border-t border-slate-200 dark:border-border/50 mt-1"
+                  className="w-full text-xs text-slate-500 hover:text-destructive pt-1 text-center font-medium border-t border-slate-200 dark:border-border/50 mt-1 cursor-pointer"
                 >
                   Remove icon
                 </button>
@@ -294,7 +343,7 @@ export default function CreateArticle() {
           )}
         </div>
 
-        {/* Notion Properties Block */}
+        {/* Notion Properties Block - Clean & Minimalist */}
         <div className="space-y-2 py-2.5 border-y border-slate-200/80 dark:border-border/40 text-xs text-slate-500 dark:text-muted-foreground font-sans">
           <div className="flex items-center gap-6">
             <div className="w-24 flex items-center gap-1.5 opacity-75">

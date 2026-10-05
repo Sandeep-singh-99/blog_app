@@ -54,24 +54,38 @@ export default async function WorkspaceDashboard() {
     );
   }
 
-  const notes = await prisma.article.findMany({
-    where: {
-      authorId: dbUser.id,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-    include: {
-      comments: true,
-      author: {
-        select: {
-          name: true,
-          email: true,
-          imageUrl: true,
+  const [notes, totalNotesCount] = await prisma.$transaction([
+    prisma.article.findMany({
+      where: {
+        authorId: dbUser.id,
+        parentId: null,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      include: {
+        comments: true,
+        subNotes: {
+          select: {
+            id: true,
+            title: true,
+          },
+        },
+        author: {
+          select: {
+            name: true,
+            email: true,
+            imageUrl: true,
+          },
         },
       },
-    },
-  });
+    }),
+    prisma.article.count({
+      where: {
+        authorId: dbUser.id,
+      },
+    }),
+  ]);
 
   return (
     <div className="flex-1 space-y-6 sm:space-y-8">
@@ -147,9 +161,9 @@ export default async function WorkspaceDashboard() {
             </div>
           </CardHeader>
           <CardContent className="px-4 pb-4">
-            <div className="text-2xl font-black text-foreground">{notes.length}</div>
+            <div className="text-2xl font-black text-foreground">{totalNotesCount}</div>
             <p className="mt-0.5 text-[11px] text-muted-foreground">
-              Markdown & links
+              {notes.length} main {notes.length === 1 ? "page" : "pages"}
             </p>
           </CardContent>
         </Card>
