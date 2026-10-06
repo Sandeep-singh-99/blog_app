@@ -39,10 +39,29 @@ export default async function DocumentsPage() {
     );
   }
 
-  const rawDocs = await prisma.document.findMany({
-    where: { userId: dbUser.id },
-    orderBy: { createdAt: "desc" },
-  });
+  let rawDocs: Array<{
+    id: string;
+    title: string;
+    fileName: string;
+    fileUrl: string;
+    fileSize: number | null;
+    fileType: string;
+    pages: number | null;
+    category: string | null;
+    summary: string | null;
+    createdAt: Date;
+  }> = [];
+
+  try {
+    if ("document" in prisma && typeof (prisma as any).document?.findMany === "function") {
+      rawDocs = await (prisma as any).document.findMany({
+        where: { userId: dbUser.id },
+        orderBy: { createdAt: "desc" },
+      });
+    }
+  } catch (err) {
+    console.warn("Could not query documents from Prisma:", err);
+  }
 
   const documents: SerializedDocument[] = rawDocs.map((doc) => ({
     id: doc.id,

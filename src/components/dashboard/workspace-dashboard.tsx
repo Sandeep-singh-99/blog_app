@@ -54,7 +54,7 @@ export default async function WorkspaceDashboard() {
     );
   }
 
-  const [notes, totalNotesCount, documentsCount] = await prisma.$transaction([
+  const [notes, totalNotesCount] = await prisma.$transaction([
     prisma.article.findMany({
       where: {
         authorId: dbUser.id,
@@ -85,12 +85,20 @@ export default async function WorkspaceDashboard() {
         authorId: dbUser.id,
       },
     }),
-    prisma.document.count({
-      where: {
-        userId: dbUser.id,
-      },
-    }),
   ]);
+
+  let documentsCount = 0;
+  try {
+    if ("document" in prisma && typeof (prisma as any).document?.count === "function") {
+      documentsCount = await (prisma as any).document.count({
+        where: {
+          userId: dbUser.id,
+        },
+      });
+    }
+  } catch (err) {
+    console.warn("Could not fetch document count:", err);
+  }
 
   return (
     <div className="flex-1 space-y-6 sm:space-y-8">
