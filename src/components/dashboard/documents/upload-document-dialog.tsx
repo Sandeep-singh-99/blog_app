@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useTransition } from "react";
+import React, { useState, useRef } from "react";
 import {
   Dialog,
   DialogContent,
@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { uploadDocument } from "@/actions/upload-document";
 import { toast } from "sonner";
 import {
   FileUp,
@@ -19,7 +18,6 @@ import {
   X,
   CheckCircle2,
   AlertCircle,
-  Tag,
 } from "lucide-react";
 
 interface UploadDocumentDialogProps {
@@ -51,15 +49,15 @@ export function UploadDocumentDialog({
   const [file, setFile] = useState<File | null>(initialFile);
   const [dragActive, setDragActive] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [isPending, startTransition] = useTransition();
+  const [isUploading, setIsUploading] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const isSubmittingRef = useRef(false);
 
   React.useEffect(() => {
     if (initialFile) {
       setFile(initialFile);
       if (!title) {
-        // Auto-fill title from clean filename
         const cleanName = initialFile.name
           .replace(/\.pdf$/i, "")
           .replace(/[-_]/g, " ")
@@ -124,10 +122,14 @@ export function UploadDocumentDialog({
     setSummary("");
     setFile(null);
     setErrorMessage(null);
+    isSubmittingRef.current = false;
+    setIsUploading(false);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmittingRef.current || isUploading) return;
+
     setErrorMessage(null);
 
     if (!title.trim()) {
@@ -140,6 +142,9 @@ export function UploadDocumentDialog({
       return;
     }
 
+    isSubmittingRef.current = true;
+    setIsUploading(true);
+
     const formData = new FormData();
     formData.append("title", title.trim());
     formData.append("category", category);
@@ -148,19 +153,33 @@ export function UploadDocumentDialog({
     }
     formData.append("file", file);
 
-    startTransition(async () => {
-      const res = await uploadDocument(null, formData);
+    try {
+      const res = await fetch("/api/documents/upload", {
+        method: "POST",
+        body: formData,
+      });
 
-      if (res.error) {
-        setErrorMessage(res.error);
-        toast.error(res.error);
-      } else if (res.success) {
+      const data = await res.json();
+
+      if (!res.ok || data.error) {
+        const err = data.error || "Failed to upload document.";
+        setErrorMessage(err);
+        toast.error(err);
+      } else {
         toast.success("PDF document uploaded successfully!");
         resetForm();
         onOpenChange(false);
         if (onUploadSuccess) onUploadSuccess();
       }
-    });
+    } catch (err: unknown) {
+      const message =
+        err instanceof Error ? err.message : "Network error during upload.";
+      setErrorMessage(message);
+      toast.error(message);
+    } finally {
+      isSubmittingRef.current = false;
+      setIsUploading(false);
+    }
   };
 
   const formatFileSize = (bytes: number) => {
@@ -173,7 +192,7 @@ export function UploadDocumentDialog({
     <Dialog
       open={open}
       onOpenChange={(val) => {
-        if (!isPending) {
+        if (!isUploading) {
           if (!val) resetForm();
           onOpenChange(val);
         }
@@ -213,7 +232,7 @@ export function UploadDocumentDialog({
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="e.g. Distributed Consensus & Raft Protocol"
-              disabled={isPending}
+              disabled={isUploading}
               className="h-10 rounded-xl text-xs bg-muted/30 focus-visible:ring-cyan-500/30"
               maxLength={120}
             />
@@ -236,7 +255,7 @@ export function UploadDocumentDialog({
                   dragActive
                     ? "border-cyan-500 bg-cyan-500/10 scale-[1.01]"
                     : "border-border/80 bg-muted/20 hover:border-cyan-500/50 hover:bg-muted/40"
-                } ${isPending ? "pointer-events-none opacity-50" : ""}`}
+                } ${isUploading ? "pointer-events-none opacity-50" : ""}`}
               >
                 <input
                   ref={fileInputRef}
@@ -244,7 +263,7 @@ export function UploadDocumentDialog({
                   accept="application/pdf,.pdf"
                   onChange={handleFileChange}
                   className="hidden"
-                  disabled={isPending}
+                  disabled={isUploading}
                 />
                 <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-cyan-500/15 text-cyan-600 dark:text-cyan-400">
                   <FileUp className="h-5 w-5" />
@@ -274,7 +293,7 @@ export function UploadDocumentDialog({
                   </div>
                 </div>
 
-                {!isPending && (
+                {!isUploading && (
                   <Button
                     type="button"
                     variant="ghost"
@@ -308,9 +327,9 @@ export function UploadDocumentDialog({
                 <button
                   key={cat}
                   type="button"
-                  disabled={isPending}
+                  disabled={isUploading}
                   onClick={() => setCategory(cat)}
-                  className={`rounded-lg px-2.5 py-1 text-[11px] font-medium transition-all ${
+                  className={`rounded-lg px-2.5 py-1 text-[11px] font-medium transition-all cursor-pointer ${
                     category === cat
                       ? "bg-cyan-600 text-white shadow-xs font-semibold"
                       : "bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground border border-border/40"
@@ -333,7 +352,7 @@ export function UploadDocumentDialog({
               onChange={(e) => setSummary(e.target.value)}
               placeholder="Add key notes, topics, or summary of this PDF..."
               rows={2}
-              disabled={isPending}
+              disabled={isUploading}
               className="w-full rounded-xl border border-input bg-muted/30 p-2.5 text-xs text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/30"
               maxLength={300}
             />
@@ -345,7 +364,7 @@ export function UploadDocumentDialog({
               type="button"
               variant="outline"
               size="sm"
-              disabled={isPending}
+              disabled={isUploading}
               onClick={() => onOpenChange(false)}
               className="rounded-xl text-xs h-9"
             >
@@ -354,10 +373,10 @@ export function UploadDocumentDialog({
             <Button
               type="submit"
               size="sm"
-              disabled={isPending || !title.trim() || !file}
+              disabled={isUploading || !title.trim() || !file}
               className="rounded-xl text-xs h-9 bg-cyan-600 hover:bg-cyan-700 text-white font-semibold gap-1.5 shadow-sm shadow-cyan-600/20"
             >
-              {isPending ? (
+              {isUploading ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" />
                   <span>Uploading PDF...</span>
