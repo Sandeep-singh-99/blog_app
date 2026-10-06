@@ -28,8 +28,25 @@ model User {
   socialLinks SocialLink[]
   followers   Follow[] @relation("UserFollowers") 
   following   Follow[] @relation("UserFollowing")
+  documents   Document[]
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
+}
+
+model Document {
+  id        String   @id @default(cuid())
+  title     String
+  fileName  String
+  fileUrl   String
+  fileSize  Int?
+  fileType  String   @default("application/pdf")
+  pages     Int?
+  category  String?  @default("General")
+  summary   String?
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Follow {

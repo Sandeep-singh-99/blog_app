@@ -54,7 +54,7 @@ export default async function WorkspaceDashboard() {
     );
   }
 
-  const [notes, totalNotesCount] = await prisma.$transaction([
+  const [notes, totalNotesCount, documentsCount] = await prisma.$transaction([
     prisma.article.findMany({
       where: {
         authorId: dbUser.id,
@@ -83,6 +83,11 @@ export default async function WorkspaceDashboard() {
     prisma.article.count({
       where: {
         authorId: dbUser.id,
+      },
+    }),
+    prisma.document.count({
+      where: {
+        userId: dbUser.id,
       },
     }),
   ]);
@@ -169,22 +174,24 @@ export default async function WorkspaceDashboard() {
         </Card>
 
         {/* Card 2: PDFs & Documents */}
-        <Card className="border border-border/70 shadow-xs hover:shadow-md transition-all">
-          <CardHeader className="flex flex-row items-center justify-between pb-2 pt-4 px-4">
-            <CardTitle className="text-xs font-semibold text-muted-foreground">
-              PDFs & Docs
-            </CardTitle>
-            <div className="rounded-xl bg-cyan-500/10 p-2 text-cyan-600 dark:text-cyan-400">
-              <FileUp className="h-4 w-4" />
-            </div>
-          </CardHeader>
-          <CardContent className="px-4 pb-4">
-            <div className="text-2xl font-black text-foreground">12</div>
-            <p className="mt-0.5 text-[11px] text-muted-foreground">
-              Indexed OCR files
-            </p>
-          </CardContent>
-        </Card>
+        <Link href="/dashboard/documents" className="block">
+          <Card className="border border-border/70 shadow-xs hover:shadow-md hover:border-cyan-500/40 transition-all h-full cursor-pointer">
+            <CardHeader className="flex flex-row items-center justify-between pb-2 pt-4 px-4">
+              <CardTitle className="text-xs font-semibold text-muted-foreground">
+                PDFs & Docs
+              </CardTitle>
+              <div className="rounded-xl bg-cyan-500/10 p-2 text-cyan-600 dark:text-cyan-400">
+                <FileUp className="h-4 w-4" />
+              </div>
+            </CardHeader>
+            <CardContent className="px-4 pb-4">
+              <div className="text-2xl font-black text-foreground">{documentsCount}</div>
+              <p className="mt-0.5 text-[11px] text-muted-foreground">
+                Uploaded PDF files
+              </p>
+            </CardContent>
+          </Card>
+        </Link>
 
         {/* Card 3: Projects & Sprints */}
         <Card className="border border-border/70 shadow-xs hover:shadow-md transition-all">
