@@ -23,36 +23,10 @@ import {
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../ui/card";
 import RecentNotes from "./recent-notes";
 import { prisma } from "@/lib/prisma";
-import { currentUser } from "@clerk/nextjs/server";
+import { getAuthenticatedUser } from "@/lib/auth-user";
 
 export default async function WorkspaceDashboard() {
-  const authUser = await currentUser();
-
-  if (!authUser) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[400px] text-center p-4">
-        <h2 className="text-2xl font-semibold mb-2">Please sign in</h2>
-        <p className="text-muted-foreground">
-          You need to be logged in to view your NoteVault workspace.
-        </p>
-      </div>
-    );
-  }
-
-  const dbUser = await prisma.user.findUnique({
-    where: { clerkUserId: authUser.id },
-  });
-
-  if (!dbUser) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[400px] text-center p-4">
-        <h2 className="text-2xl font-semibold mb-2">No profile found</h2>
-        <p className="text-muted-foreground">
-          Your account was not found in the database.
-        </p>
-      </div>
-    );
-  }
+  const dbUser = await getAuthenticatedUser();
 
   const [notes, totalNotesCount] = await prisma.$transaction([
     prisma.article.findMany({

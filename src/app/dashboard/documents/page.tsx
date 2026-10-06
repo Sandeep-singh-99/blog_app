@@ -1,4 +1,4 @@
-import { currentUser } from "@clerk/nextjs/server";
+import { getAuthenticatedUser } from "@/lib/auth-user";
 import { prisma } from "@/lib/prisma";
 import { DocumentsClient, SerializedDocument } from "@/components/dashboard/documents/documents-client";
 import type { Metadata } from "next";
@@ -11,33 +11,7 @@ export const metadata: Metadata = {
 };
 
 export default async function DocumentsPage() {
-  const authUser = await currentUser();
-
-  if (!authUser) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[400px] text-center p-4">
-        <h2 className="text-xl font-bold mb-2">Please sign in</h2>
-        <p className="text-sm text-muted-foreground">
-          You need to be logged in to view and manage your documents library.
-        </p>
-      </div>
-    );
-  }
-
-  const dbUser = await prisma.user.findUnique({
-    where: { clerkUserId: authUser.id },
-  });
-
-  if (!dbUser) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[400px] text-center p-4">
-        <h2 className="text-xl font-bold mb-2">Account profile not found</h2>
-        <p className="text-sm text-muted-foreground">
-          Your account was not found in the database. Please try signing in again.
-        </p>
-      </div>
-    );
-  }
+  const dbUser = await getAuthenticatedUser();
 
   let rawDocs: Array<{
     id: string;

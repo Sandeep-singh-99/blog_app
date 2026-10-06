@@ -1,6 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { currentUser } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
+import { getAuthenticatedUser } from "@/lib/auth-user";
 import { Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -16,21 +15,7 @@ export const metadata: Metadata = {
 };
 
 export default async function ConnectionsPage() {
-  const authUser = await currentUser();
-
-  if (!authUser) {
-    // 🔒 Redirect to sign-in if user not logged in
-    redirect("/sign-in");
-  }
-
-  //  Find the corresponding user in your DB
-  const dbUser = await prisma.user.findUnique({
-    where: { clerkUserId: authUser.id },
-  });
-
-  if (!dbUser) {
-    throw new Error("User not found in the database.");
-  }
+  const dbUser = await getAuthenticatedUser();
 
   const userId = dbUser.id;
 

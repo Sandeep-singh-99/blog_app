@@ -2,8 +2,7 @@ import EditArticle from "@/components/articles/edit-article";
 import { prisma } from "@/lib/prisma";
 import React from "react";
 import type { Metadata } from "next";
-import { currentUser } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
+import { getAuthenticatedUser } from "@/lib/auth-user";
 
 export const dynamic = "force-dynamic";
 
@@ -25,15 +24,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function EditNotePage({ params }: Props) {
   const { id } = await params;
-  const authUser = await currentUser();
-
-  if (!authUser) {
-    redirect("/sign-in");
-  }
-
-  const dbUser = await prisma.user.findUnique({
-    where: { clerkUserId: authUser.id },
-  });
+  const dbUser = await getAuthenticatedUser();
 
   const note = await prisma.article.findUnique({
     where: { id },

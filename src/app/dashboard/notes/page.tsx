@@ -1,6 +1,6 @@
 import React from "react";
 import { prisma } from "@/lib/prisma";
-import { currentUser } from "@clerk/nextjs/server";
+import { getAuthenticatedUser } from "@/lib/auth-user";
 import RecentNotes from "@/components/dashboard/recent-notes";
 import type { Metadata } from "next";
 
@@ -12,25 +12,9 @@ export const metadata: Metadata = {
 };
 
 export default async function NotesPage() {
-  const authUser = await currentUser();
+  const dbUser = await getAuthenticatedUser();
 
-  if (!authUser) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[400px] text-center p-4">
-        <h2 className="text-2xl font-bold mb-2">Please sign in</h2>
-        <p className="text-muted-foreground text-sm">
-          Sign in to access your private knowledge notes.
-        </p>
-      </div>
-    );
-  }
-
-  const dbUser = await prisma.user.findUnique({
-    where: { clerkUserId: authUser.id },
-  });
-
-  const notes = dbUser
-    ? await prisma.article.findMany({
+  const notes = await prisma.article.findMany({
         where: {
           authorId: dbUser.id,
           parentId: null,
@@ -52,8 +36,7 @@ export default async function NotesPage() {
             },
           },
         },
-      })
-    : [];
+      });
 
   return (
     <div className="space-y-6">

@@ -2,8 +2,11 @@ import React, { ReactNode } from "react";
 import SidebarSwitcher from "@/components/dashboard/SidebarSwitcher";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import SidebarHeader from "@/components/dashboard/SidebarHeader";
+import { getAuthenticatedUser } from "@/lib/auth-user";
 
-export default function Layout({ children }: { children: ReactNode }) {
+export default async function Layout({ children }: { children: ReactNode }) {
+  await getAuthenticatedUser();
+
   return (
     <SidebarProvider>
       <React.Suspense fallback={<div className="w-[16rem] border-r border-sidebar-border bg-sidebar" />}>

@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { currentUser } from "@clerk/nextjs/server";
+import { getAuthenticatedUser } from "@/lib/auth-user";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -17,34 +17,7 @@ export const metadata: Metadata = {
 };
 
 export default async function BookmarksPage() {
-  const authUser = await currentUser();
-
-  if (!authUser) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen text-center">
-        <h2 className="text-2xl font-semibold mb-4">Please sign in</h2>
-        <p className="text-muted-foreground">
-          You need to be logged in to view your bookmarked articles.
-        </p>
-      </div>
-    );
-  }
-
-  //  Get logged-in user in DB
-  const dbUser = await prisma.user.findUnique({
-    where: { clerkUserId: authUser.id },
-  });
-
-  if (!dbUser) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen text-center">
-        <h2 className="text-2xl font-semibold mb-4">No profile found</h2>
-        <p className="text-muted-foreground">
-          Your account doesn’t exist in the database.
-        </p>
-      </div>
-    );
-  }
+  const dbUser = await getAuthenticatedUser();
 
   //  Fetch all bookmarked articles for this user
   const bookmarks = await prisma.bookmark.findMany({

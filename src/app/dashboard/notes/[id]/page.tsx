@@ -1,8 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
-import { currentUser } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
+import { getAuthenticatedUser } from "@/lib/auth-user";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import EditorClientPreview from "@/components/Editor/EditorClientPreview";
@@ -45,11 +44,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ViewNotePage({ params }: Props) {
   const { id } = await params;
-  const authUser = await currentUser();
-
-  if (!authUser) {
-    redirect("/sign-in");
-  }
+  await getAuthenticatedUser();
 
   const note = await prisma.article.findUnique({
     where: { id },
